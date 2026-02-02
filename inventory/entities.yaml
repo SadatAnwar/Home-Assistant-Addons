@@ -1,0 +1,4742 @@
+ai_task:
+- entity_id: ai_task.google_ai_task
+  state: unknown
+  friendly_name: Google AI Task
+  device_class: null
+  unit: null
+alarm_control_panel:
+- entity_id: alarm_control_panel.homebase
+  state: armed_home
+  friendly_name: Homebase
+  device_class: null
+  unit: null
+automation:
+- entity_id: automation.auto_on_heating
+  state: 'off'
+  friendly_name: Auto on heating
+  device_class: null
+  unit: null
+  last_triggered: '2025-10-31T04:30:00.256340+00:00'
+  mode: single
+- entity_id: automation.automation_central_heating_delayed_start
+  state: 'on'
+  friendly_name: Automation Central Heating Delayed Start
+  device_class: null
+  unit: null
+  last_triggered: '2026-02-02T05:30:00.150751+00:00'
+  mode: single
+- entity_id: automation.automation_central_heating_delayed_stop
+  state: 'on'
+  friendly_name: Automation Central Heating Delayed Stop
+  device_class: null
+  unit: null
+  last_triggered: '2026-02-02T00:00:00.170923+00:00'
+  mode: single
+- entity_id: automation.bedroom_light_automation
+  state: 'off'
+  friendly_name: Bedroom Light Automation
+  device_class: null
+  unit: null
+  last_triggered: '2025-10-30T22:39:47.602212+00:00'
+  mode: single
+- entity_id: automation.energy_consumption_updates
+  state: 'on'
+  friendly_name: Energy Consumption Updates
+  device_class: null
+  unit: null
+  last_triggered: '2026-02-02T13:00:00.443105+00:00'
+  mode: single
+- entity_id: automation.prayer_time_notifications
+  state: 'on'
+  friendly_name: Prayer Time Notifications
+  device_class: null
+  unit: null
+  last_triggered: '2026-02-02T15:55:00.001845+00:00'
+  mode: single
+- entity_id: automation.sunset_night_light
+  state: 'on'
+  friendly_name: Sunset night light
+  device_class: null
+  unit: null
+  last_triggered: '2026-02-02T04:50:53.419022+00:00'
+  mode: single
+- entity_id: automation.switching_off_light
+  state: 'on'
+  friendly_name: Switching off bathroom light
+  device_class: null
+  unit: null
+  last_triggered: '2026-02-02T04:52:26.201657+00:00'
+  mode: single
+binary_sensor:
+- entity_id: binary_sensor.aayat_room_temp_alarm_status
+  state: 'off'
+  friendly_name: Aayat Room Temp Smoke
+  device_class: smoke
+  unit: null
+- entity_id: binary_sensor.backyard_debug_device
+  state: 'on'
+  friendly_name: Backyard Debug (device)
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.backyard_motion_detected
+  state: 'off'
+  friendly_name: Backyard Motion detected
+  device_class: motion
+  unit: null
+- entity_id: binary_sensor.backyard_person_detected
+  state: 'off'
+  friendly_name: Backyard Person detected
+  device_class: motion
+  unit: null
+- entity_id: binary_sensor.backyard_snooze
+  state: 'off'
+  friendly_name: Backyard Snooze
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.base_station_none
+  state: 'on'
+  friendly_name: Base Station None
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.basement_alarm_status
+  state: 'off'
+  friendly_name: Basement Smoke
+  device_class: smoke
+  unit: null
+- entity_id: binary_sensor.bathroom_temp_alarm_status
+  state: 'off'
+  friendly_name: Bathroom Temp Smoke
+  device_class: smoke
+  unit: null
+- entity_id: binary_sensor.bedroom_lamp_overcurrent
+  state: 'off'
+  friendly_name: Bedroom Lamp Overcurrent
+  device_class: problem
+  unit: null
+- entity_id: binary_sensor.bedroom_lamp_overheating
+  state: 'off'
+  friendly_name: Bedroom Lamp Overheating
+  device_class: problem
+  unit: null
+- entity_id: binary_sensor.bedroom_lamp_overpowering
+  state: 'off'
+  friendly_name: Bedroom Lamp Overpowering
+  device_class: problem
+  unit: null
+- entity_id: binary_sensor.bedroom_lamp_overvoltage
+  state: 'off'
+  friendly_name: Bedroom Lamp Overvoltage
+  device_class: problem
+  unit: null
+- entity_id: binary_sensor.bedroom_thermo_alarm_status
+  state: 'off'
+  friendly_name: Bedroom Thermo Smoke
+  device_class: smoke
+  unit: null
+- entity_id: binary_sensor.dehumidifier_fe8c_tank_full
+  state: unavailable
+  friendly_name: Dehumidifier_FE8C Tank Full
+  device_class: problem
+  unit: null
+- entity_id: binary_sensor.dishwasher_connectivity
+  state: 'on'
+  friendly_name: Dishwasher Connectivity
+  device_class: connectivity
+  unit: null
+- entity_id: binary_sensor.dishwasher_remote_control
+  state: 'on'
+  friendly_name: Dishwasher Remote control
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.dishwasher_remote_start
+  state: 'on'
+  friendly_name: Dishwasher Remote start
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.door_lock
+  state: 'off'
+  friendly_name: Door Lock
+  device_class: door
+  unit: null
+- entity_id: binary_sensor.door_lock_auto_lock_paused
+  state: 'off'
+  friendly_name: Door Lock Auto-lock paused
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.door_lock_calibration
+  state: 'on'
+  friendly_name: Door Lock Calibration
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.door_lock_unclosed_alarm
+  state: 'off'
+  friendly_name: Door Lock Unclosed alarm
+  device_class: problem
+  unit: null
+- entity_id: binary_sensor.door_lock_unlocked_alarm
+  state: 'off'
+  friendly_name: Door Lock Unlocked alarm
+  device_class: problem
+  unit: null
+- entity_id: binary_sensor.doorbell_debug_device_2
+  state: 'on'
+  friendly_name: Doorbell Debug (device)
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.doorbell_motion_detected_2
+  state: 'off'
+  friendly_name: Doorbell Motion detected
+  device_class: motion
+  unit: null
+- entity_id: binary_sensor.doorbell_person_detected_2
+  state: 'off'
+  friendly_name: Doorbell Person detected
+  device_class: motion
+  unit: null
+- entity_id: binary_sensor.doorbell_ringing_2
+  state: 'off'
+  friendly_name: Doorbell Ringing
+  device_class: running
+  unit: null
+- entity_id: binary_sensor.doorbell_snooze_2
+  state: 'off'
+  friendly_name: Doorbell Snooze
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.e3_vitodens_100_0421_1_burner
+  state: 'on'
+  friendly_name: Viessmann W100 Boiler Burner
+  device_class: running
+  unit: null
+- entity_id: binary_sensor.e3_vitodens_100_0421_1_frost_protection
+  state: 'off'
+  friendly_name: Viessmann W100 Boiler Frost protection
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.fritz_box_7530_ax_connection
+  state: 'on'
+  friendly_name: FRITZ!Box 7530 AX Connection
+  device_class: connectivity
+  unit: null
+- entity_id: binary_sensor.fritz_box_7530_ax_link
+  state: 'on'
+  friendly_name: FRITZ!Box 7530 AX Link
+  device_class: plug
+  unit: null
+- entity_id: binary_sensor.front_door_debug_device
+  state: 'on'
+  friendly_name: Front Door Debug (device)
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.front_door_motion_detected
+  state: 'off'
+  friendly_name: Front Door Motion detected
+  device_class: motion
+  unit: null
+- entity_id: binary_sensor.front_door_person_detected
+  state: 'off'
+  friendly_name: Front Door Person detected
+  device_class: motion
+  unit: null
+- entity_id: binary_sensor.front_door_snooze
+  state: 'off'
+  friendly_name: Front Door Snooze
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.homebase_debug_station
+  state: 'on'
+  friendly_name: Homebase Debug (station)
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.kitchen_alarm_status
+  state: 'off'
+  friendly_name: Kitchen Smoke
+  device_class: smoke
+  unit: null
+- entity_id: binary_sensor.l10s_ultra_gen_2_charging_state
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 Charging State
+  device_class: battery_charging
+  unit: null
+- entity_id: binary_sensor.living_room_smoke_alarm_alarm_status
+  state: 'off'
+  friendly_name: Living Room Smoke Alarm Smoke
+  device_class: smoke
+  unit: null
+- entity_id: binary_sensor.living_room_smoke_alarm_mute_status
+  state: 'off'
+  friendly_name: Living Room Smoke Alarm Mute Status
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.living_room_temp_alarm_status
+  state: 'off'
+  friendly_name: Living Room Temp Smoke
+  device_class: smoke
+  unit: null
+- entity_id: binary_sensor.lock_ultra_4c_calibration
+  state: 'off'
+  friendly_name: Lock Ultra 4C Calibration
+  device_class: problem
+  unit: null
+- entity_id: binary_sensor.lock_ultra_4c_door
+  state: 'off'
+  friendly_name: Lock Ultra 4C Door
+  device_class: door
+  unit: null
+- entity_id: binary_sensor.motion_sensor_1_occupancy
+  state: 'off'
+  friendly_name: motion_sensor_1 Occupancy
+  device_class: occupancy
+  unit: null
+- entity_id: binary_sensor.motion_sensor_occupancy_2
+  state: 'off'
+  friendly_name: Motion Sensor Occupancy
+  device_class: motion
+  unit: null
+- entity_id: binary_sensor.motion_sensor_small_1_battery_low
+  state: 'off'
+  friendly_name: motion_sensor_small_1 Battery
+  device_class: battery
+  unit: null
+- entity_id: binary_sensor.motion_sensor_small_1_occupancy
+  state: 'off'
+  friendly_name: motion_sensor_small_1 Occupancy
+  device_class: occupancy
+  unit: null
+- entity_id: binary_sensor.oven_connectivity
+  state: 'on'
+  friendly_name: Oven Connectivity
+  device_class: connectivity
+  unit: null
+- entity_id: binary_sensor.oven_local_control
+  state: 'off'
+  friendly_name: Oven Local control
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.oven_remote_control
+  state: 'on'
+  friendly_name: Oven Remote control
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.oven_remote_start
+  state: 'on'
+  friendly_name: Oven Remote start
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.shelly_power_monitor_overpowering
+  state: 'off'
+  friendly_name: Shelly Power Monitor Overpowering
+  device_class: problem
+  unit: null
+- entity_id: binary_sensor.smoke_alarm_alarm_status
+  state: 'off'
+  friendly_name: Top Floor Alarm Smoke
+  device_class: smoke
+  unit: null
+- entity_id: binary_sensor.smoke_alarm_mute_status
+  state: 'off'
+  friendly_name: Top Floor Alarm Mute Status
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.stairwell_alarm_mute_status
+  state: 'off'
+  friendly_name: Stairwell Alarm Mute Status
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.stairwell_alarm_smoke
+  state: 'off'
+  friendly_name: Stairwell Alarm Smoke
+  device_class: smoke
+  unit: null
+- entity_id: binary_sensor.syed_sadats_ipad_focus
+  state: 'off'
+  friendly_name: Syed Sadat’s iPad Focus
+  device_class: null
+  unit: null
+- entity_id: binary_sensor.top_floor_thermo_alarm_status
+  state: 'off'
+  friendly_name: Top floor thermo Smoke
+  device_class: smoke
+  unit: null
+- entity_id: binary_sensor.viessmann_w100_boiler_circulation_pump
+  state: 'on'
+  friendly_name: Viessmann W100 Boiler Circulation pump
+  device_class: running
+  unit: null
+- entity_id: binary_sensor.zigbee2mqtt_bridge_connection_state
+  state: 'on'
+  friendly_name: Zigbee2MQTT Bridge Connection state
+  device_class: connectivity
+  unit: null
+button:
+- entity_id: button.aayat_room_temp_none
+  state: unknown
+  friendly_name: Aayat Room Temp None
+  device_class: null
+  unit: null
+- entity_id: button.basement_none
+  state: unknown
+  friendly_name: Basement None
+  device_class: null
+  unit: null
+- entity_id: button.bathroom_temp_none
+  state: unknown
+  friendly_name: Bathroom Temp None
+  device_class: null
+  unit: null
+- entity_id: button.bathroomlight_identify
+  state: unknown
+  friendly_name: BathroomLight Identify
+  device_class: identify
+  unit: null
+- entity_id: button.bathroomlightswitch_identify
+  state: unknown
+  friendly_name: BathroomLightSwitch Identify
+  device_class: identify
+  unit: null
+- entity_id: button.bedroom_lamp_reboot
+  state: unknown
+  friendly_name: Bedroom Lamp Restart
+  device_class: restart
+  unit: null
+- entity_id: button.bedroom_thermo_none
+  state: '2025-10-29T22:40:42.658921+00:00'
+  friendly_name: Bedroom Thermo None
+  device_class: null
+  unit: null
+- entity_id: button.dishwasher_stop_program
+  state: unknown
+  friendly_name: Dishwasher Stop program
+  device_class: null
+  unit: null
+- entity_id: button.esp32_bluetooth_proxy_59e048_factory_reset
+  state: unknown
+  friendly_name: Bluetooth Proxy 1 Factory reset
+  device_class: restart
+  unit: null
+- entity_id: button.esp32_bluetooth_proxy_59e048_safe_mode_boot
+  state: unknown
+  friendly_name: Bluetooth Proxy 1 Safe Mode Boot
+  device_class: restart
+  unit: null
+- entity_id: button.fritz_box_7530_ax_cleanup
+  state: unknown
+  friendly_name: FRITZ!Box 7530 AX Cleanup
+  device_class: null
+  unit: null
+- entity_id: button.fritz_box_7530_ax_firmware_update
+  state: unknown
+  friendly_name: FRITZ!Box 7530 AX Firmware update
+  device_class: update
+  unit: null
+- entity_id: button.fritz_box_7530_ax_reconnect
+  state: unknown
+  friendly_name: FRITZ!Box 7530 AX Reconnect
+  device_class: restart
+  unit: null
+- entity_id: button.fritz_box_7530_ax_restart
+  state: unknown
+  friendly_name: FRITZ!Box 7530 AX Restart
+  device_class: restart
+  unit: null
+- entity_id: button.fritz_repeater_gf_cleanup
+  state: unknown
+  friendly_name: fritz-repeater-gf Cleanup
+  device_class: null
+  unit: null
+- entity_id: button.fritz_repeater_gf_firmware_update
+  state: unknown
+  friendly_name: fritz-repeater-gf Firmware update
+  device_class: update
+  unit: null
+- entity_id: button.fritz_repeater_gf_reconnect
+  state: unknown
+  friendly_name: fritz-repeater-gf Reconnect
+  device_class: restart
+  unit: null
+- entity_id: button.fritz_repeater_gf_restart
+  state: unknown
+  friendly_name: fritz-repeater-gf Restart
+  device_class: restart
+  unit: null
+- entity_id: button.front_light_reboot
+  state: unknown
+  friendly_name: Front Light Restart
+  device_class: restart
+  unit: null
+- entity_id: button.kitchen_none
+  state: unknown
+  friendly_name: Kitchen None
+  device_class: null
+  unit: null
+- entity_id: button.kitchencounter_identify
+  state: unknown
+  friendly_name: KitchenCounter Identify
+  device_class: identify
+  unit: null
+- entity_id: button.kitchenlightremote_identify
+  state: unknown
+  friendly_name: KitchenLightRemote Identify
+  device_class: identify
+  unit: null
+- entity_id: button.kitchenspot_identify
+  state: unknown
+  friendly_name: KitchenSpot Identify
+  device_class: identify
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_backup_map_1
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Backup Saved Map 1
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_backup_map_2
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Backup Saved Map 2
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_base_station_cleaning
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Base Station Cleaning
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_base_station_self_repair
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Base Station Self Repair
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_clear_warning
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Clear Warning
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_manual_drying
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Start Drying
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_reload_shortcuts
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Reload Shourtcuts
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_reset_deodorizer
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Reset Deodorizer
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_reset_filter
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Reset Filter
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_reset_main_brush
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Reset Main Brush
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_reset_sensor
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Reset Sensor
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_reset_side_brush
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Reset Side Brush
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_self_clean
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Self-Clean
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_shortcut_1
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Shortcut Quick Cleaning
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_start_auto_empty
+  state: '2025-12-21T20:28:35.726412+00:00'
+  friendly_name: Empty Robo
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_start_fast_mapping
+  state: unknown
+  friendly_name: L10s Ultra Gen 2 Start Fast Mapping
+  device_class: null
+  unit: null
+- entity_id: button.l10s_ultra_gen_2_water_tank_draining
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Water Tank Draining
+  device_class: null
+  unit: null
+- entity_id: button.living_room_smoke_alarm_none
+  state: unknown
+  friendly_name: Living Room Smoke Alarm None
+  device_class: null
+  unit: null
+- entity_id: button.living_room_temp_none
+  state: unknown
+  friendly_name: Living Room Temp None
+  device_class: null
+  unit: null
+- entity_id: button.oven_pause_program
+  state: unknown
+  friendly_name: Oven Pause program
+  device_class: null
+  unit: null
+- entity_id: button.oven_resume_program
+  state: unavailable
+  friendly_name: Resume program
+  device_class: null
+  unit: null
+- entity_id: button.oven_stop_program
+  state: unknown
+  friendly_name: Oven Stop program
+  device_class: null
+  unit: null
+- entity_id: button.shelly_power_monitor_reboot
+  state: unknown
+  friendly_name: Shelly Power Monitor Restart
+  device_class: restart
+  unit: null
+- entity_id: button.smart_plug_2212202420152151080b48e1e9b55812_refresh
+  state: '2025-09-30T21:14:34.549926+00:00'
+  friendly_name: Freezer Refresh
+  device_class: restart
+  unit: null
+- entity_id: button.smart_plug_2212202420152151080b48e1e9b55812_reload
+  state: unknown
+  friendly_name: Freezer Reload
+  device_class: restart
+  unit: null
+- entity_id: button.smart_plug_2212208966263051080b48e1e9b557d2_refresh
+  state: unknown
+  friendly_name: Washing Machine Refresh
+  device_class: restart
+  unit: null
+- entity_id: button.smart_plug_2212208966263051080b48e1e9b557d2_reload
+  state: unknown
+  friendly_name: Washing Machine Reload
+  device_class: restart
+  unit: null
+- entity_id: button.smart_roller_shutter_2403076692918970200148e1e9eecc6d_refresh
+  state: unknown
+  friendly_name: Window Blinds Refresh
+  device_class: restart
+  unit: null
+- entity_id: button.smart_roller_shutter_2403076692918970200148e1e9eecc6d_reload
+  state: unknown
+  friendly_name: Window Blinds Reload
+  device_class: restart
+  unit: null
+- entity_id: button.smart_roller_shutter_24121047557727700802c4e7ae116985_refresh
+  state: unknown
+  friendly_name: Garden Shade Refresh
+  device_class: restart
+  unit: null
+- entity_id: button.smart_roller_shutter_24121047557727700802c4e7ae116985_reload
+  state: unknown
+  friendly_name: Garden Shade Reload
+  device_class: restart
+  unit: null
+- entity_id: button.smoke_alarm_none
+  state: unknown
+  friendly_name: Top Floor Alarm None
+  device_class: null
+  unit: null
+- entity_id: button.stairwell_alarm_none
+  state: unknown
+  friendly_name: Stairwell Alarm None
+  device_class: null
+  unit: null
+- entity_id: button.switchbot_hub_mini_identify
+  state: unavailable
+  friendly_name: SwitchBot Hub Mini Identify
+  device_class: identify
+  unit: null
+- entity_id: button.switchbot_relay_switch_2pm_identify
+  state: unknown
+  friendly_name: Living Room Switch Identify
+  device_class: identify
+  unit: null
+- entity_id: button.top_floor_thermo_none
+  state: unknown
+  friendly_name: Top floor thermo None
+  device_class: null
+  unit: null
+- entity_id: button.zigbee2mqtt_bridge_restart
+  state: unknown
+  friendly_name: Zigbee2MQTT Bridge Restart
+  device_class: restart
+  unit: null
+camera:
+- entity_id: camera.192_168_178_69
+  state: unavailable
+  friendly_name: '192_168_178_69'
+  device_class: null
+  unit: null
+- entity_id: camera.backyard
+  state: idle
+  friendly_name: Backyard
+  device_class: null
+  unit: null
+- entity_id: camera.doorbell_2
+  state: idle
+  friendly_name: Doorbell
+  device_class: null
+  unit: null
+- entity_id: camera.front_door
+  state: idle
+  friendly_name: Front Door
+  device_class: null
+  unit: null
+- entity_id: camera.l10s_ultra_gen_2_map
+  state: '2026-02-02 04:35:13'
+  friendly_name: L10s Ultra Gen 2 Current Map
+  device_class: null
+  unit: null
+- entity_id: camera.l10s_ultra_gen_2_map_1
+  state: '2026-02-02 04:35:28'
+  friendly_name: L10s Ultra Gen 2 Saved Map 1
+  device_class: null
+  unit: null
+- entity_id: camera.l10s_ultra_gen_2_map_2
+  state: '2026-02-02 01:23:48'
+  friendly_name: L10s Ultra Gen 2 Saved Map 2
+  device_class: null
+  unit: null
+climate:
+- entity_id: climate.e3_vitodens_100_0421_1_heating
+  state: auto
+  friendly_name: Viessmann W100 Boiler Heating
+  device_class: null
+  unit: null
+  hvac_modes:
+  - 'off'
+  - auto
+  current_temperature: 58.7
+  target_temperature: 21
+conversation:
+- entity_id: conversation.google_ai_conversation
+  state: '2025-10-14T20:43:36.167534+00:00'
+  friendly_name: Google AI Conversation
+  device_class: null
+  unit: null
+- entity_id: conversation.google_ai_conversation_2
+  state: unknown
+  friendly_name: Google AI Conversation
+  device_class: null
+  unit: null
+- entity_id: conversation.home_assistant
+  state: '2025-10-14T20:39:31.187720+00:00'
+  friendly_name: Home Assistant
+  device_class: null
+  unit: null
+cover:
+- entity_id: cover.smart_roller_shutter_2403076692918970200148e1e9eecc6d_shutter
+  state: closed
+  friendly_name: Window Blinds Shutter
+  device_class: shutter
+  unit: null
+- entity_id: cover.smart_roller_shutter_24121047557727700802c4e7ae116985_shutter
+  state: closed
+  friendly_name: Garden Shade Shutter
+  device_class: shutter
+  unit: null
+device_tracker:
+- entity_id: device_tracker.5cg4114lhp_w10
+  state: unavailable
+  friendly_name: 5CG4114LHP-W10
+  device_class: null
+  unit: null
+- entity_id: device_tracker.7d30a712_dedd_4e32_807e_162fc16ad917
+  state: unavailable
+  friendly_name: 7d30a712-dedd-4e32-807e-162fc16ad917
+  device_class: null
+  unit: null
+- entity_id: device_tracker.aivi2_access_da
+  state: not_home
+  friendly_name: AIVI2-ACCESS-DA
+  device_class: null
+  unit: null
+- entity_id: device_tracker.alizas_iphone
+  state: home
+  friendly_name: Aliza’s iPhone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.amazon_2366ca2f8
+  state: home
+  friendly_name: amazon-2366ca2f8
+  device_class: null
+  unit: null
+- entity_id: device_tracker.android
+  state: home
+  friendly_name: Android-2
+  device_class: null
+  unit: null
+- entity_id: device_tracker.aneeqa
+  state: not_home
+  friendly_name: Aneeqa
+  device_class: null
+  unit: null
+- entity_id: device_tracker.care_dae3
+  state: unavailable
+  friendly_name: ''
+  device_class: null
+  unit: null
+- entity_id: device_tracker.de_olx_j60xrd633h
+  state: home
+  friendly_name: Mac
+  device_class: null
+  unit: null
+- entity_id: device_tracker.de_olx_r7vxk462q4_2
+  state: unavailable
+  friendly_name: DE-OLX-R7VXK462Q4
+  device_class: null
+  unit: null
+- entity_id: device_tracker.desktop_lg6ua53
+  state: not_home
+  friendly_name: DESKTOP-LG6UA53
+  device_class: null
+  unit: null
+- entity_id: device_tracker.dishwasher
+  state: home
+  friendly_name: Dishwasher
+  device_class: null
+  unit: null
+- entity_id: device_tracker.dreame_vacuum_r2469x
+  state: home
+  friendly_name: dreame-vacuum-r2469x
+  device_class: null
+  unit: null
+- entity_id: device_tracker.drivedot_8878_1f59
+  state: unavailable
+  friendly_name: ''
+  device_class: null
+  unit: null
+- entity_id: device_tracker.echoshow_290849e62c26e6f7
+  state: unavailable
+  friendly_name: echoshow-290849e62c26e6f7
+  device_class: null
+  unit: null
+- entity_id: device_tracker.epson310a43
+  state: unavailable
+  friendly_name: EPSON310A43
+  device_class: null
+  unit: null
+- entity_id: device_tracker.esp32_bluetooth_proxy_59e048
+  state: home
+  friendly_name: bluetoothproxy1
+  device_class: null
+  unit: null
+- entity_id: device_tracker.eufyhomebase
+  state: home
+  friendly_name: eufyhomebase
+  device_class: null
+  unit: null
+- entity_id: device_tracker.faizans_macbook_pro
+  state: unavailable
+  friendly_name: Faizans-MacBook-Pro
+  device_class: null
+  unit: null
+- entity_id: device_tracker.fritz_repeater_entrance
+  state: unavailable
+  friendly_name: fritz-repeater-entrance
+  device_class: null
+  unit: null
+- entity_id: device_tracker.fritz_repeater_gf
+  state: unavailable
+  friendly_name: fritz-repeater-gf
+  device_class: null
+  unit: null
+- entity_id: device_tracker.galaxy_a56_5g
+  state: not_home
+  friendly_name: Galaxy-A56-5G
+  device_class: null
+  unit: null
+- entity_id: device_tracker.homeassistant
+  state: home
+  friendly_name: homeassistant
+  device_class: null
+  unit: null
+- entity_id: device_tracker.hpi753923
+  state: not_home
+  friendly_name: HPI753923
+  device_class: null
+  unit: null
+- entity_id: device_tracker.iphone
+  state: not_home
+  friendly_name: iPhone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.iphone_2
+  state: unavailable
+  friendly_name: Sadat’s iPhone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.iphone_3
+  state: not_home
+  friendly_name: iPhone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.iphone_4
+  state: unavailable
+  friendly_name: iPhone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.iphone_5
+  state: not_home
+  friendly_name: iPhone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.iphone_6
+  state: home
+  friendly_name: sadat---siphone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.irfanuls_iphone
+  state: unavailable
+  friendly_name: Irfanuls-iPhone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.macbook_pro_2
+  state: unavailable
+  friendly_name: Mac
+  device_class: null
+  unit: null
+- entity_id: device_tracker.macbookpro
+  state: not_home
+  friendly_name: MacBookPro
+  device_class: null
+  unit: null
+- entity_id: device_tracker.macmini
+  state: not_home
+  friendly_name: macmini
+  device_class: null
+  unit: null
+- entity_id: device_tracker.macmini_7
+  state: home
+  friendly_name: macmini
+  device_class: null
+  unit: null
+- entity_id: device_tracker.meross_garden_shade
+  state: home
+  friendly_name: meross-garden-shade
+  device_class: null
+  unit: null
+- entity_id: device_tracker.meross_smart_plug
+  state: home
+  friendly_name: Meross-Smart-Plug
+  device_class: null
+  unit: null
+- entity_id: device_tracker.meross_smart_plug_2
+  state: home
+  friendly_name: Meross-Smart-Plug
+  device_class: null
+  unit: null
+- entity_id: device_tracker.merosswindowblinds
+  state: home
+  friendly_name: merosswindowblinds
+  device_class: null
+  unit: null
+- entity_id: device_tracker.net_a1_fe8c
+  state: not_home
+  friendly_name: net-a1-FE8C
+  device_class: null
+  unit: null
+- entity_id: device_tracker.ooono_0d06
+  state: unavailable
+  friendly_name: ''
+  device_class: null
+  unit: null
+- entity_id: device_tracker.ooono_b1a3
+  state: unavailable
+  friendly_name: ''
+  device_class: null
+  unit: null
+- entity_id: device_tracker.ooono_db85
+  state: unavailable
+  friendly_name: ''
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_0e_08_b5_71_8f_fa
+  state: unavailable
+  friendly_name: PC-0E-08-B5-71-8F-FA
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_18b8_fb6b_b15d_4bf0
+  state: unavailable
+  friendly_name: PC---18b8-fb6b-b15d-4bf0
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_103
+  state: unavailable
+  friendly_name: 63a1fa91-3ef7-4039-bf63-97f36c456495
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_108
+  state: not_home
+  friendly_name: PC-192-168-178-108
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_113
+  state: not_home
+  friendly_name: 98faf432-a33c-4329-81bb-5858e3117ecb
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_116
+  state: home
+  friendly_name: Alizas-iPhone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_52
+  state: unavailable
+  friendly_name: PC-192-168-178-52
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_59
+  state: unavailable
+  friendly_name: PC-192-168-178-59
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_65
+  state: unavailable
+  friendly_name: PC-192-168-178-65
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_72
+  state: unavailable
+  friendly_name: PC-192-168-178-72
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_80
+  state: unavailable
+  friendly_name: PC-192-168-178-80
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_86
+  state: not_home
+  friendly_name: iPhone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_91
+  state: unavailable
+  friendly_name: PC-192-168-178-91
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_94
+  state: not_home
+  friendly_name: b2898d9a-254b-4a48-af0e-3e0c6a3d8b26
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_192_168_178_95
+  state: not_home
+  friendly_name: PC-192-168-178-95
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_1e_23_53_72_3b_39
+  state: unavailable
+  friendly_name: PC-1E-23-53-72-3B-39
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_22_ad_b6_f8_bb_b1
+  state: not_home
+  friendly_name: bbea4771-485a-41b0-8c3d-cf8afb07a9e5
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_26_a2_92_ea_f4_dc
+  state: not_home
+  friendly_name: Irfanuls-iPhone
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_36_1e_30_19_3b_f0
+  state: not_home
+  friendly_name: fritz-repeater-gf
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_46_ab_6f_99_10_c8
+  state: not_home
+  friendly_name: cc0febcd-92e5-44d6-b100-958598bd522f
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_5a_01_49_ed_d2_c5
+  state: unavailable
+  friendly_name: PC-5A-01-49-ED-D2-C5
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_60_74_f4_9c_1d_c6
+  state: home
+  friendly_name: PC-60-74-F4-9C-1D-C6
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_60_74_f4_be_3b_00
+  state: home
+  friendly_name: PC-60-74-F4-BE-3B-00
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_92_de_09_70_e0_14
+  state: not_home
+  friendly_name: PC-92-DE-09-70-E0-14
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_b4_0a_d8_a2_49_69
+  state: not_home
+  friendly_name: PS5-B49D4D
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_d2_f5_8f_51_92_cd
+  state: not_home
+  friendly_name: PC-D2-F5-8F-51-92-CD
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_d8_d6_68_a0_c8_79
+  state: not_home
+  friendly_name: PC-D8-D6-68-A0-C8-79
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_ee_3c_c5_72_15_37
+  state: not_home
+  friendly_name: PC-EE-3C-C5-72-15-37
+  device_class: null
+  unit: null
+- entity_id: device_tracker.pc_fe_2e_46_bc_28_e8
+  state: unavailable
+  friendly_name: PC-FE-2E-46-BC-28-E8
+  device_class: null
+  unit: null
+- entity_id: device_tracker.s2c0c9ec17e497de6c_b978
+  state: unavailable
+  friendly_name: ''
+  device_class: null
+  unit: null
+- entity_id: device_tracker.sadats_iphone_15_olx
+  state: home
+  friendly_name: Sadat’s iPhone 15 OLX
+  device_class: null
+  unit: null
+- entity_id: device_tracker.sadats_mbp
+  state: not_home
+  friendly_name: Sadats-MBP
+  device_class: null
+  unit: null
+- entity_id: device_tracker.sadats_mbp_2
+  state: unavailable
+  friendly_name: Sadats-MBP
+  device_class: null
+  unit: null
+- entity_id: device_tracker.samsung
+  state: not_home
+  friendly_name: Samsung
+  device_class: null
+  unit: null
+- entity_id: device_tracker.sb12a08e57343db20c_b5c3
+  state: unavailable
+  friendly_name: ''
+  device_class: null
+  unit: null
+- entity_id: device_tracker.sbs50_997347
+  state: home
+  friendly_name: SBS50-997347
+  device_class: null
+  unit: null
+- entity_id: device_tracker.shadmans_macbook_pro
+  state: unavailable
+  friendly_name: Shadmans-MacBook-Pro
+  device_class: null
+  unit: null
+- entity_id: device_tracker.shadmans_macbook_pro_2
+  state: unavailable
+  friendly_name: Shadmans-MacBook-Pro
+  device_class: null
+  unit: null
+- entity_id: device_tracker.shelly1minig3_e4b3231a4e14
+  state: home
+  friendly_name: shelly1minig3-e4b3231a4e14
+  device_class: null
+  unit: null
+- entity_id: device_tracker.shelly1pmminig3_34b7daca88a8
+  state: home
+  friendly_name: shelly1pmminig3-34b7daca88a8
+  device_class: null
+  unit: null
+- entity_id: device_tracker.shelly3em
+  state: home
+  friendly_name: shelly3
+  device_class: null
+  unit: null
+- entity_id: device_tracker.siemensoven
+  state: home
+  friendly_name: siemens-oven-384070390159010341
+  device_class: null
+  unit: null
+- entity_id: device_tracker.smartnetz_gas_reader_1073677969
+  state: home
+  friendly_name: gas
+  device_class: null
+  unit: null
+- entity_id: device_tracker.switchbot_hubminimatter_b2b9b8
+  state: home
+  friendly_name: SwitchBot-HubMiniMatter-B2B9B8
+  device_class: null
+  unit: null
+- entity_id: device_tracker.switchbot_relay_switch_11ce28
+  state: home
+  friendly_name: SwitchBot-Relay-Switch-11CE28
+  device_class: null
+  unit: null
+- entity_id: device_tracker.syed_sadats_ipad
+  state: unavailable
+  friendly_name: Syed-Sadats-iPad
+  device_class: null
+  unit: null
+- entity_id: device_tracker.syed_sadats_ipad_2
+  state: home
+  friendly_name: Syed Sadat’s iPad
+  device_class: null
+  unit: null
+- entity_id: device_tracker.viessmann_2236
+  state: home
+  friendly_name: Viessmann-2236
+  device_class: null
+  unit: null
+event:
+- entity_id: event.backup_automatic_backup
+  state: '2026-02-02T03:56:33.744+00:00'
+  friendly_name: Backup Automatic backup
+  device_class: null
+  unit: null
+fan:
+- entity_id: fan.dehumidifier_fe8c_fan
+  state: unavailable
+  friendly_name: Dehumidifier Fan
+  device_class: null
+  unit: null
+humidifier:
+- entity_id: humidifier.dehumidifier_fe8c
+  state: unavailable
+  friendly_name: Dehumidifier
+  device_class: dehumidifier
+  unit: null
+image:
+- entity_id: image.backyard_event_image
+  state: unknown
+  friendly_name: Backyard Event Image
+  device_class: null
+  unit: null
+- entity_id: image.doorbell_event_image_2
+  state: '2026-02-02T15:14:35.949544+00:00'
+  friendly_name: Doorbell Event Image
+  device_class: null
+  unit: null
+- entity_id: image.fritz_box_7530_ax_fritz_box_guest_access
+  state: '2026-02-02T00:24:01.657033+00:00'
+  friendly_name: FRITZ!Box 7530 AX FRITZ!Box guest access
+  device_class: null
+  unit: null
+- entity_id: image.fritz_repeater_gf_fritz_box_guest_access
+  state: '2026-02-02T00:24:00.746327+00:00'
+  friendly_name: fritz-repeater-gf FRITZ!Box guest access
+  device_class: null
+  unit: null
+- entity_id: image.front_door_event_image
+  state: unknown
+  friendly_name: Front Door Event Image
+  device_class: null
+  unit: null
+input_boolean:
+- entity_id: input_boolean.central_heating_delay_start
+  state: 'off'
+  friendly_name: Central Heating Delay Start
+  device_class: null
+  unit: null
+  editable: true
+- entity_id: input_boolean.central_heating_delay_stop
+  state: 'off'
+  friendly_name: Central Heating Delay Stop
+  device_class: null
+  unit: null
+  editable: true
+- entity_id: input_boolean.heater_safe_shutdown
+  state: 'off'
+  friendly_name: Heater Safe Shutdown
+  device_class: null
+  unit: null
+  editable: true
+input_datetime:
+- entity_id: input_datetime.central_heating_delay_off
+  state: 00:00:00
+  friendly_name: Central Heating Delay Off
+  device_class: null
+  unit: null
+  has_date: false
+  has_time: true
+- entity_id: input_datetime.central_heating_start
+  state: 06:30:00
+  friendly_name: Central Heating Start
+  device_class: null
+  unit: null
+  has_date: false
+  has_time: true
+- entity_id: input_datetime.central_heating_stop
+  state: 01:00:00
+  friendly_name: Central Heating Stop
+  device_class: null
+  unit: null
+  has_date: false
+  has_time: true
+light:
+- entity_id: light.bathroomlight
+  state: 'off'
+  friendly_name: BathroomLight
+  device_class: null
+  unit: null
+  supported_color_modes:
+  - brightness
+  brightness: null
+- entity_id: light.govee_lamps
+  state: 'off'
+  friendly_name: Govee Lamps
+  device_class: null
+  unit: null
+  supported_color_modes:
+  - color_temp
+  - rgb
+  brightness: null
+- entity_id: light.h6072
+  state: 'off'
+  friendly_name: Lamp Left
+  device_class: null
+  unit: null
+  supported_color_modes:
+  - color_temp
+  - rgb
+  brightness: null
+- entity_id: light.h6072_2
+  state: 'off'
+  friendly_name: Lamp Right
+  device_class: null
+  unit: null
+  supported_color_modes:
+  - color_temp
+  - rgb
+  brightness: null
+- entity_id: light.kitchen_lights
+  state: 'on'
+  friendly_name: Kitchen Lights
+  device_class: null
+  unit: null
+  supported_color_modes:
+  - brightness
+  brightness: 158
+- entity_id: light.kitchencounter
+  state: 'on'
+  friendly_name: KitchenCounter
+  device_class: null
+  unit: null
+  supported_color_modes:
+  - brightness
+  brightness: 158
+- entity_id: light.kitchenspot
+  state: 'on'
+  friendly_name: KitchenSpot
+  device_class: null
+  unit: null
+  supported_color_modes:
+  - brightness
+  brightness: 158
+- entity_id: light.smart_plug_2212202420152151080b48e1e9b55812_dnd
+  state: 'on'
+  friendly_name: Freezer Dnd
+  device_class: DNDMode
+  unit: null
+  supported_color_modes:
+  - onoff
+  brightness: null
+- entity_id: light.smart_plug_2212208966263051080b48e1e9b557d2_dnd
+  state: 'on'
+  friendly_name: Washing Machine Dnd
+  device_class: DNDMode
+  unit: null
+  supported_color_modes:
+  - onoff
+  brightness: null
+- entity_id: light.smart_roller_shutter_2403076692918970200148e1e9eecc6d_dnd
+  state: 'on'
+  friendly_name: Window Blinds Dnd
+  device_class: DNDMode
+  unit: null
+  supported_color_modes:
+  - onoff
+  brightness: null
+- entity_id: light.smart_roller_shutter_24121047557727700802c4e7ae116985_dnd
+  state: 'on'
+  friendly_name: Garden Shade Dnd
+  device_class: DNDMode
+  unit: null
+  supported_color_modes:
+  - onoff
+  brightness: null
+lock:
+- entity_id: lock.door_lock
+  state: unlocked
+  friendly_name: Door Lock
+  device_class: null
+  unit: null
+- entity_id: lock.lock_ultra_4c
+  state: unavailable
+  friendly_name: Lock Ultra 4C
+  device_class: null
+  unit: null
+- entity_id: lock.lock_ultra_4c_2
+  state: unlocked
+  friendly_name: Lock Ultra 4C
+  device_class: null
+  unit: null
+number:
+- entity_id: number.backyard_light_brightness_manual
+  state: '60'
+  friendly_name: Backyard Light Brightness Manual
+  device_class: null
+  unit: null
+- entity_id: number.backyard_motion_detection_sensitivity
+  state: '4'
+  friendly_name: Backyard Motion Detection Sensitivity
+  device_class: null
+  unit: null
+- entity_id: number.dishwasher_start_in_relative
+  state: '0'
+  friendly_name: Dishwasher Start in relative
+  device_class: null
+  unit: s
+- entity_id: number.doorbell_homebase_chime_ringtone_volume_2
+  state: '26'
+  friendly_name: Doorbell Homebase Chime Ringtone Volume
+  device_class: null
+  unit: null
+- entity_id: number.doorbell_motion_detection_sensitivity_2
+  state: '3'
+  friendly_name: Doorbell Motion Detection Sensitivity
+  device_class: null
+  unit: null
+- entity_id: number.doorbell_speaker_volume_2
+  state: '95'
+  friendly_name: Doorbell Speaker Volume
+  device_class: null
+  unit: null
+- entity_id: number.e3_vitodens_100_0421_1_comfort_temperature
+  state: '21'
+  friendly_name: Viessmann W100 Boiler Comfort temperature
+  device_class: temperature
+  unit: °C
+- entity_id: number.e3_vitodens_100_0421_1_normal_temperature
+  state: '21'
+  friendly_name: Viessmann W100 Boiler Normal temperature
+  device_class: temperature
+  unit: °C
+- entity_id: number.e3_vitodens_100_0421_1_reduced_temperature
+  state: '20'
+  friendly_name: Viessmann W100 Boiler Reduced temperature
+  device_class: temperature
+  unit: °C
+- entity_id: number.front_door_light_brightness_manual
+  state: '60'
+  friendly_name: Front Door Light Brightness Manual
+  device_class: null
+  unit: null
+- entity_id: number.front_door_motion_detection_sensitivity
+  state: '4'
+  friendly_name: Front Door Motion Detection Sensitivity
+  device_class: null
+  unit: null
+- entity_id: number.homebase_alarm_volume
+  state: '26'
+  friendly_name: Homebase Alarm Volume
+  device_class: null
+  unit: null
+- entity_id: number.homebase_prompt_volume
+  state: '9'
+  friendly_name: Homebase Prompt Volume
+  device_class: null
+  unit: null
+- entity_id: number.l10s_ultra_gen_2_room_1_wetness_level
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Wetness Level Kitchen
+  device_class: null
+  unit: null
+- entity_id: number.l10s_ultra_gen_2_room_2_wetness_level
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Wetness Level Lobby
+  device_class: null
+  unit: null
+- entity_id: number.l10s_ultra_gen_2_room_3_wetness_level
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Wetness Level Living Room
+  device_class: null
+  unit: null
+- entity_id: number.l10s_ultra_gen_2_room_4_wetness_level
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Wetness Level Room Unavailable
+  device_class: null
+  unit: null
+- entity_id: number.l10s_ultra_gen_2_room_5_wetness_level
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Wetness Level Dining Hall
+  device_class: null
+  unit: null
+- entity_id: number.l10s_ultra_gen_2_self_clean_area
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Self Clean Area
+  device_class: null
+  unit: m²
+- entity_id: number.l10s_ultra_gen_2_self_clean_time
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Self Clean Time
+  device_class: null
+  unit: min
+- entity_id: number.l10s_ultra_gen_2_volume
+  state: '45'
+  friendly_name: L10s Ultra Gen 2 Volume
+  device_class: null
+  unit: '%'
+- entity_id: number.l10s_ultra_gen_2_wetness_level
+  state: '32'
+  friendly_name: L10s Ultra Gen 2 Wetness Level
+  device_class: null
+  unit: null
+- entity_id: number.motion_sensor_1_motion_timeout
+  state: '30'
+  friendly_name: motion_sensor_1 Motion timeout
+  device_class: null
+  unit: null
+- entity_id: number.oven_alarm_clock
+  state: '0'
+  friendly_name: Oven Alarm clock
+  device_class: duration
+  unit: s
+- entity_id: number.smart_roller_shutter_2403076692918970200148e1e9eecc6d_signalclose
+  state: '31.7'
+  friendly_name: Window Blinds signalClose
+  device_class: duration
+  unit: s
+- entity_id: number.smart_roller_shutter_2403076692918970200148e1e9eecc6d_signalopen
+  state: '33.2'
+  friendly_name: Window Blinds signalOpen
+  device_class: duration
+  unit: s
+- entity_id: number.smart_roller_shutter_24121047557727700802c4e7ae116985_signalclose
+  state: '40.6'
+  friendly_name: Garden Shade signalClose
+  device_class: duration
+  unit: s
+- entity_id: number.smart_roller_shutter_24121047557727700802c4e7ae116985_signalopen
+  state: '38.1'
+  friendly_name: Garden Shade signalOpen
+  device_class: duration
+  unit: s
+person:
+- entity_id: person.aliza
+  state: home
+  friendly_name: Aliza
+  device_class: null
+  unit: null
+- entity_id: person.living
+  state: home
+  friendly_name: iPad Dashboard
+  device_class: null
+  unit: null
+- entity_id: person.mqttuser
+  state: unknown
+  friendly_name: mqttuser
+  device_class: null
+  unit: null
+- entity_id: person.sadat_anwar
+  state: home
+  friendly_name: Sadat Anwar
+  device_class: null
+  unit: null
+script:
+- entity_id: script.notify_all
+  state: 'off'
+  friendly_name: Notify All
+  device_class: null
+  unit: null
+select:
+- entity_id: select.backyard_motion_detection_type
+  state: All motions
+  friendly_name: Backyard Motion Detection Type
+  device_class: null
+  unit: null
+- entity_id: select.backyard_nightvision
+  state: B&W Night Vision
+  friendly_name: Backyard Nightvision
+  device_class: null
+  unit: null
+- entity_id: select.backyard_speaker_volume
+  state: High
+  friendly_name: Backyard Speaker Volume
+  device_class: null
+  unit: null
+- entity_id: select.bathroomlight_power_on_behavior
+  state: 'on'
+  friendly_name: BathroomLight Power-on behavior
+  device_class: null
+  unit: null
+- entity_id: select.dishwasher_active_program
+  state: unknown
+  friendly_name: Dishwasher Active program
+  device_class: null
+  unit: null
+- entity_id: select.dishwasher_selected_program
+  state: dishcare_dishwasher_program_eco_50
+  friendly_name: Dishwasher Selected program
+  device_class: null
+  unit: null
+- entity_id: select.doorbell_motion_detection_type_2
+  state: Humans only
+  friendly_name: Doorbell Motion Detection Type
+  device_class: null
+  unit: null
+- entity_id: select.doorbell_video_streaming_quality_2
+  state: Auto / High Encoding
+  friendly_name: Doorbell Video Streaming Quality
+  device_class: null
+  unit: null
+- entity_id: select.front_door_motion_detection_type
+  state: Humans only
+  friendly_name: Front Door Motion Detection Type
+  device_class: null
+  unit: null
+- entity_id: select.front_door_nightvision
+  state: Color Night Vision
+  friendly_name: Front Door Nightvision
+  device_class: null
+  unit: null
+- entity_id: select.front_door_speaker_volume
+  state: High
+  friendly_name: Front Door Speaker Volume
+  device_class: null
+  unit: null
+- entity_id: select.homebase_guard_mode
+  state: Schedule
+  friendly_name: Homebase Guard Mode
+  device_class: null
+  unit: null
+- entity_id: select.kitchencounter_power_on_behavior
+  state: unknown
+  friendly_name: KitchenCounter Power-on behavior
+  device_class: null
+  unit: null
+- entity_id: select.kitchenspot_power_on_behavior
+  state: unknown
+  friendly_name: KitchenSpot Power-on behavior
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_auto_empty_mode
+  state: standard
+  friendly_name: L10s Ultra Gen 2 Auto Empty Mode
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_carpet_cleaning
+  state: ignore
+  friendly_name: L10s Ultra Gen 2 Carpet Cleaning
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_cleangenius
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 CleanGenius
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_cleangenius_mode
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 CleanGenius Mode
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_cleaning_mode
+  state: sweeping_and_mopping
+  friendly_name: L10s Ultra Gen 2 Cleaning Mode
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_cleaning_route
+  state: standard
+  friendly_name: L10s Ultra Gen 2 Cleaning Route
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_drying_time
+  state: 2h
+  friendly_name: L10s Ultra Gen 2 Drying Time
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_map_rotation
+  state: '90'
+  friendly_name: L10s Ultra Gen 2 Map Rotation
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_mop_extend_frequency
+  state: high
+  friendly_name: L10s Ultra Gen 2 Mop Extend Frequency
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_mop_pad_humidity
+  state: wet
+  friendly_name: L10s Ultra Gen 2 Mop Pad Humidity
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_mop_wash_level
+  state: daily
+  friendly_name: L10s Ultra Gen 2 Mop Wash Level
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_1_cleaning_mode
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Mode Kitchen
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_1_cleaning_route
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Route Kitchen
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_1_cleaning_times
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Times Kitchen
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_1_floor_material
+  state: tile
+  friendly_name: L10s Ultra Gen 2 Floor Material Kitchen
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_1_floor_material_direction
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Floor Material Direction Kitchen
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_1_mop_pad_humidity
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Mop Pad Humidity Kitchen
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_1_name
+  state: Kitchen
+  friendly_name: L10s Ultra Gen 2 Room 1 Name
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_1_order
+  state: '1'
+  friendly_name: L10s Ultra Gen 2 Order Kitchen
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_1_suction_level
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Suction Level Kitchen
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_1_visibility
+  state: visible
+  friendly_name: L10s Ultra Gen 2 Visibility Kitchen
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_2_cleaning_mode
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Mode Lobby
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_2_cleaning_route
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Route Lobby
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_2_cleaning_times
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Times Lobby
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_2_floor_material
+  state: tile
+  friendly_name: L10s Ultra Gen 2 Floor Material Lobby
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_2_floor_material_direction
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Floor Material Direction Lobby
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_2_mop_pad_humidity
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Mop Pad Humidity Lobby
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_2_name
+  state: Lobby
+  friendly_name: L10s Ultra Gen 2 Room 2 Name
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_2_order
+  state: '2'
+  friendly_name: L10s Ultra Gen 2 Order Lobby
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_2_suction_level
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Suction Level Lobby
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_2_visibility
+  state: visible
+  friendly_name: L10s Ultra Gen 2 Visibility Lobby
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_3_cleaning_mode
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Mode Living Room
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_3_cleaning_route
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Route Living Room
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_3_cleaning_times
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Times Living Room
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_3_floor_material
+  state: wood
+  friendly_name: L10s Ultra Gen 2 Floor Material Living Room
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_3_floor_material_direction
+  state: horizontal
+  friendly_name: L10s Ultra Gen 2 Floor Material Direction Living Room
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_3_mop_pad_humidity
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Mop Pad Humidity Living Room
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_3_name
+  state: Living Room
+  friendly_name: L10s Ultra Gen 2 Room 3 Name
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_3_order
+  state: '3'
+  friendly_name: L10s Ultra Gen 2 Order Living Room
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_3_suction_level
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Suction Level Living Room
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_3_visibility
+  state: visible
+  friendly_name: L10s Ultra Gen 2 Visibility Living Room
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_4_cleaning_mode
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Mode Room Unavailable
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_4_cleaning_route
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Route Room Unavailable
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_4_cleaning_times
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Times Room Unavailable
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_4_floor_material
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Floor Material Room Unavailable
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_4_floor_material_direction
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Floor Material Direction Room Unavailable
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_4_mop_pad_humidity
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Mop Pad Humidity Room Unavailable
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_4_name
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Room 4 Name
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_4_order
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Order Room Unavailable
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_4_suction_level
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Suction Level Room Unavailable
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_4_visibility
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Visibility Room Unavailable
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_5_cleaning_mode
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Mode Dining Hall
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_5_cleaning_route
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Route Dining Hall
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_5_cleaning_times
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Times Dining Hall
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_5_floor_material
+  state: wood
+  friendly_name: L10s Ultra Gen 2 Floor Material Dining Hall
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_5_floor_material_direction
+  state: horizontal
+  friendly_name: L10s Ultra Gen 2 Floor Material Direction Dining Hall
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_5_mop_pad_humidity
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Mop Pad Humidity Dining Hall
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_5_name
+  state: Dining Hall
+  friendly_name: L10s Ultra Gen 2 Room 5 Name
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_5_order
+  state: '4'
+  friendly_name: L10s Ultra Gen 2 Order Dining Hall
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_5_suction_level
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Suction Level Dining Hall
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_room_5_visibility
+  state: visible
+  friendly_name: L10s Ultra Gen 2 Visibility Dining Hall
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_selected_map
+  state: Map 1
+  friendly_name: L10s Ultra Gen 2 Selected Map
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_self_clean_frequency
+  state: by_room
+  friendly_name: L10s Ultra Gen 2 Self Clean Frequency
+  device_class: null
+  unit: null
+- entity_id: select.l10s_ultra_gen_2_suction_level
+  state: turbo
+  friendly_name: L10s Ultra Gen 2 Suction Level
+  device_class: null
+  unit: null
+- entity_id: select.lock_ultra_4c_operating_mode
+  state: unavailable
+  friendly_name: Lock Ultra 4C Operating mode
+  device_class: null
+  unit: null
+- entity_id: select.oven_active_program
+  state: unknown
+  friendly_name: Oven Active program
+  device_class: null
+  unit: null
+- entity_id: select.oven_selected_program
+  state: unknown
+  friendly_name: Oven Selected program
+  device_class: null
+  unit: null
+- entity_id: select.water_timer_weather_delay
+  state: unavailable
+  friendly_name: Water Timer Weather delay
+  device_class: null
+  unit: null
+- entity_id: select.zigbee2mqtt_bridge_log_level
+  state: warning
+  friendly_name: Zigbee2MQTT Bridge Log level
+  device_class: null
+  unit: null
+sensor:
+- entity_id: sensor.1st_floor_tmperature
+  state: '20.2'
+  friendly_name: 1st Floor Tmperature
+  device_class: null
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.aayat_room_temp_battery
+  state: '100.0'
+  friendly_name: Aayat Room Temp Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.aayat_room_temp_humidity
+  state: '44.8'
+  friendly_name: Kids Room Humidity
+  device_class: humidity
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.aayat_room_temp_rf_level
+  state: good
+  friendly_name: Aayat Room Temp RF Level
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.aayat_room_temp_temperature
+  state: '19.9'
+  friendly_name: Kids Room Temperatur
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.alizas_iphone_app_version
+  state: 2026.1.1
+  friendly_name: Aliza’s iPhone App Version
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_audio_output
+  state: unavailable
+  friendly_name: Aliza’s iPhone Audio Output
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_battery_level
+  state: '100'
+  friendly_name: Aliza’s iPhone Battery Level
+  device_class: battery
+  unit: '%'
+  state_class: null
+- entity_id: sensor.alizas_iphone_battery_state
+  state: Not Charging
+  friendly_name: Aliza’s iPhone Battery State
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_bssid
+  state: unavailable
+  friendly_name: Aliza’s iPhone BSSID
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_connection_type
+  state: unavailable
+  friendly_name: Aliza’s iPhone Connection Type
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_geocoded_location
+  state: 'Am Siebgraben 3
+
+    16727 Oberkrämer
+
+    Germany'
+  friendly_name: Aliza’s iPhone Geocoded Location
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_last_update_trigger
+  state: unavailable
+  friendly_name: Aliza’s iPhone Last Update Trigger
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_location_permission
+  state: Denied
+  friendly_name: Aliza’s iPhone Location permission
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_sim_1
+  state: unavailable
+  friendly_name: Aliza’s iPhone SIM 1
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_sim_2
+  state: unavailable
+  friendly_name: Aliza’s iPhone SIM 2
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_ssid
+  state: unavailable
+  friendly_name: Aliza’s iPhone SSID
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.alizas_iphone_storage
+  state: unavailable
+  friendly_name: Aliza’s iPhone Storage
+  device_class: null
+  unit: '% available'
+  state_class: null
+- entity_id: sensor.average_freezer_p
+  state: '1.025'
+  friendly_name: Average Freezer P
+  device_class: null
+  unit: W
+  state_class: measurement
+- entity_id: sensor.average_freezer_power
+  state: '125.0'
+  friendly_name: Average Freezer Power
+  device_class: null
+  unit: Wh
+  state_class: measurement
+- entity_id: sensor.backup_backup_manager_state
+  state: idle
+  friendly_name: Backup Backup Manager state
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.backup_last_attempted_automatic_backup
+  state: '2026-02-02T03:55:06+00:00'
+  friendly_name: Backup Last attempted automatic backup
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.backup_last_successful_automatic_backup
+  state: '2026-02-02T03:56:33+00:00'
+  friendly_name: Backup Last successful automatic backup
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.backup_next_scheduled_automatic_backup
+  state: '2026-02-03T04:29:15+00:00'
+  friendly_name: Backup Next scheduled automatic backup
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.backyard_person_name
+  state: No Person
+  friendly_name: Backyard Person Name
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.backyard_snooze_time
+  state: '0'
+  friendly_name: Backyard Snooze Time
+  device_class: null
+  unit: sec
+  state_class: null
+- entity_id: sensor.base_station_alarm_volume
+  state: '75'
+  friendly_name: Base Station Alarm Volume
+  device_class: null
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.base_station_ip_address
+  state: 192.168.178.56
+  friendly_name: Base Station IP Address
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.base_station_signal_strength
+  state: '-16'
+  friendly_name: Base Station Signal strength
+  device_class: signal_strength
+  unit: dBm
+  state_class: measurement
+- entity_id: sensor.base_station_software_version
+  state: v1.6.3
+  friendly_name: Base Station Software Version
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.base_station_ssid
+  state: Baitul Asad
+  friendly_name: Base Station SSID
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.base_station_voice_volume
+  state: '0'
+  friendly_name: Base Station Voice Volume
+  device_class: null
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.basement_battery
+  state: '100.0'
+  friendly_name: Basement Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.basement_humidity
+  state: '48.0'
+  friendly_name: Basement Humidity
+  device_class: humidity
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.basement_rf_level
+  state: good
+  friendly_name: Basement RF Level
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.basement_temperature
+  state: '16.7'
+  friendly_name: Basement Temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.bathroom_temp_battery
+  state: '100.0'
+  friendly_name: Bathroom Temp Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.bathroom_temp_humidity
+  state: '45.6'
+  friendly_name: Bathroom Temp Humidity
+  device_class: humidity
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.bathroom_temp_rf_level
+  state: good
+  friendly_name: Bathroom Temp RF Level
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.bathroom_temp_temperature
+  state: '21.1'
+  friendly_name: Bathroom Temp Temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.bathroomlightswitch_battery
+  state: '99'
+  friendly_name: BathroomLightSwitch Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.bathroomlightswitch_voltage
+  state: '1400'
+  friendly_name: BathroomLightSwitch Voltage
+  device_class: voltage
+  unit: mV
+  state_class: measurement
+- entity_id: sensor.bedroom_lamp_power
+  state: '10.3'
+  friendly_name: Bedroom Lamp Power
+  device_class: power
+  unit: W
+  state_class: measurement
+- entity_id: sensor.bedroom_lamp_returned_energy
+  state: '0.0'
+  friendly_name: Bedroom Lamp Energy returned
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.bedroom_lamp_total_energy
+  state: '3.144219'
+  friendly_name: Bedroom Lamp Energy
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.bedroom_thermo_battery
+  state: '100.0'
+  friendly_name: Bedroom Thermo Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.bedroom_thermo_humidity
+  state: '42.4'
+  friendly_name: Bedroom Thermo Humidity
+  device_class: humidity
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.bedroom_thermo_rf_level
+  state: good
+  friendly_name: Bedroom Thermo RF Level
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.bedroom_thermo_temperature
+  state: '19.6'
+  friendly_name: Bedroom Thermo Temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.burner_hours_today
+  state: '13'
+  friendly_name: Burner Hours Today
+  device_class: null
+  unit: h
+  state_class: total_increasing
+- entity_id: sensor.burner_starts_today
+  state: '1'
+  friendly_name: Burner Starts Today
+  device_class: null
+  unit: null
+  state_class: total_increasing
+- entity_id: sensor.care_dae3_estimated_distance
+  state: unavailable
+  friendly_name: Estimated distance
+  device_class: distance
+  unit: m
+  state_class: measurement
+- entity_id: sensor.daily_electricity_consumed
+  state: '6.75'
+  friendly_name: Daily Electricity Consumed
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.day_before_yesterday_s_usage_energy
+  state: '93.36'
+  friendly_name: Day Before Yesterday's Usage (Energy)
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.day_before_yesterday_s_usage_volume
+  state: '8.66'
+  friendly_name: Day Before Yesterday's Usage (Volume)
+  device_class: gas
+  unit: m³
+  state_class: total_increasing
+- entity_id: sensor.dehumidifier_fe8c_humidity
+  state: unavailable
+  friendly_name: Dehumidifier_FE8C Humidity
+  device_class: humidity
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.dehumidifier_fe8c_temperature
+  state: unavailable
+  friendly_name: Dehumidifier_FE8C Temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.dishwasher_door
+  state: closed
+  friendly_name: Dishwasher Door
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.dishwasher_operation_state
+  state: ready
+  friendly_name: Dishwasher Operation state
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.dishwasher_program_finish_time
+  state: unavailable
+  friendly_name: Dishwasher Program finish time
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.dishwasher_program_progress
+  state: unavailable
+  friendly_name: Dishwasher Program progress
+  device_class: null
+  unit: '%'
+  state_class: null
+- entity_id: sensor.door_lock_battery
+  state: '55'
+  friendly_name: Door Lock Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.doorbell_person_name_2
+  state: No Person
+  friendly_name: Doorbell Person Name
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.doorbell_snooze_time_2
+  state: '0'
+  friendly_name: Doorbell Snooze Time
+  device_class: null
+  unit: sec
+  state_class: null
+- entity_id: sensor.drivedot_8878_1f59_estimated_distance
+  state: unavailable
+  friendly_name: Estimated distance
+  device_class: distance
+  unit: m
+  state_class: measurement
+- entity_id: sensor.e3_vitodens_100_0421_1_boiler_supply_temperature
+  state: '58.7'
+  friendly_name: Viessmann W100 Boiler Boiler supply temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.e3_vitodens_100_0421_1_burner_hours
+  state: '981'
+  friendly_name: Viessmann W100 Boiler Burner hours
+  device_class: null
+  unit: h
+  state_class: total_increasing
+- entity_id: sensor.e3_vitodens_100_0421_1_burner_modulation
+  state: '27.5'
+  friendly_name: Viessmann W100 Boiler Burner modulation
+  device_class: null
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.e3_vitodens_100_0421_1_burner_starts
+  state: '401'
+  friendly_name: Viessmann W100 Boiler Burner starts
+  device_class: null
+  unit: null
+  state_class: total_increasing
+- entity_id: sensor.e3_vitodens_100_0421_1_heating_electricity_consumption_last_seven_days
+  state: '7.7'
+  friendly_name: Viessmann W100 Boiler Heating electricity consumption last seven
+    days
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.e3_vitodens_100_0421_1_heating_electricity_consumption_today
+  state: '0.8'
+  friendly_name: Viessmann W100 Boiler Heating electricity consumption today
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.e3_vitodens_100_0421_1_heating_gas_consumption_today
+  state: '9.7'
+  friendly_name: Viessmann W100 Boiler Heating gas consumption today
+  device_class: gas
+  unit: m³
+  state_class: total_increasing
+- entity_id: sensor.e3_vitodens_100_0421_1_outside_temperature
+  state: '-7.8'
+  friendly_name: Viessmann W100 Boiler Outside temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.e3_vitodens_100_0421_1_supply_temperature
+  state: '58.7'
+  friendly_name: Viessmann W100 Boiler Supply temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.fritz_box_7530_ax_connection_uptime
+  state: '2026-02-02T02:14:51+00:00'
+  friendly_name: FRITZ!Box 7530 AX Connection uptime
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.fritz_box_7530_ax_cpu_temperature
+  state: '57'
+  friendly_name: FRITZ!Box 7530 AX CPU temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.fritz_box_7530_ax_download_throughput
+  state: '144.1'
+  friendly_name: FRITZ!Box 7530 AX Download throughput
+  device_class: data_rate
+  unit: kB/s
+  state_class: measurement
+- entity_id: sensor.fritz_box_7530_ax_external_ip
+  state: 83.135.0.206
+  friendly_name: FRITZ!Box 7530 AX External IP
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.fritz_box_7530_ax_external_ipv6
+  state: 2001:9e8:1fc1:9517:d624:ddff:fef5:cae7
+  friendly_name: FRITZ!Box 7530 AX External IPv6
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.fritz_box_7530_ax_gb_received
+  state: '826.3'
+  friendly_name: FRITZ!Box 7530 AX GB received
+  device_class: data_size
+  unit: GB
+  state_class: total_increasing
+- entity_id: sensor.fritz_box_7530_ax_gb_sent
+  state: '302.3'
+  friendly_name: FRITZ!Box 7530 AX GB sent
+  device_class: data_size
+  unit: GB
+  state_class: total_increasing
+- entity_id: sensor.fritz_box_7530_ax_last_restart
+  state: '2025-11-27T15:18:12+00:00'
+  friendly_name: FRITZ!Box 7530 AX Last restart
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.fritz_box_7530_ax_link_download_throughput
+  state: '148842.0'
+  friendly_name: FRITZ!Box 7530 AX Link download throughput
+  device_class: data_rate
+  unit: kbit/s
+  state_class: null
+- entity_id: sensor.fritz_box_7530_ax_link_upload_throughput
+  state: '52022.0'
+  friendly_name: FRITZ!Box 7530 AX Link upload throughput
+  device_class: data_rate
+  unit: kbit/s
+  state_class: null
+- entity_id: sensor.fritz_box_7530_ax_max_connection_download_throughput
+  state: '114113.0'
+  friendly_name: FRITZ!Box 7530 AX Max connection download throughput
+  device_class: data_rate
+  unit: kbit/s
+  state_class: null
+- entity_id: sensor.fritz_box_7530_ax_max_connection_upload_throughput
+  state: '45645.0'
+  friendly_name: FRITZ!Box 7530 AX Max connection upload throughput
+  device_class: data_rate
+  unit: kbit/s
+  state_class: null
+- entity_id: sensor.fritz_box_7530_ax_upload_throughput
+  state: '83.1'
+  friendly_name: FRITZ!Box 7530 AX Upload throughput
+  device_class: data_rate
+  unit: kB/s
+  state_class: measurement
+- entity_id: sensor.fritz_repeater_gf_cpu_temperature
+  state: '71'
+  friendly_name: fritz-repeater-gf CPU temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.fritz_repeater_gf_last_restart
+  state: '2026-01-22T01:25:42+00:00'
+  friendly_name: fritz-repeater-gf Last restart
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.front_door_person_name
+  state: No Person
+  friendly_name: Front Door Person Name
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.front_door_snooze_time
+  state: '0'
+  friendly_name: Front Door Snooze Time
+  device_class: null
+  unit: sec
+  state_class: null
+- entity_id: sensor.gas_meter_total_reading
+  state: '6242.72'
+  friendly_name: Gas Meter Total Reading
+  device_class: gas
+  unit: m³
+  state_class: total_increasing
+- entity_id: sensor.gas_used_since_reset
+  state: '527.63'
+  friendly_name: Gas Used Since Reset
+  device_class: gas
+  unit: m³
+  state_class: total_increasing
+- entity_id: sensor.homebase_current_mode
+  state: Home
+  friendly_name: Homebase Current Mode
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.kitchen_battery
+  state: '100.0'
+  friendly_name: Kitchen Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.kitchen_humidity
+  state: '48.0'
+  friendly_name: Kitchen Humidity
+  device_class: humidity
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.kitchen_rf_level
+  state: good
+  friendly_name: Kitchen RF Level
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.kitchen_temperature
+  state: '18.1'
+  friendly_name: Kitchen Temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.kitchenlightremote_battery
+  state: '95'
+  friendly_name: KitchenLightRemote Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.kitchenlightremote_voltage
+  state: '1300'
+  friendly_name: KitchenLightRemote Voltage
+  device_class: voltage
+  unit: mV
+  state_class: measurement
+- entity_id: sensor.l10s_ultra_gen_2_auto_empty_status
+  state: idle
+  friendly_name: L10s Ultra Gen 2 Auto Empty Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_battery_level
+  state: '100'
+  friendly_name: L10s Ultra Gen 2 Battery Level
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.l10s_ultra_gen_2_charging_status
+  state: charging_completed
+  friendly_name: L10s Ultra Gen 2 Charging Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_clean_water_tank_status
+  state: installed
+  friendly_name: L10s Ultra Gen 2 Clean Water Tank Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_cleaned_area
+  state: '30'
+  friendly_name: L10s Ultra Gen 2 Cleaned Area
+  device_class: null
+  unit: m²
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_cleaning_count
+  state: '134'
+  friendly_name: L10s Ultra Gen 2 Cleaning Count
+  device_class: null
+  unit: x
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_cleaning_history
+  state: '2026-01-31T23:58:58+00:00'
+  friendly_name: L10s Ultra Gen 2 Cleaning History
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_cleaning_progress
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Cleaning Progress
+  device_class: null
+  unit: '%'
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_cleaning_time
+  state: '55'
+  friendly_name: L10s Ultra Gen 2 Cleaning Time
+  device_class: null
+  unit: min
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_current_room
+  state: Dining Hall
+  friendly_name: L10s Ultra Gen 2 Current Room
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_detergent_status
+  state: installed
+  friendly_name: L10s Ultra Gen 2 Detergent Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_dirty_water_tank_status
+  state: installed
+  friendly_name: L10s Ultra Gen 2 Dirty Water Tank Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_drainage_status
+  state: idle
+  friendly_name: L10s Ultra Gen 2 Drainage Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_drying_progress
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Drying Progress
+  device_class: null
+  unit: '%'
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_dust_bag_status
+  state: installed
+  friendly_name: L10s Ultra Gen 2 Dust Bag Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_dust_collection
+  state: available
+  friendly_name: L10s Ultra Gen 2 Dust Collection
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_error
+  state: no_error
+  friendly_name: L10s Ultra Gen 2 Error
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_filter_left
+  state: '64'
+  friendly_name: L10s Ultra Gen 2 Filter Left
+  device_class: null
+  unit: '%'
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_filter_time_left
+  state: '97'
+  friendly_name: L10s Ultra Gen 2 Filter Time Left
+  device_class: null
+  unit: hr
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_firmware_version
+  state: '1611'
+  friendly_name: L10s Ultra Gen 2 Firmware Version
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_first_cleaning_date
+  state: '2025-10-12T13:28:28+00:00'
+  friendly_name: L10s Ultra Gen 2 First Cleaning Date
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_low_water_warning
+  state: no_warning
+  friendly_name: L10s Ultra Gen 2 Low Water Warning
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_main_brush_left
+  state: '82'
+  friendly_name: L10s Ultra Gen 2 Main Brush Left
+  device_class: null
+  unit: '%'
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_main_brush_time_left
+  state: '247'
+  friendly_name: L10s Ultra Gen 2 Main Brush  Time Left
+  device_class: null
+  unit: hr
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_mapping_time
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Mapping Time
+  device_class: null
+  unit: min
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_mop_pad
+  state: installed
+  friendly_name: L10s Ultra Gen 2 Mop Pad
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_relocation_status
+  state: located
+  friendly_name: L10s Ultra Gen 2 Relocation Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_self_wash_base_status
+  state: idle
+  friendly_name: L10s Ultra Gen 2 Self-Wash Base Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_sensor_dirty_left
+  state: '29'
+  friendly_name: L10s Ultra Gen 2 Sensor Dirty Left
+  device_class: null
+  unit: '%'
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_sensor_dirty_time_left
+  state: '8'
+  friendly_name: L10s Ultra Gen 2 Sensor Dirty Time Left
+  device_class: null
+  unit: hr
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_side_brush_left
+  state: '73'
+  friendly_name: L10s Ultra Gen 2 Side Brush Left
+  device_class: null
+  unit: '%'
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_side_brush_time_left
+  state: '147'
+  friendly_name: L10s Ultra Gen 2 Side Brush Time Left
+  device_class: null
+  unit: hr
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_state
+  state: charging_completed
+  friendly_name: L10s Ultra Gen 2 State
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_station_drainage_status
+  state: idle
+  friendly_name: L10s Ultra Gen 2 Station Drainage Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_status
+  state: sleeping
+  friendly_name: L10s Ultra Gen 2 Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_task_status
+  state: completed
+  friendly_name: L10s Ultra Gen 2 Task Status
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_task_type
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Task Type
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_total_cleaned_area
+  state: '1660'
+  friendly_name: L10s Ultra Gen 2 Total Cleaned Area
+  device_class: null
+  unit: m²
+  state_class: null
+- entity_id: sensor.l10s_ultra_gen_2_total_cleaning_time
+  state: '3156'
+  friendly_name: L10s Ultra Gen 2 Total Cleaning Time
+  device_class: duration
+  unit: min
+  state_class: null
+- entity_id: sensor.living_room_smoke_alarm_battery
+  state: '100.0'
+  friendly_name: Living Room Smoke Alarm Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.living_room_smoke_alarm_rf_level
+  state: good
+  friendly_name: Living Room Smoke Alarm RF Level
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.living_room_temp_battery
+  state: '100.0'
+  friendly_name: Living Room Temp Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.living_room_temp_humidity
+  state: '42.4'
+  friendly_name: Living Room Temp Humidity
+  device_class: humidity
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.living_room_temp_rf_level
+  state: good
+  friendly_name: Living Room Temp RF Level
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.living_room_temp_temperature
+  state: '18.6'
+  friendly_name: Living Room Temp Temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.lock_ultra_4c_battery
+  state: '55'
+  friendly_name: Lock Ultra 4C Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.motion_sensor_1_battery
+  state: '100'
+  friendly_name: motion_sensor_1 Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.motion_sensor_1_illumination
+  state: bright
+  friendly_name: motion_sensor_1 Illumination
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.motion_sensor_1_voltage
+  state: '2900'
+  friendly_name: motion_sensor_1 Voltage
+  device_class: voltage
+  unit: mV
+  state_class: measurement
+- entity_id: sensor.motion_sensor_linkquality
+  state: '72'
+  friendly_name: motion_sensor_small_1 Linkquality
+  device_class: null
+  unit: lqi
+  state_class: measurement
+- entity_id: sensor.motion_sensor_small_1_battery
+  state: '88'
+  friendly_name: motion_sensor_small_1 Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.motion_sensor_small_1_voltage
+  state: '2700'
+  friendly_name: motion_sensor_small_1 Voltage
+  device_class: voltage
+  unit: mV
+  state_class: measurement
+- entity_id: sensor.ooono_0d06_estimated_distance
+  state: unavailable
+  friendly_name: Estimated distance
+  device_class: distance
+  unit: m
+  state_class: measurement
+- entity_id: sensor.ooono_b1a3_estimated_distance
+  state: unavailable
+  friendly_name: Estimated distance
+  device_class: distance
+  unit: m
+  state_class: measurement
+- entity_id: sensor.ooono_db85_estimated_distance
+  state: unavailable
+  friendly_name: Estimated distance
+  device_class: distance
+  unit: m
+  state_class: measurement
+- entity_id: sensor.outdoor_humidity
+  state: '56'
+  friendly_name: Outdoor Humidity
+  device_class: humidity
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.oven_current_oven_cavity_temperature
+  state: '20'
+  friendly_name: Oven Current oven cavity temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.oven_door
+  state: closed
+  friendly_name: Oven Door
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.oven_operation_state
+  state: inactive
+  friendly_name: Oven Operation state
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.oven_program_finish_time
+  state: unavailable
+  friendly_name: Oven Program finish time
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.oven_program_progress
+  state: unavailable
+  friendly_name: Oven Program progress
+  device_class: null
+  unit: '%'
+  state_class: null
+- entity_id: sensor.prayer_times_asr_prayer
+  state: '2026-02-02T14:05:00+00:00'
+  friendly_name: Prayer Times Asr prayer
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.prayer_times_dhuhr_prayer
+  state: '2026-02-02T11:21:00+00:00'
+  friendly_name: Prayer Times Dhuhr prayer
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.prayer_times_fajr_prayer
+  state: '2026-02-02T05:10:00+00:00'
+  friendly_name: Prayer Times Fajr prayer
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.prayer_times_isha_prayer
+  state: '2026-02-02T17:33:00+00:00'
+  friendly_name: Prayer Times Isha prayer
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.prayer_times_maghrib_prayer
+  state: '2026-02-02T15:55:00+00:00'
+  friendly_name: Prayer Times Maghrib prayer
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.prayer_times_midnight_time
+  state: '2026-02-02T23:21:00+00:00'
+  friendly_name: Prayer Times Midnight time
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.prayer_times_sunrise_time
+  state: '2026-02-02T06:48:00+00:00'
+  friendly_name: Prayer Times Sunrise time
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.relay_switch_2pm_2a_channel_1_current
+  state: '0'
+  friendly_name: Relay Switch 2PM 2A Channel 1 Current
+  device_class: current
+  unit: mA
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_2a_channel_1_energy
+  state: '0'
+  friendly_name: Relay Switch 2PM 2A Channel 1 Energy
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.relay_switch_2pm_2a_channel_1_power
+  state: '0'
+  friendly_name: Relay Switch 2PM 2A Channel 1 Power
+  device_class: power
+  unit: W
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_2a_channel_1_voltage
+  state: '0'
+  friendly_name: Relay Switch 2PM 2A Channel 1 Voltage
+  device_class: voltage
+  unit: V
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_2a_channel_2_current
+  state: '434'
+  friendly_name: Relay Switch 2PM 2A Channel 2 Current
+  device_class: current
+  unit: mA
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_2a_channel_2_energy
+  state: '12'
+  friendly_name: Relay Switch 2PM 2A Channel 2 Energy
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.relay_switch_2pm_2a_channel_2_power
+  state: '39'
+  friendly_name: Relay Switch 2PM 2A Channel 2 Power
+  device_class: power
+  unit: W
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_2a_channel_2_voltage
+  state: '239.3'
+  friendly_name: Relay Switch 2PM 2A Channel 2 Voltage
+  device_class: voltage
+  unit: V
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_ce2a_channel_1_current
+  state: '0'
+  friendly_name: Dining Table Light Current
+  device_class: current
+  unit: A
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_ce2a_channel_1_energy
+  state: '0'
+  friendly_name: Dining Table Light Energy
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.relay_switch_2pm_ce2a_channel_1_power
+  state: '0'
+  friendly_name: Dining Table Light Power
+  device_class: power
+  unit: W
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_ce2a_channel_1_voltage
+  state: '0'
+  friendly_name: Dining Table Light Voltage
+  device_class: voltage
+  unit: V
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_ce2a_channel_2_current
+  state: '0.4'
+  friendly_name: Drawing Room Light Current
+  device_class: current
+  unit: A
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_ce2a_channel_2_energy
+  state: '0.01'
+  friendly_name: Drawing Room Light Energy
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.relay_switch_2pm_ce2a_channel_2_power
+  state: '39.0'
+  friendly_name: Drawing Room Light Power
+  device_class: power
+  unit: W
+  state_class: measurement
+- entity_id: sensor.relay_switch_2pm_ce2a_channel_2_voltage
+  state: '239'
+  friendly_name: Drawing Room Light Voltage
+  device_class: voltage
+  unit: V
+  state_class: measurement
+- entity_id: sensor.s2c0c9ec17e497de6c_b978_estimated_distance
+  state: unavailable
+  friendly_name: Estimated distance
+  device_class: distance
+  unit: m
+  state_class: measurement
+- entity_id: sensor.sadats_iphone_15_olx_activity
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX Activity
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_app_version
+  state: 2026.1.1
+  friendly_name: Sadat’s iPhone 15 OLX App Version
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_audio_output
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX Audio Output
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_battery_level
+  state: '90'
+  friendly_name: Sadat’s iPhone 15 OLX Battery Level
+  device_class: battery
+  unit: '%'
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_battery_state
+  state: Not Charging
+  friendly_name: Sadat’s iPhone 15 OLX Battery State
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_bssid
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX BSSID
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_connection_type
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX Connection Type
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_distance
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX Distance
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_floors_ascended
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX Floors Ascended
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_floors_descended
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX Floors Descended
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_last_update_trigger
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX Last Update Trigger
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_location_permission
+  state: Authorized when in use
+  friendly_name: Sadat’s iPhone 15 OLX Location permission
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_sim_1
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX SIM 1
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_sim_2
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX SIM 2
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_ssid
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX SSID
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_steps
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX Steps
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sadats_iphone_15_olx_storage
+  state: unavailable
+  friendly_name: Sadat’s iPhone 15 OLX Storage
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.sb12a08e57343db20c_b5c3_estimated_distance
+  state: unavailable
+  friendly_name: Estimated distance
+  device_class: distance
+  unit: m
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_a_current
+  state: '0.92'
+  friendly_name: Shelly Power Monitor Phase A Current
+  device_class: current
+  unit: A
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_a_energy
+  state: '1826.3968'
+  friendly_name: Shelly Power Monitor Phase A Energy
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.shelly_power_monitor_phase_a_energy_returned
+  state: '0.0002'
+  friendly_name: Shelly Power Monitor Phase A Energy returned
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.shelly_power_monitor_phase_a_power
+  state: '104.77'
+  friendly_name: Shelly Power Monitor Phase A Power
+  device_class: power
+  unit: W
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_a_power_factor
+  state: '0.48'
+  friendly_name: Shelly Power Monitor Phase A Power factor
+  device_class: power_factor
+  unit: null
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_a_voltage
+  state: '237.96'
+  friendly_name: Shelly Power Monitor Phase A Voltage
+  device_class: voltage
+  unit: V
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_b_current
+  state: '0.44'
+  friendly_name: Shelly Power Monitor Phase B Current
+  device_class: current
+  unit: A
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_b_energy
+  state: '982.73'
+  friendly_name: Shelly Power Monitor Phase B Energy
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.shelly_power_monitor_phase_b_energy_returned
+  state: '0.0'
+  friendly_name: Shelly Power Monitor Phase B Energy returned
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.shelly_power_monitor_phase_b_power
+  state: '27.31'
+  friendly_name: Shelly Power Monitor Phase B Power
+  device_class: power
+  unit: W
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_b_power_factor
+  state: '0.26'
+  friendly_name: Shelly Power Monitor Phase B Power factor
+  device_class: power_factor
+  unit: null
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_b_voltage
+  state: '237.14'
+  friendly_name: Shelly Power Monitor Phase B Voltage
+  device_class: voltage
+  unit: V
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_c_current
+  state: '0.53'
+  friendly_name: Shelly Power Monitor Phase C Current
+  device_class: current
+  unit: A
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_c_energy
+  state: '1160.3177'
+  friendly_name: Shelly Power Monitor Phase C Energy
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.shelly_power_monitor_phase_c_energy_returned
+  state: '0.0003'
+  friendly_name: Shelly Power Monitor Phase C Energy returned
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.shelly_power_monitor_phase_c_power
+  state: '62.96'
+  friendly_name: Shelly Power Monitor Phase C Power
+  device_class: power
+  unit: W
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_c_power_factor
+  state: '0.5'
+  friendly_name: Shelly Power Monitor Phase C Power factor
+  device_class: power_factor
+  unit: null
+  state_class: measurement
+- entity_id: sensor.shelly_power_monitor_phase_c_voltage
+  state: '237.64'
+  friendly_name: Shelly Power Monitor Phase C Voltage
+  device_class: voltage
+  unit: V
+  state_class: measurement
+- entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_config_overtemp_type
+  state: '-1'
+  friendly_name: Freezer Config overtemp type
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_consumption
+  state: '125.0'
+  friendly_name: Freezer Consumption
+  device_class: energy
+  unit: Wh
+  state_class: total_increasing
+- entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_current
+  state: '0.034'
+  friendly_name: Freezer Current
+  device_class: current
+  unit: A
+  state_class: measurement
+- entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_energy
+  state: '125'
+  friendly_name: Freezer Energy
+  device_class: energy
+  unit: Wh
+  state_class: total_increasing
+- entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_power
+  state: '1.025'
+  friendly_name: Freezer Power
+  device_class: power
+  unit: W
+  state_class: measurement
+- entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_signal_strength
+  state: '81'
+  friendly_name: Freezer Signal strength
+  device_class: null
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_voltage
+  state: '235.0'
+  friendly_name: Freezer Voltage
+  device_class: voltage
+  unit: V
+  state_class: measurement
+- entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_config_overtemp_type
+  state: '-1'
+  friendly_name: Washing Machine Config overtemp type
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_consumption
+  state: '0.0'
+  friendly_name: Washing Machine Consumption
+  device_class: energy
+  unit: Wh
+  state_class: total_increasing
+- entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_current
+  state: '0.0'
+  friendly_name: Washing Machine Current
+  device_class: current
+  unit: A
+  state_class: measurement
+- entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_energy
+  state: '0'
+  friendly_name: Washing Machine Energy
+  device_class: energy
+  unit: Wh
+  state_class: total_increasing
+- entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_power
+  state: '0.0'
+  friendly_name: Washing Machine Power
+  device_class: power
+  unit: W
+  state_class: measurement
+- entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_signal_strength
+  state: '83'
+  friendly_name: Washing Machine Signal strength
+  device_class: null
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_voltage
+  state: '235.0'
+  friendly_name: Washing Machine Voltage
+  device_class: voltage
+  unit: V
+  state_class: measurement
+- entity_id: sensor.smart_roller_shutter_2403076692918970200148e1e9eecc6d_signal_strength
+  state: '94'
+  friendly_name: Window Blinds Signal strength
+  device_class: null
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.smart_roller_shutter_24121047557727700802c4e7ae116985_signal_strength
+  state: '96'
+  friendly_name: Garden Shade Signal strength
+  device_class: null
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.smoke_alarm_battery
+  state: '100.0'
+  friendly_name: Top Floor Alarm Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.smoke_alarm_rf_level
+  state: good
+  friendly_name: Top Floor Alarm RF Level
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.speedtest_download
+  state: '61.37'
+  friendly_name: SpeedTest Download
+  device_class: data_rate
+  unit: Mbit/s
+  state_class: measurement
+- entity_id: sensor.speedtest_ping
+  state: '59'
+  friendly_name: SpeedTest Ping
+  device_class: duration
+  unit: ms
+  state_class: measurement
+- entity_id: sensor.speedtest_upload
+  state: '29.93'
+  friendly_name: SpeedTest Upload
+  device_class: data_rate
+  unit: Mbit/s
+  state_class: measurement
+- entity_id: sensor.stairwell_alarm_battery
+  state: '100.0'
+  friendly_name: Stairwell Alarm Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.stairwell_alarm_rf_level
+  state: good
+  friendly_name: Stairwell Alarm RF Level
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.sun_next_dawn
+  state: '2026-02-03T06:08:59+00:00'
+  friendly_name: Sun Next dawn
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.sun_next_dusk
+  state: '2026-02-03T16:34:05+00:00'
+  friendly_name: Sun Next dusk
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.sun_next_midnight
+  state: '2026-02-02T23:21:11+00:00'
+  friendly_name: Sun Next midnight
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.sun_next_noon
+  state: '2026-02-03T11:21:07+00:00'
+  friendly_name: Sun Next noon
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.sun_next_rising
+  state: '2026-02-03T06:46:43+00:00'
+  friendly_name: Sun Next rising
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.sun_next_setting
+  state: '2026-02-03T15:56:18+00:00'
+  friendly_name: Sun Next setting
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_app_version
+  state: 2025.10.0
+  friendly_name: Syed Sadat’s iPad App Version
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_audio_output
+  state: unavailable
+  friendly_name: Syed Sadat’s iPad Audio Output
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_battery_level
+  state: '1'
+  friendly_name: Syed Sadat’s iPad Battery Level
+  device_class: battery
+  unit: '%'
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_battery_state
+  state: Not Charging
+  friendly_name: Syed Sadat’s iPad Battery State
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_bssid
+  state: unavailable
+  friendly_name: Syed Sadat’s iPad BSSID
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_connection_type
+  state: unavailable
+  friendly_name: Syed Sadat’s iPad Connection Type
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_geocoded_location
+  state: unavailable
+  friendly_name: Syed Sadat’s iPad Geocoded Location
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_last_update_trigger
+  state: unavailable
+  friendly_name: Syed Sadat’s iPad Last Update Trigger
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_location_permission
+  state: Authorized Always
+  friendly_name: Syed Sadat’s iPad Location permission
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_ssid
+  state: unavailable
+  friendly_name: Syed Sadat’s iPad SSID
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.syed_sadats_ipad_storage
+  state: unavailable
+  friendly_name: Syed Sadat’s iPad Storage
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.tasmota_counter_c1
+  state: '52763'
+  friendly_name: Tasmota COUNTER C1
+  device_class: null
+  unit: null
+  state_class: measurement
+- entity_id: sensor.tasmota_last_restart_time
+  state: '2025-11-27T15:18:03+00:00'
+  friendly_name: Tasmota Last Restart Time
+  device_class: timestamp
+  unit: null
+  state_class: null
+- entity_id: sensor.tasmota_mqtt_connect_count
+  state: '14'
+  friendly_name: Tasmota MQTT Connect Count
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.tasmota_restart_reason
+  state: Power On
+  friendly_name: Tasmota Restart Reason
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.tasmota_ssid
+  state: Baitul Asad
+  friendly_name: Tasmota SSID
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.tasmota_wifi_connect_count
+  state: '10'
+  friendly_name: Tasmota WiFi Connect Count
+  device_class: null
+  unit: null
+  state_class: null
+- entity_id: sensor.today_s_gas_usage_energy
+  state: '93.04'
+  friendly_name: Today's Gas Usage (Energy)
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.today_s_gas_usage_volume
+  state: '8.63'
+  friendly_name: Today's Gas Usage (Volume)
+  device_class: gas
+  unit: m³
+  state_class: total_increasing
+- entity_id: sensor.top_floor_thermo_battery
+  state: '100.0'
+  friendly_name: Top floor thermo Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.top_floor_thermo_humidity
+  state: '51.2'
+  friendly_name: Top floor thermo Humidity
+  device_class: humidity
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.top_floor_thermo_rf_level
+  state: good
+  friendly_name: Top floor thermo RF Level
+  device_class: enum
+  unit: null
+  state_class: null
+- entity_id: sensor.top_floor_thermo_temperature
+  state: '17.8'
+  friendly_name: Top floor thermo Temperature
+  device_class: temperature
+  unit: °C
+  state_class: measurement
+- entity_id: sensor.total_energy
+  state: '3969.44'
+  friendly_name: Total Energy
+  device_class: null
+  unit: kWh
+  state_class: measurement
+- entity_id: sensor.total_power_consumed
+  state: '195.04'
+  friendly_name: Total Power Consumed
+  device_class: null
+  unit: W
+  state_class: measurement
+- entity_id: sensor.viessmann_w100_boiler_supply_pressure
+  state: '1.1'
+  friendly_name: Viessmann W100 Boiler Supply pressure
+  device_class: pressure
+  unit: bar
+  state_class: measurement
+- entity_id: sensor.water_timer_battery
+  state: unavailable
+  friendly_name: Water Timer Battery
+  device_class: battery
+  unit: '%'
+  state_class: measurement
+- entity_id: sensor.water_timer_total_watering_time
+  state: unavailable
+  friendly_name: Water Timer Total watering time
+  device_class: null
+  unit: s
+  state_class: total_increasing
+- entity_id: sensor.yahoofinance_gc_f
+  state: '4703.1'
+  friendly_name: Gold Apr 26
+  device_class: null
+  unit: USD
+  state_class: measurement
+- entity_id: sensor.yesterday_s_gas_usage_energy
+  state: '80.10'
+  friendly_name: Yesterday's Gas Usage (Energy)
+  device_class: energy
+  unit: kWh
+  state_class: total_increasing
+- entity_id: sensor.yesterday_s_gas_usage_volume
+  state: '7.43'
+  friendly_name: Yesterday's Gas Usage (Volume)
+  device_class: gas
+  unit: m³
+  state_class: total_increasing
+- entity_id: sensor.zigbee2mqtt_bridge_version
+  state: 2.7.1
+  friendly_name: Zigbee2MQTT Bridge Version
+  device_class: null
+  unit: null
+  state_class: null
+stt:
+- entity_id: stt.google_ai_stt_4
+  state: unknown
+  friendly_name: Google AI STT
+  device_class: null
+  unit: null
+sun:
+- entity_id: sun.sun
+  state: below_horizon
+  friendly_name: Sun
+  device_class: null
+  unit: null
+switch:
+- entity_id: switch.5cg4114lhp_w10_internet_access
+  state: unavailable
+  friendly_name: 5CG4114LHP-W10 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.7d30a712_dedd_4e32_807e_162fc16ad917_internet_access
+  state: unavailable
+  friendly_name: 7d30a712-dedd-4e32-807e-162fc16ad917 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.aivi2_access_da_internet_access
+  state: 'on'
+  friendly_name: AIVI2-ACCESS-DA Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.amazon_2366ca2f8_internet_access
+  state: 'on'
+  friendly_name: amazon-2366ca2f8 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.android_internet_access
+  state: 'on'
+  friendly_name: Android-2 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.aneeqa_internet_access
+  state: 'on'
+  friendly_name: Aneeqa Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.backyard_antitheft_detection
+  state: 'off'
+  friendly_name: Backyard Antitheft Detection
+  device_class: null
+  unit: null
+- entity_id: switch.backyard_audio_recording
+  state: 'on'
+  friendly_name: Backyard Audio Recording
+  device_class: null
+  unit: null
+- entity_id: switch.backyard_camera_enabled
+  state: 'on'
+  friendly_name: Backyard Camera enabled
+  device_class: null
+  unit: null
+- entity_id: switch.backyard_light
+  state: 'off'
+  friendly_name: Backyard Light
+  device_class: null
+  unit: null
+- entity_id: switch.backyard_microphone
+  state: 'on'
+  friendly_name: Backyard Microphone
+  device_class: null
+  unit: null
+- entity_id: switch.backyard_motion_detection
+  state: 'on'
+  friendly_name: Backyard Motion Detection
+  device_class: null
+  unit: null
+- entity_id: switch.backyard_rtsp_stream
+  state: 'on'
+  friendly_name: Backyard RTSP Stream
+  device_class: null
+  unit: null
+- entity_id: switch.backyard_speaker
+  state: 'on'
+  friendly_name: Backyard Speaker
+  device_class: null
+  unit: null
+- entity_id: switch.backyard_status_led
+  state: 'off'
+  friendly_name: Backyard Status LED
+  device_class: null
+  unit: null
+- entity_id: switch.bedroom_lamp
+  state: 'on'
+  friendly_name: Bedroom Lamp
+  device_class: null
+  unit: null
+- entity_id: switch.de_olx_j60xrd633h_internet_access
+  state: 'on'
+  friendly_name: Mac Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.de_olx_r7vxk462q4_internet_access_2
+  state: unavailable
+  friendly_name: DE-OLX-R7VXK462Q4 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.desktop_lg6ua53_internet_access
+  state: 'on'
+  friendly_name: DESKTOP-LG6UA53 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.dishwasher_eco_dry
+  state: 'on'
+  friendly_name: Dishwasher Eco dry
+  device_class: null
+  unit: null
+- entity_id: switch.dishwasher_hygiene
+  state: 'off'
+  friendly_name: Dishwasher Hygiene +
+  device_class: null
+  unit: null
+- entity_id: switch.dishwasher_intensive_zone
+  state: 'off'
+  friendly_name: Dishwasher Intensive zone
+  device_class: null
+  unit: null
+- entity_id: switch.dishwasher_internet_access
+  state: 'on'
+  friendly_name: Dishwasher Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.dishwasher_power
+  state: 'off'
+  friendly_name: Dishwasher Power
+  device_class: null
+  unit: null
+- entity_id: switch.dishwasher_silence_on_demand
+  state: unavailable
+  friendly_name: Silence on demand
+  device_class: null
+  unit: null
+- entity_id: switch.dishwasher_vario_speed
+  state: 'off'
+  friendly_name: Dishwasher Vario speed +
+  device_class: null
+  unit: null
+- entity_id: switch.doorbell_audio_recording_2
+  state: 'on'
+  friendly_name: Doorbell Audio Recording
+  device_class: null
+  unit: null
+- entity_id: switch.doorbell_auto_nightvision_2
+  state: 'on'
+  friendly_name: Doorbell Auto Nightvision
+  device_class: null
+  unit: null
+- entity_id: switch.doorbell_camera_enabled_2
+  state: 'on'
+  friendly_name: Doorbell Camera enabled
+  device_class: null
+  unit: null
+- entity_id: switch.doorbell_indoor_chime_enabled_2
+  state: 'off'
+  friendly_name: Doorbell Indoor Chime Enabled
+  device_class: null
+  unit: null
+- entity_id: switch.doorbell_motion_detection_2
+  state: 'on'
+  friendly_name: Doorbell Motion Detection
+  device_class: null
+  unit: null
+- entity_id: switch.doorbell_status_led_2
+  state: 'on'
+  friendly_name: Doorbell Status LED
+  device_class: null
+  unit: null
+- entity_id: switch.dreame_vacuum_r2469x_internet_access
+  state: 'on'
+  friendly_name: dreame-vacuum-r2469x Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.echoshow_290849e62c26e6f7_internet_access
+  state: unavailable
+  friendly_name: echoshow-290849e62c26e6f7 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.epson310a43_internet_access
+  state: unavailable
+  friendly_name: EPSON310A43 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.esp32_bluetooth_proxy_59e048_internet_access
+  state: 'on'
+  friendly_name: bluetoothproxy1 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.eufyhomebase_internet_access
+  state: 'on'
+  friendly_name: eufyhomebase Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.faizans_macbook_pro_internet_access
+  state: unavailable
+  friendly_name: Faizans-MacBook-Pro Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.fritz_box_7530_ax_port_forward_home_assistant
+  state: 'on'
+  friendly_name: 'FRITZ!Box 7530 AX Port forward Home Assistant '
+  device_class: null
+  unit: null
+- entity_id: switch.fritz_box_7530_ax_wi_fi_baitul_asad_2_4ghz
+  state: 'on'
+  friendly_name: FRITZ!Box 7530 AX Wi-Fi Baitul Asad (2.4Ghz)
+  device_class: null
+  unit: null
+- entity_id: switch.fritz_box_7530_ax_wi_fi_baitul_asad_5ghz
+  state: 'on'
+  friendly_name: FRITZ!Box 7530 AX Wi-Fi Baitul Asad (5Ghz)
+  device_class: null
+  unit: null
+- entity_id: switch.fritz_box_7530_ax_wi_fi_fritz_box_guest_access
+  state: 'off'
+  friendly_name: FRITZ!Box 7530 AX Wi-Fi FRITZ!Box guest access
+  device_class: null
+  unit: null
+- entity_id: switch.fritz_repeater_entrance_internet_access
+  state: unavailable
+  friendly_name: fritz-repeater-entrance Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.fritz_repeater_gf_internet_access
+  state: unavailable
+  friendly_name: fritz-repeater-gf Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.front_door_antitheft_detection
+  state: 'off'
+  friendly_name: Front Door Antitheft Detection
+  device_class: null
+  unit: null
+- entity_id: switch.front_door_audio_recording
+  state: 'on'
+  friendly_name: Front Door Audio Recording
+  device_class: null
+  unit: null
+- entity_id: switch.front_door_camera_enabled
+  state: 'on'
+  friendly_name: Front Door Camera enabled
+  device_class: null
+  unit: null
+- entity_id: switch.front_door_light
+  state: 'off'
+  friendly_name: Front Door Light
+  device_class: null
+  unit: null
+- entity_id: switch.front_door_microphone
+  state: 'on'
+  friendly_name: Front Door Microphone
+  device_class: null
+  unit: null
+- entity_id: switch.front_door_motion_detection
+  state: 'on'
+  friendly_name: Front Door Motion Detection
+  device_class: null
+  unit: null
+- entity_id: switch.front_door_rtsp_stream
+  state: 'on'
+  friendly_name: Front Door RTSP Stream
+  device_class: null
+  unit: null
+- entity_id: switch.front_door_speaker
+  state: 'on'
+  friendly_name: Front Door Speaker
+  device_class: null
+  unit: null
+- entity_id: switch.front_door_status_led
+  state: 'off'
+  friendly_name: Front Door Status LED
+  device_class: null
+  unit: null
+- entity_id: switch.front_light
+  state: 'on'
+  friendly_name: Front Light Front Light
+  device_class: null
+  unit: null
+- entity_id: switch.galaxy_a56_5g_internet_access
+  state: 'on'
+  friendly_name: Galaxy-A56-5G Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.homeassistant_internet_access
+  state: 'on'
+  friendly_name: homeassistant Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.hpi753923_internet_access
+  state: 'on'
+  friendly_name: HPI753923 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.iphone_internet_access
+  state: 'on'
+  friendly_name: iPhone Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.iphone_internet_access_2
+  state: unavailable
+  friendly_name: sadat---siphone Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.iphone_internet_access_3
+  state: 'on'
+  friendly_name: iPhone Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.iphone_internet_access_4
+  state: unavailable
+  friendly_name: iPhone Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.iphone_internet_access_5
+  state: 'on'
+  friendly_name: iPhone Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.iphone_internet_access_6
+  state: 'on'
+  friendly_name: sadat---siphone Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.irfanuls_iphone_internet_access
+  state: unavailable
+  friendly_name: Irfanuls-iPhone Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_auto_drying
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 Auto Drying
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_auto_water_refilling
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 Auto Water Refilling
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_carpet_boost
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Carpet Boost
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_child_lock
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 Child Lock
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_clean_carpets_first
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 Clean Carpets First
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_cleaning_sequence
+  state: 'on'
+  friendly_name: L10s Ultra Gen 2 Cleaning Sequence
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_collision_avoidance
+  state: 'on'
+  friendly_name: L10s Ultra Gen 2 Collision Avoidance
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_customized_cleaning
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 Customized Cleaning
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_dnd
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 DnD
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_floor_direction_cleaning
+  state: 'on'
+  friendly_name: L10s Ultra Gen 2 Floor Direction Cleaning
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_gap_cleaning_extension
+  state: 'on'
+  friendly_name: L10s Ultra Gen 2 Gap Cleaning Extension
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_intelligent_recognition
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 Intelligent Recognition
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_intensive_carpet_cleaning
+  state: 'on'
+  friendly_name: L10s Ultra Gen 2 Intensive Carpet Cleaning
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_max_suction_power
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Max Suction Power
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_mop_extend
+  state: 'on'
+  friendly_name: L10s Ultra Gen 2 Mop Extend
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_mopping_under_furnitures
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 Mopping Under Furnitures
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_multi_floor_map
+  state: 'on'
+  friendly_name: L10s Ultra Gen 2 Multi Floor Map
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_obstacle_avoidance
+  state: 'on'
+  friendly_name: L10s Ultra Gen 2 Obstacle Avoidance
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_off_peak_charging
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 Off-Peak Charging
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_pet_focused_detection
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Pet Focused Detection
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_resume_cleaning
+  state: 'on'
+  friendly_name: L10s Ultra Gen 2 Resume Cleaning
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_self_clean
+  state: 'on'
+  friendly_name: L10s Ultra Gen 2 Self-Clean
+  device_class: null
+  unit: null
+- entity_id: switch.l10s_ultra_gen_2_ultra_clean_mode
+  state: 'off'
+  friendly_name: L10s Ultra Gen 2 Ultra Clean Mode
+  device_class: null
+  unit: null
+- entity_id: switch.living_room_tv
+  state: unknown
+  friendly_name: Living room TV
+  device_class: switch
+  unit: null
+- entity_id: switch.macbook_pro_2_internet_access
+  state: unavailable
+  friendly_name: Mac Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.macbookpro_internet_access
+  state: 'on'
+  friendly_name: MacBookPro Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.macmini_7_internet_access
+  state: 'on'
+  friendly_name: macmini Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.macmini_internet_access
+  state: 'on'
+  friendly_name: macmini Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.meross_garden_shade_internet_access
+  state: 'on'
+  friendly_name: meross-garden-shade Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.meross_smart_plug_internet_access
+  state: 'on'
+  friendly_name: Meross-Smart-Plug Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.meross_smart_plug_internet_access_2
+  state: 'on'
+  friendly_name: Meross-Smart-Plug Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.merosswindowblinds_internet_access
+  state: 'on'
+  friendly_name: merosswindowblinds Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.net_a1_fe8c_internet_access
+  state: 'on'
+  friendly_name: net-a1-FE8C Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.oven_child_lock
+  state: 'off'
+  friendly_name: Oven Child lock
+  device_class: null
+  unit: null
+- entity_id: switch.oven_power
+  state: 'off'
+  friendly_name: Oven Power
+  device_class: null
+  unit: null
+- entity_id: switch.pc_0e_08_b5_71_8f_fa_internet_access
+  state: unavailable
+  friendly_name: PC-0E-08-B5-71-8F-FA Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_18b8_fb6b_b15d_4bf0_internet_access
+  state: unavailable
+  friendly_name: PC---18b8-fb6b-b15d-4bf0 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_103_internet_access
+  state: unavailable
+  friendly_name: 63a1fa91-3ef7-4039-bf63-97f36c456495 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_108_internet_access
+  state: 'on'
+  friendly_name: PC-192-168-178-108 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_113_internet_access
+  state: 'on'
+  friendly_name: 98faf432-a33c-4329-81bb-5858e3117ecb Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_116_internet_access
+  state: 'on'
+  friendly_name: Alizas-iPhone Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_52_internet_access
+  state: unavailable
+  friendly_name: PC-192-168-178-52 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_59_internet_access
+  state: unavailable
+  friendly_name: PC-192-168-178-59 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_65_internet_access
+  state: unavailable
+  friendly_name: PC-192-168-178-65 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_72_internet_access
+  state: unavailable
+  friendly_name: PC-192-168-178-72 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_80_internet_access
+  state: unavailable
+  friendly_name: PC-192-168-178-80 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_86_internet_access
+  state: 'on'
+  friendly_name: iPhone Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_91_internet_access
+  state: unavailable
+  friendly_name: PC-192-168-178-91 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_94_internet_access
+  state: 'on'
+  friendly_name: b2898d9a-254b-4a48-af0e-3e0c6a3d8b26 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_192_168_178_95_internet_access
+  state: 'on'
+  friendly_name: PC-192-168-178-95 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_1e_23_53_72_3b_39_internet_access
+  state: unavailable
+  friendly_name: PC-1E-23-53-72-3B-39 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_22_ad_b6_f8_bb_b1_internet_access
+  state: 'on'
+  friendly_name: bbea4771-485a-41b0-8c3d-cf8afb07a9e5 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_26_a2_92_ea_f4_dc_internet_access
+  state: 'on'
+  friendly_name: Irfanuls-iPhone Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_36_1e_30_19_3b_f0_internet_access
+  state: 'on'
+  friendly_name: fritz-repeater-gf Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_46_ab_6f_99_10_c8_internet_access
+  state: 'on'
+  friendly_name: cc0febcd-92e5-44d6-b100-958598bd522f Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_5a_01_49_ed_d2_c5_internet_access
+  state: unavailable
+  friendly_name: PC-5A-01-49-ED-D2-C5 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_60_74_f4_9c_1d_c6_internet_access
+  state: 'on'
+  friendly_name: PC-60-74-F4-9C-1D-C6 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_60_74_f4_be_3b_00_internet_access
+  state: 'on'
+  friendly_name: PC-60-74-F4-BE-3B-00 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_92_de_09_70_e0_14_internet_access
+  state: 'on'
+  friendly_name: PC-92-DE-09-70-E0-14 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_b4_0a_d8_a2_49_69_internet_access
+  state: 'on'
+  friendly_name: PS5-B49D4D Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_d2_f5_8f_51_92_cd_internet_access
+  state: 'on'
+  friendly_name: PC-D2-F5-8F-51-92-CD Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_d8_d6_68_a0_c8_79_internet_access
+  state: 'on'
+  friendly_name: PC-D8-D6-68-A0-C8-79 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_ee_3c_c5_72_15_37_internet_access
+  state: 'on'
+  friendly_name: PC-EE-3C-C5-72-15-37 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.pc_fe_2e_46_bc_28_e8_internet_access
+  state: unavailable
+  friendly_name: PC-FE-2E-46-BC-28-E8 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.relay_switch_2pm_2a_channel_1
+  state: 'off'
+  friendly_name: Relay Switch 2PM 2A Channel 1
+  device_class: switch
+  unit: null
+- entity_id: switch.relay_switch_2pm_2a_channel_2
+  state: 'on'
+  friendly_name: Relay Switch 2PM 2A Channel 2
+  device_class: switch
+  unit: null
+- entity_id: switch.relay_switch_2pm_ce2a_channel_1
+  state: 'off'
+  friendly_name: Dining Table Light
+  device_class: switch
+  unit: null
+- entity_id: switch.relay_switch_2pm_ce2a_channel_2
+  state: 'on'
+  friendly_name: Drawing Room Light
+  device_class: switch
+  unit: null
+- entity_id: switch.relay_switch_2pm_o1
+  state: 'off'
+  friendly_name: Dining Table Light
+  device_class: outlet
+  unit: null
+- entity_id: switch.relay_switch_2pm_o2
+  state: 'on'
+  friendly_name: Drawing Are Light
+  device_class: outlet
+  unit: null
+- entity_id: switch.sadats_mbp_internet_access
+  state: 'on'
+  friendly_name: Sadats-MBP Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.sadats_mbp_internet_access_2
+  state: unavailable
+  friendly_name: Sadats-MBP Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.samsung_internet_access
+  state: 'on'
+  friendly_name: Samsung Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.sbs50_997347_internet_access
+  state: 'on'
+  friendly_name: SBS50-997347 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.shadmans_macbook_pro_internet_access
+  state: unavailable
+  friendly_name: Shadmans-MacBook-Pro Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.shadmans_macbook_pro_internet_access_2
+  state: unavailable
+  friendly_name: Shadmans-MacBook-Pro Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.shelly1minig3_e4b3231a4e14_internet_access
+  state: 'on'
+  friendly_name: shelly1minig3-e4b3231a4e14 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.shelly1pmminig3_34b7daca88a8_internet_access
+  state: 'on'
+  friendly_name: shelly1pmminig3-34b7daca88a8 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.shelly3em_internet_access
+  state: 'on'
+  friendly_name: shelly3 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.shelly_power_monitor
+  state: 'off'
+  friendly_name: Shelly Power Monitor
+  device_class: null
+  unit: null
+- entity_id: switch.siemensoven_internet_access
+  state: 'on'
+  friendly_name: siemens-oven-384070390159010341 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.smart_plug_2212202420152151080b48e1e9b55812_config_overtemp_enable
+  state: 'on'
+  friendly_name: Freezer Config overtemp enable
+  device_class: switch
+  unit: null
+- entity_id: switch.smart_plug_2212202420152151080b48e1e9b55812_outlet
+  state: 'on'
+  friendly_name: Freezer Outlet
+  device_class: outlet
+  unit: null
+- entity_id: switch.smart_plug_2212208966263051080b48e1e9b557d2_config_overtemp_enable
+  state: 'on'
+  friendly_name: Washing Machine Config overtemp enable
+  device_class: switch
+  unit: null
+- entity_id: switch.smart_plug_2212208966263051080b48e1e9b557d2_outlet
+  state: 'on'
+  friendly_name: Washing Machine Outlet
+  device_class: outlet
+  unit: null
+- entity_id: switch.smartnetz_gas_reader_1073677969_internet_access
+  state: 'on'
+  friendly_name: gas Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.switchbot_hubminimatter_b2b9b8_internet_access
+  state: 'on'
+  friendly_name: SwitchBot-HubMiniMatter-B2B9B8 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.switchbot_relay_switch_11ce28_internet_access
+  state: 'on'
+  friendly_name: SwitchBot-Relay-Switch-11CE28 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.syed_sadats_ipad_internet_access
+  state: unavailable
+  friendly_name: Syed-Sadats-iPad Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.viessmann_2236_internet_access
+  state: 'on'
+  friendly_name: Viessmann-2236 Internet Access
+  device_class: null
+  unit: null
+- entity_id: switch.water_timer_switch
+  state: unavailable
+  friendly_name: Water Timer Switch
+  device_class: null
+  unit: null
+- entity_id: switch.zigbee2mqtt_bridge_permit_join
+  state: 'off'
+  friendly_name: Zigbee2MQTT Bridge Permit join
+  device_class: null
+  unit: null
+time:
+- entity_id: time.l10s_ultra_gen_2_dnd_end
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 DnD End
+  device_class: null
+  unit: null
+- entity_id: time.l10s_ultra_gen_2_dnd_start
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 DnD Start
+  device_class: null
+  unit: null
+- entity_id: time.l10s_ultra_gen_2_off_peak_charging_end
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Off-Peak Charging End
+  device_class: null
+  unit: null
+- entity_id: time.l10s_ultra_gen_2_off_peak_charging_start
+  state: unavailable
+  friendly_name: L10s Ultra Gen 2 Off-Peak Charging Start
+  device_class: null
+  unit: null
+todo:
+- entity_id: todo.shopping_list
+  state: '0'
+  friendly_name: Shopping List
+  device_class: null
+  unit: null
+tts:
+- entity_id: tts.google_ai_tts
+  state: '2025-10-21T17:48:27.605127+00:00'
+  friendly_name: Google AI TTS
+  device_class: null
+  unit: null
+- entity_id: tts.google_translate_en_com
+  state: '2025-10-10T14:50:37.760064+00:00'
+  friendly_name: Google Translate en com
+  device_class: null
+  unit: null
+update:
+- entity_id: update.advanced_ssh_web_terminal_update
+  state: 'off'
+  friendly_name: Advanced SSH & Web Terminal Update
+  device_class: null
+  unit: null
+- entity_id: update.apexcharts_card_update
+  state: 'off'
+  friendly_name: apexcharts-card update
+  device_class: null
+  unit: null
+- entity_id: update.bathroomlight
+  state: 'off'
+  friendly_name: BathroomLight
+  device_class: firmware
+  unit: null
+- entity_id: update.bathroomlightswitch
+  state: 'off'
+  friendly_name: BathroomLightSwitch
+  device_class: firmware
+  unit: null
+- entity_id: update.bedroom_lamp_firmware
+  state: 'off'
+  friendly_name: Bedroom Lamp Firmware
+  device_class: firmware
+  unit: null
+- entity_id: update.bubble_card_update
+  state: 'on'
+  friendly_name: Bubble Card update
+  device_class: null
+  unit: null
+- entity_id: update.button_card_update
+  state: 'off'
+  friendly_name: button-card update
+  device_class: null
+  unit: null
+- entity_id: update.card_mod_update
+  state: 'on'
+  friendly_name: card-mod update
+  device_class: null
+  unit: null
+- entity_id: update.dreame_vacuum_update
+  state: 'off'
+  friendly_name: Dreame Vacuum update
+  device_class: null
+  unit: null
+- entity_id: update.esp32_bluetooth_proxy_59e048_firmware
+  state: 'on'
+  friendly_name: Bluetooth Proxy 1 Firmware
+  device_class: null
+  unit: null
+- entity_id: update.eufy_security_update
+  state: 'off'
+  friendly_name: Eufy Security update
+  device_class: null
+  unit: null
+- entity_id: update.eufy_security_ws_update
+  state: 'off'
+  friendly_name: eufy-security-ws Update
+  device_class: null
+  unit: null
+- entity_id: update.file_editor_update
+  state: 'off'
+  friendly_name: File editor Update
+  device_class: null
+  unit: null
+- entity_id: update.fritz_box_7530_ax_fritz_os
+  state: 'off'
+  friendly_name: FRITZ!Box 7530 AX FRITZ!OS
+  device_class: null
+  unit: null
+- entity_id: update.fritz_repeater_gf_fritz_os
+  state: 'off'
+  friendly_name: fritz-repeater-gf FRITZ!OS
+  device_class: null
+  unit: null
+- entity_id: update.front_light_firmware
+  state: 'on'
+  friendly_name: Front Light Firmware
+  device_class: firmware
+  unit: null
+- entity_id: update.get_hacs_update
+  state: 'off'
+  friendly_name: Get HACS Update
+  device_class: null
+  unit: null
+- entity_id: update.go2rtc_update
+  state: 'on'
+  friendly_name: go2rtc Update
+  device_class: null
+  unit: null
+- entity_id: update.hacs_update
+  state: 'off'
+  friendly_name: HACS update
+  device_class: null
+  unit: null
+- entity_id: update.home_assistant_core_update
+  state: 'on'
+  friendly_name: Home Assistant Core Update
+  device_class: null
+  unit: null
+- entity_id: update.home_assistant_operating_system_update
+  state: 'on'
+  friendly_name: Home Assistant Operating System Update
+  device_class: null
+  unit: null
+- entity_id: update.home_assistant_supervisor_update
+  state: 'off'
+  friendly_name: Home Assistant Supervisor Update
+  device_class: null
+  unit: null
+- entity_id: update.home_connect_alt_update
+  state: 'on'
+  friendly_name: Home Connect Alt update
+  device_class: null
+  unit: null
+- entity_id: update.kitchencounter
+  state: 'off'
+  friendly_name: KitchenCounter
+  device_class: firmware
+  unit: null
+- entity_id: update.kitchenlightremote
+  state: 'on'
+  friendly_name: KitchenLightRemote
+  device_class: firmware
+  unit: null
+- entity_id: update.kitchenspot
+  state: 'on'
+  friendly_name: KitchenSpot
+  device_class: firmware
+  unit: null
+- entity_id: update.layout_card_update
+  state: 'off'
+  friendly_name: layout-card update
+  device_class: null
+  unit: null
+- entity_id: update.matter_server_update
+  state: 'on'
+  friendly_name: Matter Server Update
+  device_class: null
+  unit: null
+- entity_id: update.meross_lan_update
+  state: 'off'
+  friendly_name: Meross LAN update
+  device_class: null
+  unit: null
+- entity_id: update.midea_air_appliances_lan_update
+  state: 'off'
+  friendly_name: Midea Air Appliances (LAN) update
+  device_class: null
+  unit: null
+- entity_id: update.mini_graph_card_update
+  state: 'off'
+  friendly_name: mini-graph-card update
+  device_class: null
+  unit: null
+- entity_id: update.mosquitto_broker_update
+  state: 'off'
+  friendly_name: Mosquitto broker Update
+  device_class: null
+  unit: null
+- entity_id: update.motion_sensor_1
+  state: 'off'
+  friendly_name: motion_sensor_1
+  device_class: firmware
+  unit: null
+- entity_id: update.mushroom_update
+  state: 'off'
+  friendly_name: Mushroom update
+  device_class: null
+  unit: null
+- entity_id: update.stack_in_card_update
+  state: 'off'
+  friendly_name: Stack In Card update
+  device_class: null
+  unit: null
+- entity_id: update.swipe_card_update
+  state: 'off'
+  friendly_name: Swipe Card update
+  device_class: null
+  unit: null
+- entity_id: update.terminal_ssh_update
+  state: 'on'
+  friendly_name: Terminal & SSH Update
+  device_class: null
+  unit: null
+- entity_id: update.vertical_stack_in_card_update
+  state: 'off'
+  friendly_name: Vertical Stack In Card update
+  device_class: null
+  unit: null
+- entity_id: update.webrtc_camera_update
+  state: 'off'
+  friendly_name: WebRTC Camera update
+  device_class: null
+  unit: null
+- entity_id: update.xsense_update
+  state: 'off'
+  friendly_name: xsense update
+  device_class: null
+  unit: null
+- entity_id: update.yahoo_finance_update
+  state: 'on'
+  friendly_name: Yahoo Finance update
+  device_class: null
+  unit: null
+- entity_id: update.zigbee2mqtt_update
+  state: 'on'
+  friendly_name: Zigbee2MQTT Update
+  device_class: null
+  unit: null
+vacuum:
+- entity_id: vacuum.l10s_ultra_gen_2
+  state: docked
+  friendly_name: ' L10s Ultra Gen 2'
+  device_class: dreame_vacuum
+  unit: null
+valve:
+- entity_id: valve.water_timer_valve
+  state: unavailable
+  friendly_name: Water Timer Valve
+  device_class: water
+  unit: null
+weather:
+- entity_id: weather.forecast_home
+  state: cloudy
+  friendly_name: Forecast Home
+  device_class: null
+  unit: null
+zone:
+- entity_id: zone.home
+  state: '3'
+  friendly_name: Home
+  device_class: null
+  unit: null

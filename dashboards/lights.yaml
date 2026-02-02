@@ -1,0 +1,72 @@
+# Lights Dashboard
+# Lovelace dashboard for controlling all lights
+
+title: Lights
+views:
+  - title: All Lights
+    path: lights
+    icon: mdi:lightbulb-group
+    cards:
+      # Living Room
+      - type: vertical-stack
+        title: Living Room
+        cards:
+          - type: tile
+            entity: switch.relay_switch_2pm_ce2a_channel_1
+            name: Dining Table Light
+            icon: mdi:ceiling-light
+          - type: tile
+            entity: switch.relay_switch_2pm_ce2a_channel_2
+            name: Drawing Room Light
+            icon: mdi:floor-lamp
+          - type: tile
+            entity: light.govee_lamps
+            name: Govee Lamps
+
+      # Kitchen
+      - type: vertical-stack
+        title: Kitchen
+        cards:
+          - type: tile
+            entity: light.kitchen_lights
+            name: Kitchen Lights
+          - type: tile
+            entity: light.kitchencounter
+            name: Kitchen Counter
+          - type: tile
+            entity: light.kitchenspot
+            name: Kitchen Spot
+
+      # Bedroom
+      - type: vertical-stack
+        title: Bedroom
+        cards:
+          - type: tile
+            entity: switch.bedroom_lamp
+            name: Bedroom Lamp
+            icon: mdi:lamp
+
+      # Outdoor
+      - type: vertical-stack
+        title: Outdoor
+        cards:
+          - type: tile
+            entity: switch.front_light
+            name: Front Light
+            icon: mdi:outdoor-lamp
+          - type: tile
+            entity: switch.backyard_light
+            name: Backyard Light
+            icon: mdi:outdoor-lamp
+          - type: tile
+            entity: switch.front_door_light
+            name: Front Door Light
+            icon: mdi:coach-lamp
+
+      # Bathroom
+      - type: vertical-stack
+        title: Bathroom
+        cards:
+          - type: tile
+            entity: light.bathroomlight
+            name: Bathroom Light

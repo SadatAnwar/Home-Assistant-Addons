@@ -1,0 +1,590 @@
+title: Temperature - Glass
+icon: mdi:home-thermometer-outline
+views:
+- title: Overview
+  type: panel
+  cards:
+  - type: custom:stack-in-card
+    mode: vertical
+    card_mod:
+      style: |
+        ha-card {
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+    cards:
+    # Weather & Outside Section Header
+    - type: custom:bubble-card
+      card_type: separator
+      name: Weather & Outside
+      icon: mdi:weather-partly-cloudy
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    # Weather Row
+    - type: horizontal-stack
+      cards:
+      - type: weather-forecast
+        entity: weather.forecast_home
+        forecast_type: daily
+        show_current: true
+        show_forecast: true
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      - type: custom:stack-in-card
+        mode: vertical
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+        cards:
+        - type: custom:mushroom-template-card
+          primary: Outside
+          secondary: "{{ states('sensor.e3_vitodens_100_0421_1_outside_temperature') }}°C"
+          icon: mdi:thermometer
+          icon_color: |-
+            {% set temp = states('sensor.e3_vitodens_100_0421_1_outside_temperature') | float %}
+            {% if temp < 0 %}deep-purple
+            {% elif temp < 10 %}blue
+            {% elif temp < 18 %}cyan
+            {% elif temp < 25 %}teal
+            {% else %}amber{% endif %}
+          layout: horizontal
+          tap_action:
+            action: more-info
+          entity: sensor.e3_vitodens_100_0421_1_outside_temperature
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+        - type: custom:mini-graph-card
+          entities:
+          - entity: sensor.e3_vitodens_100_0421_1_outside_temperature
+            color: "rgba(38, 166, 154, 0.8)"
+          hours_to_show: 24
+          points_per_hour: 2
+          line_width: 2
+          height: 80
+          show:
+            name: false
+            icon: false
+            state: false
+            legend: false
+            fill: fade
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+
+    # Indoor Climate Section Header
+    - type: custom:bubble-card
+      card_type: separator
+      name: Indoor Climate
+      icon: mdi:home-thermometer
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    # Indoor Row 1: Parents, Kids, Living Room
+    - type: horizontal-stack
+      cards:
+      - type: custom:stack-in-card
+        mode: vertical
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+        cards:
+        - type: custom:mushroom-template-card
+          primary: Parents Bedroom
+          secondary: "{{ states('sensor.bedroom_thermo_temperature') }}°C | {{ states('sensor.bedroom_thermo_humidity') }}%"
+          icon: mdi:bed-king
+          icon_color: |-
+            {% set temp = states('sensor.bedroom_thermo_temperature') | float %}
+            {% if temp < 18 %}blue
+            {% elif temp < 22 %}teal
+            {% elif temp < 26 %}amber
+            {% else %}deep-orange{% endif %}
+          layout: horizontal
+          tap_action:
+            action: more-info
+          entity: sensor.bedroom_thermo_temperature
+          hold_action:
+            action: more-info
+            entity: sensor.bedroom_thermo_humidity
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+        - type: custom:mini-graph-card
+          entities:
+          - entity: sensor.bedroom_thermo_temperature
+            color: "rgba(255, 138, 101, 0.8)"
+          - entity: sensor.bedroom_thermo_humidity
+            color: "rgba(100, 181, 246, 0.8)"
+            y_axis: secondary
+          hours_to_show: 24
+          points_per_hour: 2
+          line_width: 2
+          height: 50
+          show:
+            name: false
+            icon: false
+            state: false
+            legend: false
+            fill: fade
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+
+      - type: custom:stack-in-card
+        mode: vertical
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+        cards:
+        - type: custom:mushroom-template-card
+          primary: Kids Room
+          secondary: "{{ states('sensor.aayat_room_temp_temperature') }}°C | {{ states('sensor.aayat_room_temp_humidity') }}%"
+          icon: mdi:baby-face
+          icon_color: |-
+            {% set temp = states('sensor.aayat_room_temp_temperature') | float %}
+            {% if temp < 18 %}blue
+            {% elif temp < 22 %}teal
+            {% elif temp < 26 %}amber
+            {% else %}deep-orange{% endif %}
+          layout: horizontal
+          tap_action:
+            action: more-info
+          entity: sensor.aayat_room_temp_temperature
+          hold_action:
+            action: more-info
+            entity: sensor.aayat_room_temp_humidity
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+        - type: custom:mini-graph-card
+          entities:
+          - entity: sensor.aayat_room_temp_temperature
+            color: "rgba(255, 138, 101, 0.8)"
+          - entity: sensor.aayat_room_temp_humidity
+            color: "rgba(100, 181, 246, 0.8)"
+            y_axis: secondary
+          hours_to_show: 24
+          points_per_hour: 2
+          line_width: 2
+          height: 50
+          show:
+            name: false
+            icon: false
+            state: false
+            legend: false
+            fill: fade
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+
+      - type: custom:stack-in-card
+        mode: vertical
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+        cards:
+        - type: custom:mushroom-template-card
+          primary: Living Room
+          secondary: "{{ states('sensor.living_room_temp_temperature') }}°C | {{ states('sensor.living_room_temp_humidity') }}%"
+          icon: mdi:sofa
+          icon_color: |-
+            {% set temp = states('sensor.living_room_temp_temperature') | float %}
+            {% if temp < 18 %}blue
+            {% elif temp < 22 %}teal
+            {% elif temp < 26 %}amber
+            {% else %}deep-orange{% endif %}
+          layout: horizontal
+          tap_action:
+            action: more-info
+          entity: sensor.living_room_temp_temperature
+          hold_action:
+            action: more-info
+            entity: sensor.living_room_temp_humidity
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+        - type: custom:mini-graph-card
+          entities:
+          - entity: sensor.living_room_temp_temperature
+            color: "rgba(255, 138, 101, 0.8)"
+          - entity: sensor.living_room_temp_humidity
+            color: "rgba(100, 181, 246, 0.8)"
+            y_axis: secondary
+          hours_to_show: 24
+          points_per_hour: 2
+          line_width: 2
+          height: 50
+          show:
+            name: false
+            icon: false
+            state: false
+            legend: false
+            fill: fade
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+
+      - type: custom:stack-in-card
+        mode: vertical
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+        cards:
+        - type: custom:mushroom-template-card
+          primary: Kitchen
+          secondary: "{{ states('sensor.kitchen_temperature') }}°C | {{ states('sensor.kitchen_humidity') }}%"
+          icon: mdi:stove
+          icon_color: |-
+            {% set temp = states('sensor.kitchen_temperature') | float %}
+            {% if temp < 18 %}blue
+            {% elif temp < 22 %}teal
+            {% elif temp < 26 %}amber
+            {% else %}deep-orange{% endif %}
+          layout: horizontal
+          tap_action:
+            action: more-info
+          entity: sensor.kitchen_temperature
+          hold_action:
+            action: more-info
+            entity: sensor.kitchen_humidity
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+        - type: custom:mini-graph-card
+          entities:
+          - entity: sensor.kitchen_temperature
+            color: "rgba(255, 138, 101, 0.8)"
+          - entity: sensor.kitchen_humidity
+            color: "rgba(100, 181, 246, 0.8)"
+            y_axis: secondary
+          hours_to_show: 24
+          points_per_hour: 2
+          line_width: 2
+          height: 50
+          show:
+            name: false
+            icon: false
+            state: false
+            legend: false
+            fill: fade
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+
+    # Indoor Row 2: Bathroom, Top Floor, Basement
+    - type: horizontal-stack
+      cards:
+      - type: custom:stack-in-card
+        mode: vertical
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+        cards:
+        - type: custom:mushroom-template-card
+          primary: Bathroom
+          secondary: "{{ states('sensor.bathroom_temp_temperature') }}°C | {{ states('sensor.bathroom_temp_humidity') }}%"
+          icon: mdi:shower
+          icon_color: |-
+            {% set temp = states('sensor.bathroom_temp_temperature') | float %}
+            {% if temp < 18 %}blue
+            {% elif temp < 22 %}teal
+            {% elif temp < 26 %}amber
+            {% else %}deep-orange{% endif %}
+          layout: horizontal
+          tap_action:
+            action: more-info
+          entity: sensor.bathroom_temp_temperature
+          hold_action:
+            action: more-info
+            entity: sensor.bathroom_temp_humidity
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+        - type: custom:mini-graph-card
+          entities:
+          - entity: sensor.bathroom_temp_temperature
+            color: "rgba(255, 138, 101, 0.8)"
+          - entity: sensor.bathroom_temp_humidity
+            color: "rgba(100, 181, 246, 0.8)"
+            y_axis: secondary
+          hours_to_show: 24
+          points_per_hour: 2
+          line_width: 2
+          height: 50
+          show:
+            name: false
+            icon: false
+            state: false
+            legend: false
+            fill: fade
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+
+      - type: custom:stack-in-card
+        mode: vertical
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+        cards:
+        - type: custom:mushroom-template-card
+          primary: Top Floor
+          secondary: "{{ states('sensor.top_floor_thermo_temperature') }}°C | {{ states('sensor.top_floor_thermo_humidity') }}%"
+          icon: mdi:desk
+          icon_color: |-
+            {% set temp = states('sensor.top_floor_thermo_temperature') | float %}
+            {% if temp < 18 %}blue
+            {% elif temp < 22 %}teal
+            {% elif temp < 26 %}amber
+            {% else %}deep-orange{% endif %}
+          layout: horizontal
+          tap_action:
+            action: more-info
+          entity: sensor.top_floor_thermo_temperature
+          hold_action:
+            action: more-info
+            entity: sensor.top_floor_thermo_humidity
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+        - type: custom:mini-graph-card
+          entities:
+          - entity: sensor.top_floor_thermo_temperature
+            color: "rgba(255, 138, 101, 0.8)"
+          - entity: sensor.top_floor_thermo_humidity
+            color: "rgba(100, 181, 246, 0.8)"
+            y_axis: secondary
+          hours_to_show: 24
+          points_per_hour: 2
+          line_width: 2
+          height: 50
+          show:
+            name: false
+            icon: false
+            state: false
+            legend: false
+            fill: fade
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+
+      - type: custom:stack-in-card
+        mode: vertical
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+        cards:
+        - type: custom:mushroom-template-card
+          primary: Basement
+          secondary: "{{ states('sensor.basement_temperature') }}°C | {{ states('sensor.basement_humidity') }}%"
+          icon: mdi:stairs-down
+          icon_color: |-
+            {% set temp = states('sensor.basement_temperature') | float %}
+            {% if temp < 18 %}blue
+            {% elif temp < 22 %}teal
+            {% elif temp < 26 %}amber
+            {% else %}deep-orange{% endif %}
+          layout: horizontal
+          tap_action:
+            action: more-info
+          entity: sensor.basement_temperature
+          hold_action:
+            action: more-info
+            entity: sensor.basement_humidity
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+        - type: custom:mini-graph-card
+          entities:
+          - entity: sensor.basement_temperature
+            color: "rgba(255, 138, 101, 0.8)"
+          - entity: sensor.basement_humidity
+            color: "rgba(100, 181, 246, 0.8)"
+            y_axis: secondary
+          hours_to_show: 24
+          points_per_hour: 2
+          line_width: 2
+          height: 50
+          show:
+            name: false
+            icon: false
+            state: false
+            legend: false
+            fill: fade
+          card_mod:
+            style: |
+              ha-card {
+                background: transparent !important;
+                box-shadow: none !important;
+              }
+
+    # Temperature Trends Section Header
+    - type: custom:bubble-card
+      card_type: separator
+      name: Indoor Temperature Trends
+      icon: mdi:chart-line-variant
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    # Temperature Trends Chart
+    - type: custom:mini-graph-card
+      name: All Indoor Temperatures (24h)
+      entities:
+      - entity: sensor.bedroom_thermo_temperature
+        name: Parents
+        color: "#e91e63"
+      - entity: sensor.aayat_room_temp_temperature
+        name: Kids
+        color: "#9c27b0"
+      - entity: sensor.living_room_temp_temperature
+        name: Living
+        color: "#673ab7"
+      - entity: sensor.kitchen_temperature
+        name: Kitchen
+        color: "#3f51b5"
+      - entity: sensor.bathroom_temp_temperature
+        name: Bath
+        color: "#2196f3"
+      - entity: sensor.top_floor_thermo_temperature
+        name: Top Floor
+        color: "#00bcd4"
+      - entity: sensor.basement_temperature
+        name: Basement
+        color: "#009688"
+      hours_to_show: 24
+      points_per_hour: 2
+      line_width: 2
+      height: 180
+      show:
+        name: true
+        icon: true
+        state: true
+        legend: true
+        fill: false
+      card_mod:
+        style: |
+          ha-card {
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+          }

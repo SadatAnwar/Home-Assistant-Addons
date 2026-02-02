@@ -1,0 +1,1453 @@
+sensors:
+  battery:
+  - entity_id: sensor.aayat_room_temp_battery
+    name: Aayat Room Temp Battery
+    unit: '%'
+  - entity_id: sensor.alizas_iphone_battery_level
+    name: Aliza’s iPhone Battery Level
+    unit: '%'
+  - entity_id: sensor.basement_battery
+    name: Basement Battery
+    unit: '%'
+  - entity_id: sensor.bathroom_temp_battery
+    name: Bathroom Temp Battery
+    unit: '%'
+  - entity_id: sensor.bathroomlightswitch_battery
+    name: BathroomLightSwitch Battery
+    unit: '%'
+  - entity_id: sensor.bedroom_thermo_battery
+    name: Bedroom Thermo Battery
+    unit: '%'
+  - entity_id: sensor.door_lock_battery
+    name: Door Lock Battery
+    unit: '%'
+  - entity_id: sensor.kitchen_battery
+    name: Kitchen Battery
+    unit: '%'
+  - entity_id: sensor.kitchenlightremote_battery
+    name: KitchenLightRemote Battery
+    unit: '%'
+  - entity_id: sensor.l10s_ultra_gen_2_battery_level
+    name: L10s Ultra Gen 2 Battery Level
+    unit: '%'
+  - entity_id: sensor.living_room_smoke_alarm_battery
+    name: Living Room Smoke Alarm Battery
+    unit: '%'
+  - entity_id: sensor.living_room_temp_battery
+    name: Living Room Temp Battery
+    unit: '%'
+  - entity_id: sensor.lock_ultra_4c_battery
+    name: Lock Ultra 4C Battery
+    unit: '%'
+  - entity_id: sensor.motion_sensor_1_battery
+    name: motion_sensor_1 Battery
+    unit: '%'
+  - entity_id: sensor.motion_sensor_small_1_battery
+    name: motion_sensor_small_1 Battery
+    unit: '%'
+  - entity_id: sensor.sadats_iphone_15_olx_battery_level
+    name: Sadat’s iPhone 15 OLX Battery Level
+    unit: '%'
+  - entity_id: sensor.smoke_alarm_battery
+    name: Top Floor Alarm Battery
+    unit: '%'
+  - entity_id: sensor.stairwell_alarm_battery
+    name: Stairwell Alarm Battery
+    unit: '%'
+  - entity_id: sensor.syed_sadats_ipad_battery_level
+    name: Syed Sadat’s iPad Battery Level
+    unit: '%'
+  - entity_id: sensor.top_floor_thermo_battery
+    name: Top floor thermo Battery
+    unit: '%'
+  - entity_id: sensor.water_timer_battery
+    name: Water Timer Battery
+    unit: '%'
+  current:
+  - entity_id: sensor.relay_switch_2pm_2a_channel_1_current
+    name: Relay Switch 2PM 2A Channel 1 Current
+    unit: mA
+  - entity_id: sensor.relay_switch_2pm_2a_channel_2_current
+    name: Relay Switch 2PM 2A Channel 2 Current
+    unit: mA
+  - entity_id: sensor.relay_switch_2pm_ce2a_channel_1_current
+    name: Dining Table Light Current
+    unit: A
+  - entity_id: sensor.relay_switch_2pm_ce2a_channel_2_current
+    name: Drawing Room Light Current
+    unit: A
+  - entity_id: sensor.shelly_power_monitor_phase_a_current
+    name: Shelly Power Monitor Phase A Current
+    unit: A
+  - entity_id: sensor.shelly_power_monitor_phase_b_current
+    name: Shelly Power Monitor Phase B Current
+    unit: A
+  - entity_id: sensor.shelly_power_monitor_phase_c_current
+    name: Shelly Power Monitor Phase C Current
+    unit: A
+  - entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_current
+    name: Freezer Current
+    unit: A
+  - entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_current
+    name: Washing Machine Current
+    unit: A
+  data_rate:
+  - entity_id: sensor.fritz_box_7530_ax_download_throughput
+    name: FRITZ!Box 7530 AX Download throughput
+    unit: kB/s
+  - entity_id: sensor.fritz_box_7530_ax_link_download_throughput
+    name: FRITZ!Box 7530 AX Link download throughput
+    unit: kbit/s
+  - entity_id: sensor.fritz_box_7530_ax_link_upload_throughput
+    name: FRITZ!Box 7530 AX Link upload throughput
+    unit: kbit/s
+  - entity_id: sensor.fritz_box_7530_ax_max_connection_download_throughput
+    name: FRITZ!Box 7530 AX Max connection download throughput
+    unit: kbit/s
+  - entity_id: sensor.fritz_box_7530_ax_max_connection_upload_throughput
+    name: FRITZ!Box 7530 AX Max connection upload throughput
+    unit: kbit/s
+  - entity_id: sensor.fritz_box_7530_ax_upload_throughput
+    name: FRITZ!Box 7530 AX Upload throughput
+    unit: kB/s
+  - entity_id: sensor.speedtest_download
+    name: SpeedTest Download
+    unit: Mbit/s
+  - entity_id: sensor.speedtest_upload
+    name: SpeedTest Upload
+    unit: Mbit/s
+  data_size:
+  - entity_id: sensor.fritz_box_7530_ax_gb_received
+    name: FRITZ!Box 7530 AX GB received
+    unit: GB
+  - entity_id: sensor.fritz_box_7530_ax_gb_sent
+    name: FRITZ!Box 7530 AX GB sent
+    unit: GB
+  distance:
+  - entity_id: sensor.care_dae3_estimated_distance
+    name: Estimated distance
+    unit: m
+  - entity_id: sensor.drivedot_8878_1f59_estimated_distance
+    name: Estimated distance
+    unit: m
+  - entity_id: sensor.ooono_0d06_estimated_distance
+    name: Estimated distance
+    unit: m
+  - entity_id: sensor.ooono_b1a3_estimated_distance
+    name: Estimated distance
+    unit: m
+  - entity_id: sensor.ooono_db85_estimated_distance
+    name: Estimated distance
+    unit: m
+  - entity_id: sensor.s2c0c9ec17e497de6c_b978_estimated_distance
+    name: Estimated distance
+    unit: m
+  - entity_id: sensor.sb12a08e57343db20c_b5c3_estimated_distance
+    name: Estimated distance
+    unit: m
+  duration:
+  - entity_id: sensor.l10s_ultra_gen_2_total_cleaning_time
+    name: L10s Ultra Gen 2 Total Cleaning Time
+    unit: min
+  - entity_id: sensor.speedtest_ping
+    name: SpeedTest Ping
+    unit: ms
+  energy:
+  - entity_id: sensor.bedroom_lamp_returned_energy
+    name: Bedroom Lamp Energy returned
+    unit: kWh
+  - entity_id: sensor.bedroom_lamp_total_energy
+    name: Bedroom Lamp Energy
+    unit: kWh
+  - entity_id: sensor.daily_electricity_consumed
+    name: Daily Electricity Consumed
+    unit: kWh
+  - entity_id: sensor.day_before_yesterday_s_usage_energy
+    name: Day Before Yesterday's Usage (Energy)
+    unit: kWh
+  - entity_id: sensor.e3_vitodens_100_0421_1_heating_electricity_consumption_last_seven_days
+    name: Viessmann W100 Boiler Heating electricity consumption last seven days
+    unit: kWh
+  - entity_id: sensor.e3_vitodens_100_0421_1_heating_electricity_consumption_today
+    name: Viessmann W100 Boiler Heating electricity consumption today
+    unit: kWh
+  - entity_id: sensor.relay_switch_2pm_2a_channel_1_energy
+    name: Relay Switch 2PM 2A Channel 1 Energy
+    unit: kWh
+  - entity_id: sensor.relay_switch_2pm_2a_channel_2_energy
+    name: Relay Switch 2PM 2A Channel 2 Energy
+    unit: kWh
+  - entity_id: sensor.relay_switch_2pm_ce2a_channel_1_energy
+    name: Dining Table Light Energy
+    unit: kWh
+  - entity_id: sensor.relay_switch_2pm_ce2a_channel_2_energy
+    name: Drawing Room Light Energy
+    unit: kWh
+  - entity_id: sensor.shelly_power_monitor_phase_a_energy
+    name: Shelly Power Monitor Phase A Energy
+    unit: kWh
+  - entity_id: sensor.shelly_power_monitor_phase_a_energy_returned
+    name: Shelly Power Monitor Phase A Energy returned
+    unit: kWh
+  - entity_id: sensor.shelly_power_monitor_phase_b_energy
+    name: Shelly Power Monitor Phase B Energy
+    unit: kWh
+  - entity_id: sensor.shelly_power_monitor_phase_b_energy_returned
+    name: Shelly Power Monitor Phase B Energy returned
+    unit: kWh
+  - entity_id: sensor.shelly_power_monitor_phase_c_energy
+    name: Shelly Power Monitor Phase C Energy
+    unit: kWh
+  - entity_id: sensor.shelly_power_monitor_phase_c_energy_returned
+    name: Shelly Power Monitor Phase C Energy returned
+    unit: kWh
+  - entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_consumption
+    name: Freezer Consumption
+    unit: Wh
+  - entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_energy
+    name: Freezer Energy
+    unit: Wh
+  - entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_consumption
+    name: Washing Machine Consumption
+    unit: Wh
+  - entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_energy
+    name: Washing Machine Energy
+    unit: Wh
+  - entity_id: sensor.today_s_gas_usage_energy
+    name: Today's Gas Usage (Energy)
+    unit: kWh
+  - entity_id: sensor.yesterday_s_gas_usage_energy
+    name: Yesterday's Gas Usage (Energy)
+    unit: kWh
+  enum:
+  - entity_id: sensor.aayat_room_temp_rf_level
+    name: Aayat Room Temp RF Level
+    unit: null
+  - entity_id: sensor.backup_backup_manager_state
+    name: Backup Backup Manager state
+    unit: null
+  - entity_id: sensor.basement_rf_level
+    name: Basement RF Level
+    unit: null
+  - entity_id: sensor.bathroom_temp_rf_level
+    name: Bathroom Temp RF Level
+    unit: null
+  - entity_id: sensor.bedroom_thermo_rf_level
+    name: Bedroom Thermo RF Level
+    unit: null
+  - entity_id: sensor.dishwasher_door
+    name: Dishwasher Door
+    unit: null
+  - entity_id: sensor.dishwasher_operation_state
+    name: Dishwasher Operation state
+    unit: null
+  - entity_id: sensor.kitchen_rf_level
+    name: Kitchen RF Level
+    unit: null
+  - entity_id: sensor.living_room_smoke_alarm_rf_level
+    name: Living Room Smoke Alarm RF Level
+    unit: null
+  - entity_id: sensor.living_room_temp_rf_level
+    name: Living Room Temp RF Level
+    unit: null
+  - entity_id: sensor.oven_door
+    name: Oven Door
+    unit: null
+  - entity_id: sensor.oven_operation_state
+    name: Oven Operation state
+    unit: null
+  - entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_config_overtemp_type
+    name: Freezer Config overtemp type
+    unit: null
+  - entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_config_overtemp_type
+    name: Washing Machine Config overtemp type
+    unit: null
+  - entity_id: sensor.smoke_alarm_rf_level
+    name: Top Floor Alarm RF Level
+    unit: null
+  - entity_id: sensor.stairwell_alarm_rf_level
+    name: Stairwell Alarm RF Level
+    unit: null
+  - entity_id: sensor.top_floor_thermo_rf_level
+    name: Top floor thermo RF Level
+    unit: null
+  gas:
+  - entity_id: sensor.day_before_yesterday_s_usage_volume
+    name: Day Before Yesterday's Usage (Volume)
+    unit: m³
+  - entity_id: sensor.e3_vitodens_100_0421_1_heating_gas_consumption_today
+    name: Viessmann W100 Boiler Heating gas consumption today
+    unit: m³
+  - entity_id: sensor.gas_meter_total_reading
+    name: Gas Meter Total Reading
+    unit: m³
+  - entity_id: sensor.gas_used_since_reset
+    name: Gas Used Since Reset
+    unit: m³
+  - entity_id: sensor.today_s_gas_usage_volume
+    name: Today's Gas Usage (Volume)
+    unit: m³
+  - entity_id: sensor.yesterday_s_gas_usage_volume
+    name: Yesterday's Gas Usage (Volume)
+    unit: m³
+  humidity:
+  - entity_id: sensor.aayat_room_temp_humidity
+    name: Kids Room Humidity
+    unit: '%'
+  - entity_id: sensor.basement_humidity
+    name: Basement Humidity
+    unit: '%'
+  - entity_id: sensor.bathroom_temp_humidity
+    name: Bathroom Temp Humidity
+    unit: '%'
+  - entity_id: sensor.bedroom_thermo_humidity
+    name: Bedroom Thermo Humidity
+    unit: '%'
+  - entity_id: sensor.dehumidifier_fe8c_humidity
+    name: Dehumidifier_FE8C Humidity
+    unit: '%'
+  - entity_id: sensor.kitchen_humidity
+    name: Kitchen Humidity
+    unit: '%'
+  - entity_id: sensor.living_room_temp_humidity
+    name: Living Room Temp Humidity
+    unit: '%'
+  - entity_id: sensor.outdoor_humidity
+    name: Outdoor Humidity
+    unit: '%'
+  - entity_id: sensor.top_floor_thermo_humidity
+    name: Top floor thermo Humidity
+    unit: '%'
+  other:
+  - entity_id: sensor.1st_floor_tmperature
+    name: 1st Floor Tmperature
+    unit: °C
+  - entity_id: sensor.alizas_iphone_app_version
+    name: Aliza’s iPhone App Version
+    unit: null
+  - entity_id: sensor.alizas_iphone_audio_output
+    name: Aliza’s iPhone Audio Output
+    unit: null
+  - entity_id: sensor.alizas_iphone_battery_state
+    name: Aliza’s iPhone Battery State
+    unit: null
+  - entity_id: sensor.alizas_iphone_bssid
+    name: Aliza’s iPhone BSSID
+    unit: null
+  - entity_id: sensor.alizas_iphone_connection_type
+    name: Aliza’s iPhone Connection Type
+    unit: null
+  - entity_id: sensor.alizas_iphone_geocoded_location
+    name: Aliza’s iPhone Geocoded Location
+    unit: null
+  - entity_id: sensor.alizas_iphone_last_update_trigger
+    name: Aliza’s iPhone Last Update Trigger
+    unit: null
+  - entity_id: sensor.alizas_iphone_location_permission
+    name: Aliza’s iPhone Location permission
+    unit: null
+  - entity_id: sensor.alizas_iphone_sim_1
+    name: Aliza’s iPhone SIM 1
+    unit: null
+  - entity_id: sensor.alizas_iphone_sim_2
+    name: Aliza’s iPhone SIM 2
+    unit: null
+  - entity_id: sensor.alizas_iphone_ssid
+    name: Aliza’s iPhone SSID
+    unit: null
+  - entity_id: sensor.alizas_iphone_storage
+    name: Aliza’s iPhone Storage
+    unit: '% available'
+  - entity_id: sensor.average_freezer_p
+    name: Average Freezer P
+    unit: W
+  - entity_id: sensor.average_freezer_power
+    name: Average Freezer Power
+    unit: Wh
+  - entity_id: sensor.backyard_person_name
+    name: Backyard Person Name
+    unit: null
+  - entity_id: sensor.backyard_snooze_time
+    name: Backyard Snooze Time
+    unit: sec
+  - entity_id: sensor.base_station_alarm_volume
+    name: Base Station Alarm Volume
+    unit: '%'
+  - entity_id: sensor.base_station_ip_address
+    name: Base Station IP Address
+    unit: null
+  - entity_id: sensor.base_station_software_version
+    name: Base Station Software Version
+    unit: null
+  - entity_id: sensor.base_station_ssid
+    name: Base Station SSID
+    unit: null
+  - entity_id: sensor.base_station_voice_volume
+    name: Base Station Voice Volume
+    unit: '%'
+  - entity_id: sensor.burner_hours_today
+    name: Burner Hours Today
+    unit: h
+  - entity_id: sensor.burner_starts_today
+    name: Burner Starts Today
+    unit: null
+  - entity_id: sensor.dishwasher_program_progress
+    name: Dishwasher Program progress
+    unit: '%'
+  - entity_id: sensor.doorbell_person_name_2
+    name: Doorbell Person Name
+    unit: null
+  - entity_id: sensor.doorbell_snooze_time_2
+    name: Doorbell Snooze Time
+    unit: sec
+  - entity_id: sensor.e3_vitodens_100_0421_1_burner_hours
+    name: Viessmann W100 Boiler Burner hours
+    unit: h
+  - entity_id: sensor.e3_vitodens_100_0421_1_burner_modulation
+    name: Viessmann W100 Boiler Burner modulation
+    unit: '%'
+  - entity_id: sensor.e3_vitodens_100_0421_1_burner_starts
+    name: Viessmann W100 Boiler Burner starts
+    unit: null
+  - entity_id: sensor.fritz_box_7530_ax_external_ip
+    name: FRITZ!Box 7530 AX External IP
+    unit: null
+  - entity_id: sensor.fritz_box_7530_ax_external_ipv6
+    name: FRITZ!Box 7530 AX External IPv6
+    unit: null
+  - entity_id: sensor.front_door_person_name
+    name: Front Door Person Name
+    unit: null
+  - entity_id: sensor.front_door_snooze_time
+    name: Front Door Snooze Time
+    unit: sec
+  - entity_id: sensor.homebase_current_mode
+    name: Homebase Current Mode
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_auto_empty_status
+    name: L10s Ultra Gen 2 Auto Empty Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_charging_status
+    name: L10s Ultra Gen 2 Charging Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_clean_water_tank_status
+    name: L10s Ultra Gen 2 Clean Water Tank Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_cleaned_area
+    name: L10s Ultra Gen 2 Cleaned Area
+    unit: m²
+  - entity_id: sensor.l10s_ultra_gen_2_cleaning_count
+    name: L10s Ultra Gen 2 Cleaning Count
+    unit: x
+  - entity_id: sensor.l10s_ultra_gen_2_cleaning_progress
+    name: L10s Ultra Gen 2 Cleaning Progress
+    unit: '%'
+  - entity_id: sensor.l10s_ultra_gen_2_cleaning_time
+    name: L10s Ultra Gen 2 Cleaning Time
+    unit: min
+  - entity_id: sensor.l10s_ultra_gen_2_current_room
+    name: L10s Ultra Gen 2 Current Room
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_detergent_status
+    name: L10s Ultra Gen 2 Detergent Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_dirty_water_tank_status
+    name: L10s Ultra Gen 2 Dirty Water Tank Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_drainage_status
+    name: L10s Ultra Gen 2 Drainage Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_drying_progress
+    name: L10s Ultra Gen 2 Drying Progress
+    unit: '%'
+  - entity_id: sensor.l10s_ultra_gen_2_dust_bag_status
+    name: L10s Ultra Gen 2 Dust Bag Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_dust_collection
+    name: L10s Ultra Gen 2 Dust Collection
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_error
+    name: L10s Ultra Gen 2 Error
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_filter_left
+    name: L10s Ultra Gen 2 Filter Left
+    unit: '%'
+  - entity_id: sensor.l10s_ultra_gen_2_filter_time_left
+    name: L10s Ultra Gen 2 Filter Time Left
+    unit: hr
+  - entity_id: sensor.l10s_ultra_gen_2_firmware_version
+    name: L10s Ultra Gen 2 Firmware Version
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_low_water_warning
+    name: L10s Ultra Gen 2 Low Water Warning
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_main_brush_left
+    name: L10s Ultra Gen 2 Main Brush Left
+    unit: '%'
+  - entity_id: sensor.l10s_ultra_gen_2_main_brush_time_left
+    name: L10s Ultra Gen 2 Main Brush  Time Left
+    unit: hr
+  - entity_id: sensor.l10s_ultra_gen_2_mapping_time
+    name: L10s Ultra Gen 2 Mapping Time
+    unit: min
+  - entity_id: sensor.l10s_ultra_gen_2_mop_pad
+    name: L10s Ultra Gen 2 Mop Pad
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_relocation_status
+    name: L10s Ultra Gen 2 Relocation Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_self_wash_base_status
+    name: L10s Ultra Gen 2 Self-Wash Base Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_sensor_dirty_left
+    name: L10s Ultra Gen 2 Sensor Dirty Left
+    unit: '%'
+  - entity_id: sensor.l10s_ultra_gen_2_sensor_dirty_time_left
+    name: L10s Ultra Gen 2 Sensor Dirty Time Left
+    unit: hr
+  - entity_id: sensor.l10s_ultra_gen_2_side_brush_left
+    name: L10s Ultra Gen 2 Side Brush Left
+    unit: '%'
+  - entity_id: sensor.l10s_ultra_gen_2_side_brush_time_left
+    name: L10s Ultra Gen 2 Side Brush Time Left
+    unit: hr
+  - entity_id: sensor.l10s_ultra_gen_2_state
+    name: L10s Ultra Gen 2 State
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_station_drainage_status
+    name: L10s Ultra Gen 2 Station Drainage Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_status
+    name: L10s Ultra Gen 2 Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_task_status
+    name: L10s Ultra Gen 2 Task Status
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_task_type
+    name: L10s Ultra Gen 2 Task Type
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_total_cleaned_area
+    name: L10s Ultra Gen 2 Total Cleaned Area
+    unit: m²
+  - entity_id: sensor.motion_sensor_1_illumination
+    name: motion_sensor_1 Illumination
+    unit: null
+  - entity_id: sensor.motion_sensor_linkquality
+    name: motion_sensor_small_1 Linkquality
+    unit: lqi
+  - entity_id: sensor.oven_program_progress
+    name: Oven Program progress
+    unit: '%'
+  - entity_id: sensor.sadats_iphone_15_olx_activity
+    name: Sadat’s iPhone 15 OLX Activity
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_app_version
+    name: Sadat’s iPhone 15 OLX App Version
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_audio_output
+    name: Sadat’s iPhone 15 OLX Audio Output
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_battery_state
+    name: Sadat’s iPhone 15 OLX Battery State
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_bssid
+    name: Sadat’s iPhone 15 OLX BSSID
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_connection_type
+    name: Sadat’s iPhone 15 OLX Connection Type
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_distance
+    name: Sadat’s iPhone 15 OLX Distance
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_floors_ascended
+    name: Sadat’s iPhone 15 OLX Floors Ascended
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_floors_descended
+    name: Sadat’s iPhone 15 OLX Floors Descended
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_last_update_trigger
+    name: Sadat’s iPhone 15 OLX Last Update Trigger
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_location_permission
+    name: Sadat’s iPhone 15 OLX Location permission
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_sim_1
+    name: Sadat’s iPhone 15 OLX SIM 1
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_sim_2
+    name: Sadat’s iPhone 15 OLX SIM 2
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_ssid
+    name: Sadat’s iPhone 15 OLX SSID
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_steps
+    name: Sadat’s iPhone 15 OLX Steps
+    unit: null
+  - entity_id: sensor.sadats_iphone_15_olx_storage
+    name: Sadat’s iPhone 15 OLX Storage
+    unit: null
+  - entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_signal_strength
+    name: Freezer Signal strength
+    unit: '%'
+  - entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_signal_strength
+    name: Washing Machine Signal strength
+    unit: '%'
+  - entity_id: sensor.smart_roller_shutter_2403076692918970200148e1e9eecc6d_signal_strength
+    name: Window Blinds Signal strength
+    unit: '%'
+  - entity_id: sensor.smart_roller_shutter_24121047557727700802c4e7ae116985_signal_strength
+    name: Garden Shade Signal strength
+    unit: '%'
+  - entity_id: sensor.syed_sadats_ipad_app_version
+    name: Syed Sadat’s iPad App Version
+    unit: null
+  - entity_id: sensor.syed_sadats_ipad_audio_output
+    name: Syed Sadat’s iPad Audio Output
+    unit: null
+  - entity_id: sensor.syed_sadats_ipad_battery_state
+    name: Syed Sadat’s iPad Battery State
+    unit: null
+  - entity_id: sensor.syed_sadats_ipad_bssid
+    name: Syed Sadat’s iPad BSSID
+    unit: null
+  - entity_id: sensor.syed_sadats_ipad_connection_type
+    name: Syed Sadat’s iPad Connection Type
+    unit: null
+  - entity_id: sensor.syed_sadats_ipad_geocoded_location
+    name: Syed Sadat’s iPad Geocoded Location
+    unit: null
+  - entity_id: sensor.syed_sadats_ipad_last_update_trigger
+    name: Syed Sadat’s iPad Last Update Trigger
+    unit: null
+  - entity_id: sensor.syed_sadats_ipad_location_permission
+    name: Syed Sadat’s iPad Location permission
+    unit: null
+  - entity_id: sensor.syed_sadats_ipad_ssid
+    name: Syed Sadat’s iPad SSID
+    unit: null
+  - entity_id: sensor.syed_sadats_ipad_storage
+    name: Syed Sadat’s iPad Storage
+    unit: null
+  - entity_id: sensor.tasmota_counter_c1
+    name: Tasmota COUNTER C1
+    unit: null
+  - entity_id: sensor.tasmota_mqtt_connect_count
+    name: Tasmota MQTT Connect Count
+    unit: null
+  - entity_id: sensor.tasmota_restart_reason
+    name: Tasmota Restart Reason
+    unit: null
+  - entity_id: sensor.tasmota_ssid
+    name: Tasmota SSID
+    unit: null
+  - entity_id: sensor.tasmota_wifi_connect_count
+    name: Tasmota WiFi Connect Count
+    unit: null
+  - entity_id: sensor.total_energy
+    name: Total Energy
+    unit: kWh
+  - entity_id: sensor.total_power_consumed
+    name: Total Power Consumed
+    unit: W
+  - entity_id: sensor.water_timer_total_watering_time
+    name: Water Timer Total watering time
+    unit: s
+  - entity_id: sensor.yahoofinance_gc_f
+    name: Gold Apr 26
+    unit: USD
+  - entity_id: sensor.zigbee2mqtt_bridge_version
+    name: Zigbee2MQTT Bridge Version
+    unit: null
+  power:
+  - entity_id: sensor.bedroom_lamp_power
+    name: Bedroom Lamp Power
+    unit: W
+  - entity_id: sensor.relay_switch_2pm_2a_channel_1_power
+    name: Relay Switch 2PM 2A Channel 1 Power
+    unit: W
+  - entity_id: sensor.relay_switch_2pm_2a_channel_2_power
+    name: Relay Switch 2PM 2A Channel 2 Power
+    unit: W
+  - entity_id: sensor.relay_switch_2pm_ce2a_channel_1_power
+    name: Dining Table Light Power
+    unit: W
+  - entity_id: sensor.relay_switch_2pm_ce2a_channel_2_power
+    name: Drawing Room Light Power
+    unit: W
+  - entity_id: sensor.shelly_power_monitor_phase_a_power
+    name: Shelly Power Monitor Phase A Power
+    unit: W
+  - entity_id: sensor.shelly_power_monitor_phase_b_power
+    name: Shelly Power Monitor Phase B Power
+    unit: W
+  - entity_id: sensor.shelly_power_monitor_phase_c_power
+    name: Shelly Power Monitor Phase C Power
+    unit: W
+  - entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_power
+    name: Freezer Power
+    unit: W
+  - entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_power
+    name: Washing Machine Power
+    unit: W
+  power_factor:
+  - entity_id: sensor.shelly_power_monitor_phase_a_power_factor
+    name: Shelly Power Monitor Phase A Power factor
+    unit: null
+  - entity_id: sensor.shelly_power_monitor_phase_b_power_factor
+    name: Shelly Power Monitor Phase B Power factor
+    unit: null
+  - entity_id: sensor.shelly_power_monitor_phase_c_power_factor
+    name: Shelly Power Monitor Phase C Power factor
+    unit: null
+  pressure:
+  - entity_id: sensor.viessmann_w100_boiler_supply_pressure
+    name: Viessmann W100 Boiler Supply pressure
+    unit: bar
+  signal_strength:
+  - entity_id: sensor.base_station_signal_strength
+    name: Base Station Signal strength
+    unit: dBm
+  temperature:
+  - entity_id: sensor.aayat_room_temp_temperature
+    name: Kids Room Temperatur
+    unit: °C
+  - entity_id: sensor.basement_temperature
+    name: Basement Temperature
+    unit: °C
+  - entity_id: sensor.bathroom_temp_temperature
+    name: Bathroom Temp Temperature
+    unit: °C
+  - entity_id: sensor.bedroom_thermo_temperature
+    name: Bedroom Thermo Temperature
+    unit: °C
+  - entity_id: sensor.dehumidifier_fe8c_temperature
+    name: Dehumidifier_FE8C Temperature
+    unit: °C
+  - entity_id: sensor.e3_vitodens_100_0421_1_boiler_supply_temperature
+    name: Viessmann W100 Boiler Boiler supply temperature
+    unit: °C
+  - entity_id: sensor.e3_vitodens_100_0421_1_outside_temperature
+    name: Viessmann W100 Boiler Outside temperature
+    unit: °C
+  - entity_id: sensor.e3_vitodens_100_0421_1_supply_temperature
+    name: Viessmann W100 Boiler Supply temperature
+    unit: °C
+  - entity_id: sensor.fritz_box_7530_ax_cpu_temperature
+    name: FRITZ!Box 7530 AX CPU temperature
+    unit: °C
+  - entity_id: sensor.fritz_repeater_gf_cpu_temperature
+    name: fritz-repeater-gf CPU temperature
+    unit: °C
+  - entity_id: sensor.kitchen_temperature
+    name: Kitchen Temperature
+    unit: °C
+  - entity_id: sensor.living_room_temp_temperature
+    name: Living Room Temp Temperature
+    unit: °C
+  - entity_id: sensor.oven_current_oven_cavity_temperature
+    name: Oven Current oven cavity temperature
+    unit: °C
+  - entity_id: sensor.top_floor_thermo_temperature
+    name: Top floor thermo Temperature
+    unit: °C
+  timestamp:
+  - entity_id: sensor.backup_last_attempted_automatic_backup
+    name: Backup Last attempted automatic backup
+    unit: null
+  - entity_id: sensor.backup_last_successful_automatic_backup
+    name: Backup Last successful automatic backup
+    unit: null
+  - entity_id: sensor.backup_next_scheduled_automatic_backup
+    name: Backup Next scheduled automatic backup
+    unit: null
+  - entity_id: sensor.dishwasher_program_finish_time
+    name: Dishwasher Program finish time
+    unit: null
+  - entity_id: sensor.fritz_box_7530_ax_connection_uptime
+    name: FRITZ!Box 7530 AX Connection uptime
+    unit: null
+  - entity_id: sensor.fritz_box_7530_ax_last_restart
+    name: FRITZ!Box 7530 AX Last restart
+    unit: null
+  - entity_id: sensor.fritz_repeater_gf_last_restart
+    name: fritz-repeater-gf Last restart
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_cleaning_history
+    name: L10s Ultra Gen 2 Cleaning History
+    unit: null
+  - entity_id: sensor.l10s_ultra_gen_2_first_cleaning_date
+    name: L10s Ultra Gen 2 First Cleaning Date
+    unit: null
+  - entity_id: sensor.oven_program_finish_time
+    name: Oven Program finish time
+    unit: null
+  - entity_id: sensor.prayer_times_asr_prayer
+    name: Prayer Times Asr prayer
+    unit: null
+  - entity_id: sensor.prayer_times_dhuhr_prayer
+    name: Prayer Times Dhuhr prayer
+    unit: null
+  - entity_id: sensor.prayer_times_fajr_prayer
+    name: Prayer Times Fajr prayer
+    unit: null
+  - entity_id: sensor.prayer_times_isha_prayer
+    name: Prayer Times Isha prayer
+    unit: null
+  - entity_id: sensor.prayer_times_maghrib_prayer
+    name: Prayer Times Maghrib prayer
+    unit: null
+  - entity_id: sensor.prayer_times_midnight_time
+    name: Prayer Times Midnight time
+    unit: null
+  - entity_id: sensor.prayer_times_sunrise_time
+    name: Prayer Times Sunrise time
+    unit: null
+  - entity_id: sensor.sun_next_dawn
+    name: Sun Next dawn
+    unit: null
+  - entity_id: sensor.sun_next_dusk
+    name: Sun Next dusk
+    unit: null
+  - entity_id: sensor.sun_next_midnight
+    name: Sun Next midnight
+    unit: null
+  - entity_id: sensor.sun_next_noon
+    name: Sun Next noon
+    unit: null
+  - entity_id: sensor.sun_next_rising
+    name: Sun Next rising
+    unit: null
+  - entity_id: sensor.sun_next_setting
+    name: Sun Next setting
+    unit: null
+  - entity_id: sensor.tasmota_last_restart_time
+    name: Tasmota Last Restart Time
+    unit: null
+  voltage:
+  - entity_id: sensor.bathroomlightswitch_voltage
+    name: BathroomLightSwitch Voltage
+    unit: mV
+  - entity_id: sensor.kitchenlightremote_voltage
+    name: KitchenLightRemote Voltage
+    unit: mV
+  - entity_id: sensor.motion_sensor_1_voltage
+    name: motion_sensor_1 Voltage
+    unit: mV
+  - entity_id: sensor.motion_sensor_small_1_voltage
+    name: motion_sensor_small_1 Voltage
+    unit: mV
+  - entity_id: sensor.relay_switch_2pm_2a_channel_1_voltage
+    name: Relay Switch 2PM 2A Channel 1 Voltage
+    unit: V
+  - entity_id: sensor.relay_switch_2pm_2a_channel_2_voltage
+    name: Relay Switch 2PM 2A Channel 2 Voltage
+    unit: V
+  - entity_id: sensor.relay_switch_2pm_ce2a_channel_1_voltage
+    name: Dining Table Light Voltage
+    unit: V
+  - entity_id: sensor.relay_switch_2pm_ce2a_channel_2_voltage
+    name: Drawing Room Light Voltage
+    unit: V
+  - entity_id: sensor.shelly_power_monitor_phase_a_voltage
+    name: Shelly Power Monitor Phase A Voltage
+    unit: V
+  - entity_id: sensor.shelly_power_monitor_phase_b_voltage
+    name: Shelly Power Monitor Phase B Voltage
+    unit: V
+  - entity_id: sensor.shelly_power_monitor_phase_c_voltage
+    name: Shelly Power Monitor Phase C Voltage
+    unit: V
+  - entity_id: sensor.smart_plug_2212202420152151080b48e1e9b55812_voltage
+    name: Freezer Voltage
+    unit: V
+  - entity_id: sensor.smart_plug_2212208966263051080b48e1e9b557d2_voltage
+    name: Washing Machine Voltage
+    unit: V
+lights:
+- entity_id: light.bathroomlight
+  name: BathroomLight
+- entity_id: light.govee_lamps
+  name: Govee Lamps
+- entity_id: light.h6072
+  name: Lamp Left
+- entity_id: light.h6072_2
+  name: Lamp Right
+- entity_id: light.kitchen_lights
+  name: Kitchen Lights
+- entity_id: light.kitchencounter
+  name: KitchenCounter
+- entity_id: light.kitchenspot
+  name: KitchenSpot
+- entity_id: light.smart_plug_2212202420152151080b48e1e9b55812_dnd
+  name: Freezer Dnd
+- entity_id: light.smart_plug_2212208966263051080b48e1e9b557d2_dnd
+  name: Washing Machine Dnd
+- entity_id: light.smart_roller_shutter_2403076692918970200148e1e9eecc6d_dnd
+  name: Window Blinds Dnd
+- entity_id: light.smart_roller_shutter_24121047557727700802c4e7ae116985_dnd
+  name: Garden Shade Dnd
+switches:
+- entity_id: switch.5cg4114lhp_w10_internet_access
+  name: 5CG4114LHP-W10 Internet Access
+- entity_id: switch.7d30a712_dedd_4e32_807e_162fc16ad917_internet_access
+  name: 7d30a712-dedd-4e32-807e-162fc16ad917 Internet Access
+- entity_id: switch.aivi2_access_da_internet_access
+  name: AIVI2-ACCESS-DA Internet Access
+- entity_id: switch.amazon_2366ca2f8_internet_access
+  name: amazon-2366ca2f8 Internet Access
+- entity_id: switch.android_internet_access
+  name: Android-2 Internet Access
+- entity_id: switch.aneeqa_internet_access
+  name: Aneeqa Internet Access
+- entity_id: switch.backyard_antitheft_detection
+  name: Backyard Antitheft Detection
+- entity_id: switch.backyard_audio_recording
+  name: Backyard Audio Recording
+- entity_id: switch.backyard_camera_enabled
+  name: Backyard Camera enabled
+- entity_id: switch.backyard_light
+  name: Backyard Light
+- entity_id: switch.backyard_microphone
+  name: Backyard Microphone
+- entity_id: switch.backyard_motion_detection
+  name: Backyard Motion Detection
+- entity_id: switch.backyard_rtsp_stream
+  name: Backyard RTSP Stream
+- entity_id: switch.backyard_speaker
+  name: Backyard Speaker
+- entity_id: switch.backyard_status_led
+  name: Backyard Status LED
+- entity_id: switch.bedroom_lamp
+  name: Bedroom Lamp
+- entity_id: switch.de_olx_j60xrd633h_internet_access
+  name: Mac Internet Access
+- entity_id: switch.de_olx_r7vxk462q4_internet_access_2
+  name: DE-OLX-R7VXK462Q4 Internet Access
+- entity_id: switch.desktop_lg6ua53_internet_access
+  name: DESKTOP-LG6UA53 Internet Access
+- entity_id: switch.dishwasher_eco_dry
+  name: Dishwasher Eco dry
+- entity_id: switch.dishwasher_hygiene
+  name: Dishwasher Hygiene +
+- entity_id: switch.dishwasher_intensive_zone
+  name: Dishwasher Intensive zone
+- entity_id: switch.dishwasher_internet_access
+  name: Dishwasher Internet Access
+- entity_id: switch.dishwasher_power
+  name: Dishwasher Power
+- entity_id: switch.dishwasher_silence_on_demand
+  name: Silence on demand
+- entity_id: switch.dishwasher_vario_speed
+  name: Dishwasher Vario speed +
+- entity_id: switch.doorbell_audio_recording_2
+  name: Doorbell Audio Recording
+- entity_id: switch.doorbell_auto_nightvision_2
+  name: Doorbell Auto Nightvision
+- entity_id: switch.doorbell_camera_enabled_2
+  name: Doorbell Camera enabled
+- entity_id: switch.doorbell_indoor_chime_enabled_2
+  name: Doorbell Indoor Chime Enabled
+- entity_id: switch.doorbell_motion_detection_2
+  name: Doorbell Motion Detection
+- entity_id: switch.doorbell_status_led_2
+  name: Doorbell Status LED
+- entity_id: switch.dreame_vacuum_r2469x_internet_access
+  name: dreame-vacuum-r2469x Internet Access
+- entity_id: switch.echoshow_290849e62c26e6f7_internet_access
+  name: echoshow-290849e62c26e6f7 Internet Access
+- entity_id: switch.epson310a43_internet_access
+  name: EPSON310A43 Internet Access
+- entity_id: switch.esp32_bluetooth_proxy_59e048_internet_access
+  name: bluetoothproxy1 Internet Access
+- entity_id: switch.eufyhomebase_internet_access
+  name: eufyhomebase Internet Access
+- entity_id: switch.faizans_macbook_pro_internet_access
+  name: Faizans-MacBook-Pro Internet Access
+- entity_id: switch.fritz_box_7530_ax_port_forward_home_assistant
+  name: 'FRITZ!Box 7530 AX Port forward Home Assistant '
+- entity_id: switch.fritz_box_7530_ax_wi_fi_baitul_asad_2_4ghz
+  name: FRITZ!Box 7530 AX Wi-Fi Baitul Asad (2.4Ghz)
+- entity_id: switch.fritz_box_7530_ax_wi_fi_baitul_asad_5ghz
+  name: FRITZ!Box 7530 AX Wi-Fi Baitul Asad (5Ghz)
+- entity_id: switch.fritz_box_7530_ax_wi_fi_fritz_box_guest_access
+  name: FRITZ!Box 7530 AX Wi-Fi FRITZ!Box guest access
+- entity_id: switch.fritz_repeater_entrance_internet_access
+  name: fritz-repeater-entrance Internet Access
+- entity_id: switch.fritz_repeater_gf_internet_access
+  name: fritz-repeater-gf Internet Access
+- entity_id: switch.front_door_antitheft_detection
+  name: Front Door Antitheft Detection
+- entity_id: switch.front_door_audio_recording
+  name: Front Door Audio Recording
+- entity_id: switch.front_door_camera_enabled
+  name: Front Door Camera enabled
+- entity_id: switch.front_door_light
+  name: Front Door Light
+- entity_id: switch.front_door_microphone
+  name: Front Door Microphone
+- entity_id: switch.front_door_motion_detection
+  name: Front Door Motion Detection
+- entity_id: switch.front_door_rtsp_stream
+  name: Front Door RTSP Stream
+- entity_id: switch.front_door_speaker
+  name: Front Door Speaker
+- entity_id: switch.front_door_status_led
+  name: Front Door Status LED
+- entity_id: switch.front_light
+  name: Front Light Front Light
+- entity_id: switch.galaxy_a56_5g_internet_access
+  name: Galaxy-A56-5G Internet Access
+- entity_id: switch.homeassistant_internet_access
+  name: homeassistant Internet Access
+- entity_id: switch.hpi753923_internet_access
+  name: HPI753923 Internet Access
+- entity_id: switch.iphone_internet_access
+  name: iPhone Internet Access
+- entity_id: switch.iphone_internet_access_2
+  name: sadat---siphone Internet Access
+- entity_id: switch.iphone_internet_access_3
+  name: iPhone Internet Access
+- entity_id: switch.iphone_internet_access_4
+  name: iPhone Internet Access
+- entity_id: switch.iphone_internet_access_5
+  name: iPhone Internet Access
+- entity_id: switch.iphone_internet_access_6
+  name: sadat---siphone Internet Access
+- entity_id: switch.irfanuls_iphone_internet_access
+  name: Irfanuls-iPhone Internet Access
+- entity_id: switch.l10s_ultra_gen_2_auto_drying
+  name: L10s Ultra Gen 2 Auto Drying
+- entity_id: switch.l10s_ultra_gen_2_auto_water_refilling
+  name: L10s Ultra Gen 2 Auto Water Refilling
+- entity_id: switch.l10s_ultra_gen_2_carpet_boost
+  name: L10s Ultra Gen 2 Carpet Boost
+- entity_id: switch.l10s_ultra_gen_2_child_lock
+  name: L10s Ultra Gen 2 Child Lock
+- entity_id: switch.l10s_ultra_gen_2_clean_carpets_first
+  name: L10s Ultra Gen 2 Clean Carpets First
+- entity_id: switch.l10s_ultra_gen_2_cleaning_sequence
+  name: L10s Ultra Gen 2 Cleaning Sequence
+- entity_id: switch.l10s_ultra_gen_2_collision_avoidance
+  name: L10s Ultra Gen 2 Collision Avoidance
+- entity_id: switch.l10s_ultra_gen_2_customized_cleaning
+  name: L10s Ultra Gen 2 Customized Cleaning
+- entity_id: switch.l10s_ultra_gen_2_dnd
+  name: L10s Ultra Gen 2 DnD
+- entity_id: switch.l10s_ultra_gen_2_floor_direction_cleaning
+  name: L10s Ultra Gen 2 Floor Direction Cleaning
+- entity_id: switch.l10s_ultra_gen_2_gap_cleaning_extension
+  name: L10s Ultra Gen 2 Gap Cleaning Extension
+- entity_id: switch.l10s_ultra_gen_2_intelligent_recognition
+  name: L10s Ultra Gen 2 Intelligent Recognition
+- entity_id: switch.l10s_ultra_gen_2_intensive_carpet_cleaning
+  name: L10s Ultra Gen 2 Intensive Carpet Cleaning
+- entity_id: switch.l10s_ultra_gen_2_max_suction_power
+  name: L10s Ultra Gen 2 Max Suction Power
+- entity_id: switch.l10s_ultra_gen_2_mop_extend
+  name: L10s Ultra Gen 2 Mop Extend
+- entity_id: switch.l10s_ultra_gen_2_mopping_under_furnitures
+  name: L10s Ultra Gen 2 Mopping Under Furnitures
+- entity_id: switch.l10s_ultra_gen_2_multi_floor_map
+  name: L10s Ultra Gen 2 Multi Floor Map
+- entity_id: switch.l10s_ultra_gen_2_obstacle_avoidance
+  name: L10s Ultra Gen 2 Obstacle Avoidance
+- entity_id: switch.l10s_ultra_gen_2_off_peak_charging
+  name: L10s Ultra Gen 2 Off-Peak Charging
+- entity_id: switch.l10s_ultra_gen_2_pet_focused_detection
+  name: L10s Ultra Gen 2 Pet Focused Detection
+- entity_id: switch.l10s_ultra_gen_2_resume_cleaning
+  name: L10s Ultra Gen 2 Resume Cleaning
+- entity_id: switch.l10s_ultra_gen_2_self_clean
+  name: L10s Ultra Gen 2 Self-Clean
+- entity_id: switch.l10s_ultra_gen_2_ultra_clean_mode
+  name: L10s Ultra Gen 2 Ultra Clean Mode
+- entity_id: switch.living_room_tv
+  name: Living room TV
+- entity_id: switch.macbook_pro_2_internet_access
+  name: Mac Internet Access
+- entity_id: switch.macbookpro_internet_access
+  name: MacBookPro Internet Access
+- entity_id: switch.macmini_7_internet_access
+  name: macmini Internet Access
+- entity_id: switch.macmini_internet_access
+  name: macmini Internet Access
+- entity_id: switch.meross_garden_shade_internet_access
+  name: meross-garden-shade Internet Access
+- entity_id: switch.meross_smart_plug_internet_access
+  name: Meross-Smart-Plug Internet Access
+- entity_id: switch.meross_smart_plug_internet_access_2
+  name: Meross-Smart-Plug Internet Access
+- entity_id: switch.merosswindowblinds_internet_access
+  name: merosswindowblinds Internet Access
+- entity_id: switch.net_a1_fe8c_internet_access
+  name: net-a1-FE8C Internet Access
+- entity_id: switch.oven_child_lock
+  name: Oven Child lock
+- entity_id: switch.oven_power
+  name: Oven Power
+- entity_id: switch.pc_0e_08_b5_71_8f_fa_internet_access
+  name: PC-0E-08-B5-71-8F-FA Internet Access
+- entity_id: switch.pc_18b8_fb6b_b15d_4bf0_internet_access
+  name: PC---18b8-fb6b-b15d-4bf0 Internet Access
+- entity_id: switch.pc_192_168_178_103_internet_access
+  name: 63a1fa91-3ef7-4039-bf63-97f36c456495 Internet Access
+- entity_id: switch.pc_192_168_178_108_internet_access
+  name: PC-192-168-178-108 Internet Access
+- entity_id: switch.pc_192_168_178_113_internet_access
+  name: 98faf432-a33c-4329-81bb-5858e3117ecb Internet Access
+- entity_id: switch.pc_192_168_178_116_internet_access
+  name: Alizas-iPhone Internet Access
+- entity_id: switch.pc_192_168_178_52_internet_access
+  name: PC-192-168-178-52 Internet Access
+- entity_id: switch.pc_192_168_178_59_internet_access
+  name: PC-192-168-178-59 Internet Access
+- entity_id: switch.pc_192_168_178_65_internet_access
+  name: PC-192-168-178-65 Internet Access
+- entity_id: switch.pc_192_168_178_72_internet_access
+  name: PC-192-168-178-72 Internet Access
+- entity_id: switch.pc_192_168_178_80_internet_access
+  name: PC-192-168-178-80 Internet Access
+- entity_id: switch.pc_192_168_178_86_internet_access
+  name: iPhone Internet Access
+- entity_id: switch.pc_192_168_178_91_internet_access
+  name: PC-192-168-178-91 Internet Access
+- entity_id: switch.pc_192_168_178_94_internet_access
+  name: b2898d9a-254b-4a48-af0e-3e0c6a3d8b26 Internet Access
+- entity_id: switch.pc_192_168_178_95_internet_access
+  name: PC-192-168-178-95 Internet Access
+- entity_id: switch.pc_1e_23_53_72_3b_39_internet_access
+  name: PC-1E-23-53-72-3B-39 Internet Access
+- entity_id: switch.pc_22_ad_b6_f8_bb_b1_internet_access
+  name: bbea4771-485a-41b0-8c3d-cf8afb07a9e5 Internet Access
+- entity_id: switch.pc_26_a2_92_ea_f4_dc_internet_access
+  name: Irfanuls-iPhone Internet Access
+- entity_id: switch.pc_36_1e_30_19_3b_f0_internet_access
+  name: fritz-repeater-gf Internet Access
+- entity_id: switch.pc_46_ab_6f_99_10_c8_internet_access
+  name: cc0febcd-92e5-44d6-b100-958598bd522f Internet Access
+- entity_id: switch.pc_5a_01_49_ed_d2_c5_internet_access
+  name: PC-5A-01-49-ED-D2-C5 Internet Access
+- entity_id: switch.pc_60_74_f4_9c_1d_c6_internet_access
+  name: PC-60-74-F4-9C-1D-C6 Internet Access
+- entity_id: switch.pc_60_74_f4_be_3b_00_internet_access
+  name: PC-60-74-F4-BE-3B-00 Internet Access
+- entity_id: switch.pc_92_de_09_70_e0_14_internet_access
+  name: PC-92-DE-09-70-E0-14 Internet Access
+- entity_id: switch.pc_b4_0a_d8_a2_49_69_internet_access
+  name: PS5-B49D4D Internet Access
+- entity_id: switch.pc_d2_f5_8f_51_92_cd_internet_access
+  name: PC-D2-F5-8F-51-92-CD Internet Access
+- entity_id: switch.pc_d8_d6_68_a0_c8_79_internet_access
+  name: PC-D8-D6-68-A0-C8-79 Internet Access
+- entity_id: switch.pc_ee_3c_c5_72_15_37_internet_access
+  name: PC-EE-3C-C5-72-15-37 Internet Access
+- entity_id: switch.pc_fe_2e_46_bc_28_e8_internet_access
+  name: PC-FE-2E-46-BC-28-E8 Internet Access
+- entity_id: switch.relay_switch_2pm_2a_channel_1
+  name: Relay Switch 2PM 2A Channel 1
+- entity_id: switch.relay_switch_2pm_2a_channel_2
+  name: Relay Switch 2PM 2A Channel 2
+- entity_id: switch.relay_switch_2pm_ce2a_channel_1
+  name: Dining Table Light
+- entity_id: switch.relay_switch_2pm_ce2a_channel_2
+  name: Drawing Room Light
+- entity_id: switch.relay_switch_2pm_o1
+  name: Dining Table Light
+- entity_id: switch.relay_switch_2pm_o2
+  name: Drawing Are Light
+- entity_id: switch.sadats_mbp_internet_access
+  name: Sadats-MBP Internet Access
+- entity_id: switch.sadats_mbp_internet_access_2
+  name: Sadats-MBP Internet Access
+- entity_id: switch.samsung_internet_access
+  name: Samsung Internet Access
+- entity_id: switch.sbs50_997347_internet_access
+  name: SBS50-997347 Internet Access
+- entity_id: switch.shadmans_macbook_pro_internet_access
+  name: Shadmans-MacBook-Pro Internet Access
+- entity_id: switch.shadmans_macbook_pro_internet_access_2
+  name: Shadmans-MacBook-Pro Internet Access
+- entity_id: switch.shelly1minig3_e4b3231a4e14_internet_access
+  name: shelly1minig3-e4b3231a4e14 Internet Access
+- entity_id: switch.shelly1pmminig3_34b7daca88a8_internet_access
+  name: shelly1pmminig3-34b7daca88a8 Internet Access
+- entity_id: switch.shelly3em_internet_access
+  name: shelly3 Internet Access
+- entity_id: switch.shelly_power_monitor
+  name: Shelly Power Monitor
+- entity_id: switch.siemensoven_internet_access
+  name: siemens-oven-384070390159010341 Internet Access
+- entity_id: switch.smart_plug_2212202420152151080b48e1e9b55812_config_overtemp_enable
+  name: Freezer Config overtemp enable
+- entity_id: switch.smart_plug_2212202420152151080b48e1e9b55812_outlet
+  name: Freezer Outlet
+- entity_id: switch.smart_plug_2212208966263051080b48e1e9b557d2_config_overtemp_enable
+  name: Washing Machine Config overtemp enable
+- entity_id: switch.smart_plug_2212208966263051080b48e1e9b557d2_outlet
+  name: Washing Machine Outlet
+- entity_id: switch.smartnetz_gas_reader_1073677969_internet_access
+  name: gas Internet Access
+- entity_id: switch.switchbot_hubminimatter_b2b9b8_internet_access
+  name: SwitchBot-HubMiniMatter-B2B9B8 Internet Access
+- entity_id: switch.switchbot_relay_switch_11ce28_internet_access
+  name: SwitchBot-Relay-Switch-11CE28 Internet Access
+- entity_id: switch.syed_sadats_ipad_internet_access
+  name: Syed-Sadats-iPad Internet Access
+- entity_id: switch.viessmann_2236_internet_access
+  name: Viessmann-2236 Internet Access
+- entity_id: switch.water_timer_switch
+  name: Water Timer Switch
+- entity_id: switch.zigbee2mqtt_bridge_permit_join
+  name: Zigbee2MQTT Bridge Permit join
+climate:
+- entity_id: climate.e3_vitodens_100_0421_1_heating
+  name: Viessmann W100 Boiler Heating
+  hvac_modes:
+  - 'off'
+  - auto
+automations:
+- entity_id: automation.auto_on_heating
+  name: Auto on heating
+  state: 'off'
+  last_triggered: '2025-10-31T04:30:00.256340+00:00'
+- entity_id: automation.automation_central_heating_delayed_start
+  name: Automation Central Heating Delayed Start
+  state: 'on'
+  last_triggered: '2026-02-02T05:30:00.150751+00:00'
+- entity_id: automation.automation_central_heating_delayed_stop
+  name: Automation Central Heating Delayed Stop
+  state: 'on'
+  last_triggered: '2026-02-02T00:00:00.170923+00:00'
+- entity_id: automation.bedroom_light_automation
+  name: Bedroom Light Automation
+  state: 'off'
+  last_triggered: '2025-10-30T22:39:47.602212+00:00'
+- entity_id: automation.energy_consumption_updates
+  name: Energy Consumption Updates
+  state: 'on'
+  last_triggered: '2026-02-02T13:00:00.443105+00:00'
+- entity_id: automation.prayer_time_notifications
+  name: Prayer Time Notifications
+  state: 'on'
+  last_triggered: '2026-02-02T15:55:00.001845+00:00'
+- entity_id: automation.sunset_night_light
+  name: Sunset night light
+  state: 'on'
+  last_triggered: '2026-02-02T04:50:53.419022+00:00'
+- entity_id: automation.switching_off_light
+  name: Switching off bathroom light
+  state: 'on'
+  last_triggered: '2026-02-02T04:52:26.201657+00:00'
+input_helpers:
+  input_boolean:
+  - entity_id: input_boolean.central_heating_delay_start
+    name: Central Heating Delay Start
+    state: 'off'
+  - entity_id: input_boolean.central_heating_delay_stop
+    name: Central Heating Delay Stop
+    state: 'off'
+  - entity_id: input_boolean.heater_safe_shutdown
+    name: Heater Safe Shutdown
+    state: 'off'
+  input_datetime:
+  - entity_id: input_datetime.central_heating_delay_off
+    name: Central Heating Delay Off
+    state: 00:00:00
+  - entity_id: input_datetime.central_heating_start
+    name: Central Heating Start
+    state: 06:30:00
+  - entity_id: input_datetime.central_heating_stop
+    name: Central Heating Stop
+    state: 01:00:00
+binary_sensors:
+  battery:
+  - entity_id: binary_sensor.motion_sensor_small_1_battery_low
+    name: motion_sensor_small_1 Battery
+    state: 'off'
+  battery_charging:
+  - entity_id: binary_sensor.l10s_ultra_gen_2_charging_state
+    name: L10s Ultra Gen 2 Charging State
+    state: 'off'
+  connectivity:
+  - entity_id: binary_sensor.dishwasher_connectivity
+    name: Dishwasher Connectivity
+    state: 'on'
+  - entity_id: binary_sensor.fritz_box_7530_ax_connection
+    name: FRITZ!Box 7530 AX Connection
+    state: 'on'
+  - entity_id: binary_sensor.oven_connectivity
+    name: Oven Connectivity
+    state: 'on'
+  - entity_id: binary_sensor.zigbee2mqtt_bridge_connection_state
+    name: Zigbee2MQTT Bridge Connection state
+    state: 'on'
+  door:
+  - entity_id: binary_sensor.door_lock
+    name: Door Lock
+    state: 'off'
+  - entity_id: binary_sensor.lock_ultra_4c_door
+    name: Lock Ultra 4C Door
+    state: 'off'
+  motion:
+  - entity_id: binary_sensor.backyard_motion_detected
+    name: Backyard Motion detected
+    state: 'off'
+  - entity_id: binary_sensor.backyard_person_detected
+    name: Backyard Person detected
+    state: 'off'
+  - entity_id: binary_sensor.doorbell_motion_detected_2
+    name: Doorbell Motion detected
+    state: 'off'
+  - entity_id: binary_sensor.doorbell_person_detected_2
+    name: Doorbell Person detected
+    state: 'off'
+  - entity_id: binary_sensor.front_door_motion_detected
+    name: Front Door Motion detected
+    state: 'off'
+  - entity_id: binary_sensor.front_door_person_detected
+    name: Front Door Person detected
+    state: 'off'
+  - entity_id: binary_sensor.motion_sensor_occupancy_2
+    name: Motion Sensor Occupancy
+    state: 'off'
+  occupancy:
+  - entity_id: binary_sensor.motion_sensor_1_occupancy
+    name: motion_sensor_1 Occupancy
+    state: 'off'
+  - entity_id: binary_sensor.motion_sensor_small_1_occupancy
+    name: motion_sensor_small_1 Occupancy
+    state: 'off'
+  other:
+  - entity_id: binary_sensor.backyard_debug_device
+    name: Backyard Debug (device)
+    state: 'on'
+  - entity_id: binary_sensor.backyard_snooze
+    name: Backyard Snooze
+    state: 'off'
+  - entity_id: binary_sensor.base_station_none
+    name: Base Station None
+    state: 'on'
+  - entity_id: binary_sensor.dishwasher_remote_control
+    name: Dishwasher Remote control
+    state: 'on'
+  - entity_id: binary_sensor.dishwasher_remote_start
+    name: Dishwasher Remote start
+    state: 'on'
+  - entity_id: binary_sensor.door_lock_auto_lock_paused
+    name: Door Lock Auto-lock paused
+    state: 'off'
+  - entity_id: binary_sensor.door_lock_calibration
+    name: Door Lock Calibration
+    state: 'on'
+  - entity_id: binary_sensor.doorbell_debug_device_2
+    name: Doorbell Debug (device)
+    state: 'on'
+  - entity_id: binary_sensor.doorbell_snooze_2
+    name: Doorbell Snooze
+    state: 'off'
+  - entity_id: binary_sensor.e3_vitodens_100_0421_1_frost_protection
+    name: Viessmann W100 Boiler Frost protection
+    state: 'off'
+  - entity_id: binary_sensor.front_door_debug_device
+    name: Front Door Debug (device)
+    state: 'on'
+  - entity_id: binary_sensor.front_door_snooze
+    name: Front Door Snooze
+    state: 'off'
+  - entity_id: binary_sensor.homebase_debug_station
+    name: Homebase Debug (station)
+    state: 'on'
+  - entity_id: binary_sensor.living_room_smoke_alarm_mute_status
+    name: Living Room Smoke Alarm Mute Status
+    state: 'off'
+  - entity_id: binary_sensor.oven_local_control
+    name: Oven Local control
+    state: 'off'
+  - entity_id: binary_sensor.oven_remote_control
+    name: Oven Remote control
+    state: 'on'
+  - entity_id: binary_sensor.oven_remote_start
+    name: Oven Remote start
+    state: 'on'
+  - entity_id: binary_sensor.smoke_alarm_mute_status
+    name: Top Floor Alarm Mute Status
+    state: 'off'
+  - entity_id: binary_sensor.stairwell_alarm_mute_status
+    name: Stairwell Alarm Mute Status
+    state: 'off'
+  - entity_id: binary_sensor.syed_sadats_ipad_focus
+    name: Syed Sadat’s iPad Focus
+    state: 'off'
+  plug:
+  - entity_id: binary_sensor.fritz_box_7530_ax_link
+    name: FRITZ!Box 7530 AX Link
+    state: 'on'
+  problem:
+  - entity_id: binary_sensor.bedroom_lamp_overcurrent
+    name: Bedroom Lamp Overcurrent
+    state: 'off'
+  - entity_id: binary_sensor.bedroom_lamp_overheating
+    name: Bedroom Lamp Overheating
+    state: 'off'
+  - entity_id: binary_sensor.bedroom_lamp_overpowering
+    name: Bedroom Lamp Overpowering
+    state: 'off'
+  - entity_id: binary_sensor.bedroom_lamp_overvoltage
+    name: Bedroom Lamp Overvoltage
+    state: 'off'
+  - entity_id: binary_sensor.dehumidifier_fe8c_tank_full
+    name: Dehumidifier_FE8C Tank Full
+    state: unavailable
+  - entity_id: binary_sensor.door_lock_unclosed_alarm
+    name: Door Lock Unclosed alarm
+    state: 'off'
+  - entity_id: binary_sensor.door_lock_unlocked_alarm
+    name: Door Lock Unlocked alarm
+    state: 'off'
+  - entity_id: binary_sensor.lock_ultra_4c_calibration
+    name: Lock Ultra 4C Calibration
+    state: 'off'
+  - entity_id: binary_sensor.shelly_power_monitor_overpowering
+    name: Shelly Power Monitor Overpowering
+    state: 'off'
+  running:
+  - entity_id: binary_sensor.doorbell_ringing_2
+    name: Doorbell Ringing
+    state: 'off'
+  - entity_id: binary_sensor.e3_vitodens_100_0421_1_burner
+    name: Viessmann W100 Boiler Burner
+    state: 'on'
+  - entity_id: binary_sensor.viessmann_w100_boiler_circulation_pump
+    name: Viessmann W100 Boiler Circulation pump
+    state: 'on'
+  smoke:
+  - entity_id: binary_sensor.aayat_room_temp_alarm_status
+    name: Aayat Room Temp Smoke
+    state: 'off'
+  - entity_id: binary_sensor.basement_alarm_status
+    name: Basement Smoke
+    state: 'off'
+  - entity_id: binary_sensor.bathroom_temp_alarm_status
+    name: Bathroom Temp Smoke
+    state: 'off'
+  - entity_id: binary_sensor.bedroom_thermo_alarm_status
+    name: Bedroom Thermo Smoke
+    state: 'off'
+  - entity_id: binary_sensor.kitchen_alarm_status
+    name: Kitchen Smoke
+    state: 'off'
+  - entity_id: binary_sensor.living_room_smoke_alarm_alarm_status
+    name: Living Room Smoke Alarm Smoke
+    state: 'off'
+  - entity_id: binary_sensor.living_room_temp_alarm_status
+    name: Living Room Temp Smoke
+    state: 'off'
+  - entity_id: binary_sensor.smoke_alarm_alarm_status
+    name: Top Floor Alarm Smoke
+    state: 'off'
+  - entity_id: binary_sensor.stairwell_alarm_smoke
+    name: Stairwell Alarm Smoke
+    state: 'off'
+  - entity_id: binary_sensor.top_floor_thermo_alarm_status
+    name: Top floor thermo Smoke
+    state: 'off'

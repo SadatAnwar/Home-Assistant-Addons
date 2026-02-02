@@ -1,0 +1,26 @@
+alias: Automation Central Heating Delayed Stop
+description: "Turns off heating at a scheduled time when delay stop is enabled"
+triggers:
+  - trigger: time
+    at: input_datetime.central_heating_stop
+conditions:
+  - condition: state
+    entity_id: input_boolean.central_heating_delay_stop
+    state: "on"
+actions:
+  - device_id: 33e4a91a3466d1d40cecf1fbff622934
+    domain: climate
+    entity_id: ae3aa52d06ebf1a386a3cbf4fc461fae
+    type: set_hvac_mode
+    hvac_mode: "off"
+  - action: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.central_heating_delay_stop
+  - action: notify.mobile_app_sadats_iphone_15_olx
+    metadata: {}
+    data:
+      message: Heating Switched off
+      title: Heating
+mode: single

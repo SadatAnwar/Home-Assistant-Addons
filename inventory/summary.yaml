@@ -1,0 +1,345 @@
+generated_at: '2026-02-02T17:59:54.794871'
+ha_version: 2025.12.4
+location_name: Home
+total_entities: 871
+entity_counts:
+  ai_task: 1
+  alarm_control_panel: 1
+  automation: 8
+  binary_sensor: 60
+  button: 60
+  camera: 7
+  climate: 1
+  conversation: 3
+  cover: 2
+  device_tracker: 91
+  event: 1
+  fan: 1
+  humidifier: 1
+  image: 5
+  input_boolean: 3
+  input_datetime: 3
+  light: 11
+  lock: 3
+  number: 28
+  person: 4
+  script: 1
+  select: 83
+  sensor: 282
+  stt: 1
+  sun: 1
+  switch: 156
+  time: 4
+  todo: 1
+  tts: 2
+  update: 42
+  vacuum: 1
+  valve: 1
+  weather: 1
+  zone: 1
+components:
+- ai_task
+- alarm_control_panel
+- analytics
+- api
+- application_credentials
+- assist_pipeline
+- auth
+- automation
+- backup
+- backup.event
+- backup.sensor
+- binary_sensor
+- blueprint
+- bluetooth
+- bluetooth_adapters
+- button
+- camera
+- climate
+- cloud
+- cloud.tts
+- config
+- conversation
+- counter
+- cover
+- default_config
+- device_automation
+- device_tracker
+- dhcp
+- diagnostics
+- dreame_vacuum
+- dreame_vacuum.binary_sensor
+- dreame_vacuum.button
+- dreame_vacuum.camera
+- dreame_vacuum.number
+- dreame_vacuum.select
+- dreame_vacuum.sensor
+- dreame_vacuum.switch
+- dreame_vacuum.time
+- dreame_vacuum.vacuum
+- energy
+- energy.sensor
+- esphome
+- esphome.button
+- esphome.update
+- eufy_security
+- eufy_security.alarm_control_panel
+- eufy_security.binary_sensor
+- eufy_security.button
+- eufy_security.camera
+- eufy_security.image
+- eufy_security.lock
+- eufy_security.number
+- eufy_security.select
+- eufy_security.sensor
+- eufy_security.switch
+- event
+- fan
+- ffmpeg
+- file
+- file_upload
+- fritz
+- fritz.binary_sensor
+- fritz.button
+- fritz.device_tracker
+- fritz.image
+- fritz.sensor
+- fritz.switch
+- fritz.update
+- frontend
+- generic
+- generic.camera
+- go2rtc
+- google_drive
+- google_generative_ai_conversation
+- google_generative_ai_conversation.ai_task
+- google_generative_ai_conversation.conversation
+- google_generative_ai_conversation.stt
+- google_generative_ai_conversation.tts
+- google_translate
+- google_translate.tts
+- govee_light_local
+- govee_light_local.light
+- group
+- group.light
+- hacs
+- hacs.switch
+- hacs.update
+- hardware
+- hassio
+- hassio.binary_sensor
+- hassio.sensor
+- hassio.switch
+- hassio.update
+- history
+- home_connect
+- home_connect.binary_sensor
+- home_connect.button
+- home_connect.light
+- home_connect.number
+- home_connect.select
+- home_connect.sensor
+- home_connect.switch
+- homeassistant
+- homeassistant.scene
+- homeassistant_alerts
+- homeassistant_hardware
+- http
+- humidifier
+- ibeacon
+- ibeacon.device_tracker
+- ibeacon.sensor
+- image
+- image_upload
+- input_boolean
+- input_button
+- input_datetime
+- input_number
+- input_select
+- input_text
+- intent
+- islamic_prayer_times
+- islamic_prayer_times.sensor
+- labs
+- light
+- lock
+- logbook
+- logger
+- lovelace
+- matter
+- matter.binary_sensor
+- matter.button
+- matter.climate
+- matter.cover
+- matter.event
+- matter.fan
+- matter.light
+- matter.lock
+- matter.number
+- matter.select
+- matter.sensor
+- matter.switch
+- matter.update
+- matter.vacuum
+- matter.valve
+- matter.water_heater
+- media_source
+- meross_lan
+- meross_lan.button
+- meross_lan.cover
+- meross_lan.light
+- meross_lan.number
+- meross_lan.sensor
+- meross_lan.switch
+- meross_lan.update
+- met
+- met.weather
+- midea_dehumidifier_lan
+- midea_dehumidifier_lan.binary_sensor
+- midea_dehumidifier_lan.climate
+- midea_dehumidifier_lan.fan
+- midea_dehumidifier_lan.humidifier
+- midea_dehumidifier_lan.sensor
+- midea_dehumidifier_lan.switch
+- min_max
+- min_max.sensor
+- mobile_app
+- mobile_app.binary_sensor
+- mobile_app.device_tracker
+- mobile_app.notify
+- mobile_app.sensor
+- mqtt
+- mqtt.binary_sensor
+- mqtt.button
+- mqtt.light
+- mqtt.number
+- mqtt.select
+- mqtt.sensor
+- mqtt.switch
+- mqtt.update
+- my
+- network
+- notify
+- number
+- onboarding
+- persistent_notification
+- person
+- radio_browser
+- recorder
+- repairs
+- scene
+- schedule
+- script
+- search
+- select
+- sensor
+- shelly
+- shelly.binary_sensor
+- shelly.button
+- shelly.climate
+- shelly.cover
+- shelly.event
+- shelly.light
+- shelly.number
+- shelly.select
+- shelly.sensor
+- shelly.switch
+- shelly.text
+- shelly.update
+- shelly.valve
+- shopping_list
+- shopping_list.todo
+- siren
+- speedtestdotnet
+- speedtestdotnet.sensor
+- ssdp
+- stream
+- stt
+- sun
+- sun.binary_sensor
+- sun.sensor
+- switch
+- switchbot
+- switchbot.binary_sensor
+- switchbot.lock
+- switchbot.sensor
+- switchbot.switch
+- switchbot_cloud
+- switchbot_cloud.binary_sensor
+- switchbot_cloud.button
+- switchbot_cloud.climate
+- switchbot_cloud.cover
+- switchbot_cloud.fan
+- switchbot_cloud.humidifier
+- switchbot_cloud.light
+- switchbot_cloud.lock
+- switchbot_cloud.sensor
+- switchbot_cloud.switch
+- switchbot_cloud.vacuum
+- system_health
+- system_log
+- tag
+- tasmota
+- tasmota.binary_sensor
+- tasmota.camera
+- tasmota.cover
+- tasmota.fan
+- tasmota.light
+- tasmota.sensor
+- tasmota.switch
+- template
+- template.sensor
+- text
+- time
+- timer
+- todo
+- trace
+- tts
+- tuya
+- tuya.alarm_control_panel
+- tuya.binary_sensor
+- tuya.button
+- tuya.camera
+- tuya.climate
+- tuya.cover
+- tuya.event
+- tuya.fan
+- tuya.humidifier
+- tuya.light
+- tuya.number
+- tuya.scene
+- tuya.select
+- tuya.sensor
+- tuya.siren
+- tuya.switch
+- tuya.vacuum
+- tuya.valve
+- update
+- usage_prediction
+- usb
+- utility_meter
+- utility_meter.sensor
+- vacuum
+- valve
+- vicare
+- vicare.binary_sensor
+- vicare.button
+- vicare.climate
+- vicare.fan
+- vicare.number
+- vicare.sensor
+- vicare.water_heater
+- wake_word
+- water_heater
+- weather
+- webhook
+- webrtc
+- websocket_api
+- xsense
+- xsense.binary_sensor
+- xsense.button
+- xsense.sensor
+- yahoofinance
+- yahoofinance.sensor
+- zeroconf
+- zone

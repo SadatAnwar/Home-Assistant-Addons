@@ -1,0 +1,20 @@
+alias: "Heating Optimization: Night Switch OFF"
+description: "Turns heating off at the ML-computed optimal time"
+triggers:
+  - trigger: time
+    at: input_datetime.heating_switch_off_time
+conditions:
+  - condition: state
+    entity_id: input_boolean.heating_optimization_enabled
+    state: "on"
+actions:
+  - action: climate.set_hvac_mode
+    target:
+      entity_id: climate.e3_vitodens_100_0421_1_heating
+    data:
+      hvac_mode: "off"
+  - action: notify.mobile_app_sadats_iphone_15_olx
+    data:
+      title: "Heating"
+      message: "Heating OFF - bedroom at {{ states('sensor.bedroom_thermo_temperature') }}°C"
+mode: single

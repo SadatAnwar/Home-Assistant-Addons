@@ -1,0 +1,14 @@
+# Home Assistant Light Groups
+# Add to configuration.yaml: group: !include groups.yaml
+
+govee_lamps_group:
+  name: Govee Lamps
+  entities:
+    - light.h6072
+    - light.h6072_2
+
+kitchen_lights_group:
+  name: Kitchen Lights
+  entities:
+    - light.kitchencounter
+    - light.kitchenspot

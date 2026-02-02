@@ -1,0 +1,31 @@
+alias: "Heating Optimization: Bedroom Protection Floor"
+description: "Emergency heating when bedroom drops below minimum temperature"
+triggers:
+  - trigger: numeric_state
+    entity_id: sensor.bedroom_thermo_temperature
+    below: input_number.heating_min_bedroom_temp
+    for:
+      minutes: 5
+conditions:
+  - condition: state
+    entity_id: input_boolean.heating_optimization_enabled
+    state: "on"
+  - condition: state
+    entity_id: climate.e3_vitodens_100_0421_1_heating
+    state: "off"
+actions:
+  - action: climate.set_hvac_mode
+    target:
+      entity_id: climate.e3_vitodens_100_0421_1_heating
+    data:
+      hvac_mode: heat
+  - action: number.set_value
+    target:
+      entity_id: number.e3_vitodens_100_0421_1_normal_temperature
+    data:
+      value: "{{ (states('input_number.heating_min_bedroom_temp') | float + 2) | round(1) }}"
+  - action: notify.mobile_app_sadats_iphone_15_olx
+    data:
+      title: "Heating Alert"
+      message: "Bedroom below {{ states('input_number.heating_min_bedroom_temp') }}°C ({{ states('sensor.bedroom_thermo_temperature') }}°C) - emergency heat ON"
+mode: single

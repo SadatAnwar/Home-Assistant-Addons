@@ -1,0 +1,16 @@
+- '*'
+- category_registry_updated
+- component_loaded
+- core_config_updated
+- device_registry_updated
+- entity_registry_updated
+- floor_registry_updated
+- homeassistant_close
+- homeassistant_final_write
+- homeassistant_start
+- homeassistant_stop
+- label_registry_updated
+- labs_updated
+- logging_changed
+- state_changed
+- user_removed

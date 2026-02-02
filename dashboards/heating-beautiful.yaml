@@ -1,0 +1,268 @@
+title: Heating
+views:
+- title: Overview
+  type: sections
+  sections:
+  - type: grid
+    column_span: 2
+    cards:
+    - type: heading
+      heading: Climate Control
+      heading_style: title
+      icon: mdi:thermostat
+    - type: thermostat
+      entity: climate.e3_vitodens_100_0421_1_heating
+      name: Heating
+      show_current_as_primary: true
+      features:
+      - type: climate-hvac-modes
+      grid_options:
+        columns: 12
+        rows: 4
+    - type: tile
+      entity: input_boolean.central_heating_delay_start
+      name: Delay Start
+      icon: mdi:timer-outline
+      color: orange
+      grid_options:
+        columns: 6
+        rows: 1
+    - type: tile
+      entity: input_datetime.central_heating_start
+      name: Start Time
+      icon: mdi:clock-start
+      color: blue
+      grid_options:
+        columns: 6
+        rows: 1
+    - type: tile
+      entity: input_boolean.central_heating_delay_stop
+      name: Delay Stop
+      icon: mdi:timer-off-outline
+      color: red
+      grid_options:
+        columns: 6
+        rows: 1
+    - type: tile
+      entity: input_datetime.central_heating_stop
+      name: Stop Time
+      icon: mdi:clock-end
+      color: deep-orange
+      grid_options:
+        columns: 6
+        rows: 1
+    - type: tile
+      entity: number.e3_vitodens_100_0421_1_normal_temperature
+      name: Normal
+      icon: mdi:thermometer-high
+      color: red
+      grid_options:
+        columns: 6
+        rows: 1
+    - type: tile
+      entity: number.e3_vitodens_100_0421_1_reduced_temperature
+      name: Reduced
+      icon: mdi:thermometer-low
+      color: cyan
+      grid_options:
+        columns: 6
+        rows: 1
+  - type: grid
+    column_span: 2
+    cards:
+    - type: heading
+      heading: Boiler
+      heading_style: title
+      icon: mdi:water-boiler
+    - type: gauge
+      entity: sensor.e3_vitodens_100_0421_1_boiler_supply_temperature
+      name: Flow Temp
+      min: 18
+      max: 80
+      needle: true
+      segments:
+      - from: 18
+        color: '#3498db'
+      - from: 40
+        color: '#2ecc71'
+      - from: 60
+        color: '#f39c12'
+      - from: 70
+        color: '#e74c3c'
+      grid_options:
+        columns: 6
+        rows: 3
+    - type: gauge
+      entity: sensor.e3_vitodens_100_0421_1_burner_modulation
+      name: Burner Load
+      min: 0
+      max: 100
+      needle: true
+      segments:
+      - from: 0
+        color: '#2ecc71'
+      - from: 50
+        color: '#f39c12'
+      - from: 80
+        color: '#e74c3c'
+      grid_options:
+        columns: 6
+        rows: 3
+    - type: gauge
+      entity: sensor.viessmann_w100_boiler_supply_pressure
+      name: Pressure
+      min: 0
+      max: 3
+      needle: true
+      segments:
+      - from: 0
+        color: '#e74c3c'
+      - from: 0.8
+        color: '#2ecc71'
+      - from: 2
+        color: '#f39c12'
+      - from: 2.5
+        color: '#e74c3c'
+      grid_options:
+        columns: 6
+        rows: 3
+  - type: grid
+    column_span: 2
+    cards:
+    - type: heading
+      heading: Room Temperatures
+      heading_style: title
+      icon: mdi:home-thermometer
+    - type: sensor
+      entity: sensor.bedroom_thermo_temperature
+      name: Master Bedroom
+      icon: mdi:bed-king
+      graph: line
+      detail: 2
+      grid_options:
+        columns: 4
+        rows: 2
+    - type: sensor
+      entity: sensor.aayat_room_temp_temperature
+      name: Kids Room
+      icon: mdi:baby-face
+      graph: line
+      detail: 2
+      grid_options:
+        columns: 4
+        rows: 2
+    - type: sensor
+      entity: sensor.living_room_temp_temperature
+      name: Living Room
+      icon: mdi:sofa
+      graph: line
+      detail: 2
+      grid_options:
+        columns: 4
+        rows: 2
+    - type: sensor
+      entity: sensor.kitchen_temperature
+      name: Kitchen
+      icon: mdi:stove
+      graph: line
+      detail: 2
+      grid_options:
+        columns: 4
+        rows: 2
+    - type: sensor
+      entity: sensor.top_floor_thermo_temperature
+      name: Office
+      icon: mdi:desk
+      graph: line
+      detail: 2
+      grid_options:
+        columns: 4
+        rows: 2
+    - type: sensor
+      entity: sensor.basement_temperature
+      name: Basement
+      icon: mdi:stairs-down
+      graph: line
+      detail: 2
+      grid_options:
+        columns: 4
+        rows: 2
+  - type: grid
+    column_span: 1
+    cards:
+    - type: heading
+      heading: Outside
+      heading_style: title
+      icon: mdi:weather-partly-cloudy
+    - type: sensor
+      entity: sensor.e3_vitodens_100_0421_1_outside_temperature
+      name: Temperature
+      icon: mdi:thermometer
+      graph: line
+      detail: 2
+      hours_to_show: 24
+      grid_options:
+        columns: 12
+        rows: 3
+  - type: grid
+    column_span: 3
+    cards:
+    - type: heading
+      heading: Today's Usage
+      heading_style: title
+      icon: mdi:chart-bar
+    - type: tile
+      entity: sensor.burner_hours_today
+      name: Burner Hours
+      icon: mdi:clock-outline
+      color: orange
+      grid_options:
+        columns: 3
+        rows: 1
+    - type: tile
+      entity: sensor.burner_starts_today
+      name: Burner Starts
+      icon: mdi:fire
+      color: deep-orange
+      grid_options:
+        columns: 3
+        rows: 1
+    - type: tile
+      entity: sensor.e3_vitodens_100_0421_1_heating_gas_consumption_today
+      name: Gas (Boiler)
+      icon: mdi:meter-gas
+      color: amber
+      grid_options:
+        columns: 3
+        rows: 1
+    - type: tile
+      entity: sensor.today_s_gas_usage_volume
+      name: Gas (Meter)
+      icon: mdi:meter-gas-outline
+      color: yellow
+      grid_options:
+        columns: 3
+        rows: 1
+  - type: grid
+    column_span: 3
+    cards:
+    - type: heading
+      heading: Lifetime Statistics
+      heading_style: subtitle
+      icon: mdi:history
+    - type: tile
+      entity: sensor.e3_vitodens_100_0421_1_burner_hours
+      name: Total Burner Hours
+      icon: mdi:clock-check
+      color: grey
+      grid_options:
+        columns: 6
+        rows: 1
+    - type: tile
+      entity: sensor.e3_vitodens_100_0421_1_burner_starts
+      name: Total Burner Starts
+      icon: mdi:fire-circle
+      color: grey
+      grid_options:
+        columns: 6
+        rows: 1

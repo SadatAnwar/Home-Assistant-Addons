@@ -1,0 +1,26 @@
+alias: "Heating Optimization: Extreme Cold Override"
+description: "Forces heating on when outside temperature drops below -5°C"
+triggers:
+  - trigger: numeric_state
+    entity_id: sensor.e3_vitodens_100_0421_1_outside_temperature
+    below: -5
+conditions:
+  - condition: state
+    entity_id: climate.e3_vitodens_100_0421_1_heating
+    state: "off"
+actions:
+  - action: climate.set_hvac_mode
+    target:
+      entity_id: climate.e3_vitodens_100_0421_1_heating
+    data:
+      hvac_mode: heat
+  - action: number.set_value
+    target:
+      entity_id: number.e3_vitodens_100_0421_1_normal_temperature
+    data:
+      value: 22
+  - action: notify.mobile_app_sadats_iphone_15_olx
+    data:
+      title: "Heating Alert"
+      message: "Extreme cold ({{ states('sensor.e3_vitodens_100_0421_1_outside_temperature') }}°C) - heating forced ON at 22°C"
+mode: single
