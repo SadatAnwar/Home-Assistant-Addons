@@ -1,0 +1,14 @@
+alias: "Heating Optimization: Setpoint Sync"
+description: "Syncs optimal setpoint helper to Viessmann boiler after 1-minute debounce"
+triggers:
+  - trigger: state
+    entity_id: input_number.heating_optimal_setpoint
+    for: "00:01:00"
+conditions: []
+actions:
+  - action: number.set_value
+    target:
+      entity_id: number.e3_vitodens_100_0421_1_normal_temperature
+    data:
+      value: "{{ states('input_number.heating_optimal_setpoint') }}"
+mode: single

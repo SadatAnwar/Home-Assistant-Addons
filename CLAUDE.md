@@ -16,7 +16,8 @@ home_assistant/
 │   └── heating/          # ML-driven heating automations
 │       ├── morning_switch_on.yaml    # Auto switch-on at ML time
 │       ├── night_switch_off.yaml     # Auto switch-off at ML time
-│       └── bedroom_protection.yaml   # Bedroom Temperature Guard
+│       ├── bedroom_protection.yaml   # Bedroom Temperature Guard
+│       └── setpoint_sync.yaml        # Sync optimal setpoint to boiler (1-min debounce)
 ├── scripts/              # Python scripts for HA interaction
 │   ├── ha_dashboard.py   # Dashboard upload/management tool
 │   ├── ha_automation.py  # Automation and helper creation tool
@@ -386,6 +387,9 @@ python -m scripts.heating.scheduler run --dry-run
 # Shadow mode (save predictions locally, don't touch HA or adjust model)
 python -m scripts.heating.scheduler run --shadow
 
+# Recommend only (save prediction, print result, don't update HA)
+python -m scripts.heating.scheduler run --recommend-only
+
 # Show thermal model information
 python -m scripts.heating.scheduler info
 
@@ -410,10 +414,10 @@ python scripts/ha_automation.py upload automations/heating/night_switch_off.yaml
 python scripts/ha_automation.py upload automations/heating/bedroom_protection.yaml
 ```
 
-**Crontab for daily scheduling (add to crontab -e):**
+**Crontab example (can run at any time; multiple runs per day are safe):**
 ```bash
-# Run heating optimizer at 4am daily
-0 4 * * * cd /path/to/home_assistant && .venv/bin/python -m scripts.heating.scheduler run >> /var/log/heating_optimizer.log 2>&1
+# Run heating optimizer every 4 hours
+0 */4 * * * cd /path/to/home_assistant && .venv/bin/python -m scripts.heating.scheduler run >> /var/log/heating_optimizer.log 2>&1
 ```
 
 ## Adaptive Heating Optimization System
@@ -426,7 +430,7 @@ The heating optimization system learns your home's thermal characteristics and a
 3. **Optimizer**: Calculates optimal switch-on/off times and setpoints
 4. **Prediction Tracking**: Saves predictions, collects actuals, calculates errors
 5. **Coefficient Adjustment**: Auto-adjusts model coefficients based on 7+ days of error data
-6. **Scheduler**: Updates HA helpers daily at 4am
+6. **Scheduler**: Updates HA helpers (can run at any time; determines correct action based on current heating state)
 7. **Automations**: Simple HA automations execute the ML-computed schedule
 
 **User-Configured Helpers (set these in HA):**
