@@ -44,6 +44,11 @@ class DailyHeatingSchedule:
     expected_max_temp: float
     solar_contribution: float
     reasoning: list[str]
+    expected_switch_on_temp: float | None = None  # Predicted room temp at switch-on time
+    expected_target_time_temp: float | None = None  # Predicted temp at target warm time
+    expected_switch_off_temp: float | None = None  # Predicted temp at switch-off time
+    expected_burner_hours: float | None = None  # Expected hours of burner operation
+    expected_avg_modulation: float | None = None  # Expected average modulation %
 
 
 class HeatingOptimizer:
@@ -52,12 +57,22 @@ class HeatingOptimizer:
     def __init__(self, thermal_model: ThermalModel):
         self.thermal_model = thermal_model
 
+    def _is_daytime(self, hour: int, target_warm_time: time, preferred_off_time: time) -> bool:
+        """Check if a clock hour falls within daytime (warm_time to off_time)."""
+        warm_h = target_warm_time.hour
+        off_h = preferred_off_time.hour
+        if warm_h <= off_h:
+            return warm_h <= hour < off_h
+        else:
+            return hour >= warm_h or hour < off_h
+
     def calculate_optimal_schedule(
         self,
         target_warm_time: time,
         target_night_time: time,
         target_temp: float,
-        min_bedroom_temp: float,
+        min_overnight_temp: float,
+        min_daytime_temp: float,
         current_temps: dict[str, float],
         outside_temp: float,
         weather_forecast: list[dict] | None = None,
@@ -69,7 +84,8 @@ class HeatingOptimizer:
             target_warm_time: When house should be warm (e.g., 07:00)
             target_night_time: When to switch off heating (e.g., 22:00)
             target_temp: Desired room temperature
-            min_bedroom_temp: Hard minimum for bedroom
+            min_overnight_temp: Hard minimum for bedroom overnight
+            min_daytime_temp: Comfort minimum for bedroom during the day
             current_temps: Current room temperatures
             outside_temp: Current outside temperature
             weather_forecast: Weather forecast data from HA
@@ -98,13 +114,13 @@ class HeatingOptimizer:
         daytime_temps = self._extract_daytime_temps(
             weather_forecast, target_warm_time, target_night_time, outside_temp
         )
-        min_daytime_temp = min(daytime_temps)
+        min_daytime_outside = min(daytime_temps)
         avg_daytime_temp = sum(daytime_temps) / len(daytime_temps)
 
         reasoning.append(f"Current bedroom: {bedroom_temp:.1f}°C, current outside: {outside_temp:.1f}°C")
         reasoning.append(f"Forecast overnight min: {min_overnight:.1f}°C")
         reasoning.append(f"Forecast morning ({target_warm_time}): {forecast_morning_temp:.1f}°C")
-        reasoning.append(f"Forecast daytime: min={min_daytime_temp:.1f}°C, avg={avg_daytime_temp:.1f}°C")
+        reasoning.append(f"Forecast daytime: min={min_daytime_outside:.1f}°C, avg={avg_daytime_temp:.1f}°C")
 
         # 1. Predict overnight cooling curve (system OFF)
         cooling_prediction = self.thermal_model.predict_cooling_curve(
@@ -169,19 +185,27 @@ class HeatingOptimizer:
         )
         reasoning.append(f"Optimal setpoint: {optimal_setpoint}°C")
 
-        # 6. Calculate switch-off time with minimum off duration constraint
-        # Use overnight forecast for cooling prediction
+        # 6. Calculate optimal switch-off time
+        # Find earliest time heating can stop while maintaining min_temp until morning
         switch_off_time = self._calculate_switch_off_time(
             preferred_off_time=target_night_time,
-            bedroom_temp=bedroom_temp,
-            min_temp=min_bedroom_temp,
+            target_temp=target_temp,
+            min_overnight_temp=min_overnight_temp,
+            min_daytime_temp=min_daytime_temp,
             outside_temp=min_overnight,  # Overnight forecast min for cooling calc
             target_warm_time=target_warm_time,
             switch_on_time=switch_on_time,
         )
 
         if switch_off_time is None:
-            reasoning.append("Switch-off: SKIPPED (off period too short, continuous heating)")
+            reasoning.append("Switch-off: CONTINUOUS (can't maintain min temp overnight)")
+        elif switch_off_time.hour < target_night_time.hour:
+            # We found an earlier time than the user's preferred
+            saved_hours = self._hours_until(switch_off_time, target_night_time)
+            reasoning.append(
+                f"Switch-off time: {switch_off_time.strftime('%H:%M')} "
+                f"({saved_hours:.0f}h earlier than preferred {target_night_time.strftime('%H:%M')})"
+            )
         else:
             reasoning.append(f"Switch-off time: {switch_off_time.strftime('%H:%M')}")
 
@@ -198,6 +222,32 @@ class HeatingOptimizer:
         expected_min, expected_max = self._estimate_temp_range(hours, bedroom_temp)
         expected_gas = self._estimate_gas_usage(hours, outside_temp)
 
+        # 9. Calculate additional prediction metrics for tracking
+        # Expected temp at target warm time
+        target_hour = target_warm_time.hour
+        expected_target_time_temp = None
+        for hp in hours:
+            if hp.hour == target_hour:
+                expected_target_time_temp = hp.expected_room_temp
+                break
+
+        # Expected temp at switch-off time
+        expected_switch_off_temp = None
+        if switch_off_time is not None:
+            off_hour = switch_off_time.hour
+            for hp in hours:
+                if hp.hour == off_hour:
+                    expected_switch_off_temp = hp.expected_room_temp
+                    break
+
+        # Expected burner hours (from on/off times)
+        expected_burner_hours = self._calculate_burner_hours(
+            switch_on_time, switch_off_time
+        )
+
+        # Expected average modulation (from hourly plan when ON)
+        expected_avg_modulation = self._calculate_avg_modulation(hours)
+
         return DailyHeatingSchedule(
             date=current_time,
             hours=hours,
@@ -210,6 +260,11 @@ class HeatingOptimizer:
             expected_max_temp=expected_max,
             solar_contribution=solar_contribution,
             reasoning=reasoning,
+            expected_switch_on_temp=morning_start_temp,
+            expected_target_time_temp=expected_target_time_temp,
+            expected_switch_off_temp=expected_switch_off_temp,
+            expected_burner_hours=expected_burner_hours,
+            expected_avg_modulation=expected_avg_modulation,
         )
 
     def apply_safety_overrides(
@@ -217,7 +272,10 @@ class HeatingOptimizer:
         schedule: DailyHeatingSchedule,
         current_temps: dict[str, float],
         outside_temp: float,
-        min_bedroom_temp: float,
+        min_overnight_temp: float,
+        min_daytime_temp: float,
+        target_warm_time: time,
+        preferred_off_time: time,
     ) -> tuple[DailyHeatingSchedule, list[str]]:
         """Apply safety overrides to a schedule.
 
@@ -226,21 +284,21 @@ class HeatingOptimizer:
         overrides = []
         bedroom_temp = current_temps.get("bedroom", 20.0)
 
-        # Extreme cold override
-        if outside_temp < DEFAULTS.extreme_cold_threshold:
-            if schedule.switch_on_time.hour > 4:
-                # Move switch-on earlier
-                new_on_time = time(4, 0)
-                schedule.switch_on_time = new_on_time
-                overrides.append(f"Extreme cold ({outside_temp}°C): moved switch-on to 04:00")
-
-            if schedule.optimal_setpoint < 22:
-                schedule.optimal_setpoint = 22
-                overrides.append("Extreme cold: increased setpoint to 22°C")
+        # Determine active threshold based on current time of day
+        now_hour = datetime.now().time().hour
+        if self._is_daytime(now_hour, target_warm_time, preferred_off_time):
+            active_min = min_daytime_temp
+            label = "daytime"
+        else:
+            active_min = min_overnight_temp
+            label = "overnight"
 
         # Bedroom too cold override
-        if bedroom_temp < min_bedroom_temp:
-            overrides.append(f"Bedroom below {min_bedroom_temp}°C: recommend immediate heating")
+        if bedroom_temp < active_min:
+            overrides.append(
+                f"Bedroom below {label} minimum {active_min}°C: "
+                f"recommend immediate heating ({bedroom_temp:.1f}°C)"
+            )
 
         return schedule, overrides
 
@@ -434,66 +492,126 @@ class HeatingOptimizer:
     def _calculate_switch_off_time(
         self,
         preferred_off_time: time,
-        bedroom_temp: float,
-        min_temp: float,
+        target_temp: float,
+        min_overnight_temp: float,
+        min_daytime_temp: float,
         outside_temp: float,
         target_warm_time: time,
         switch_on_time: time,
     ) -> time | None:
-        """Calculate safe switch-off time ensuring min temp until morning.
+        """Find earliest switch-off time keeping bedroom above the active threshold.
 
-        Returns None if off period would be too short (skip turn-off entirely).
+        Each simulated cooling hour is checked against the correct threshold
+        for that clock hour: min_daytime_temp during waking hours
+        (target_warm_time → preferred_off_time) and min_overnight_temp otherwise.
+
+        Args:
+            preferred_off_time: User's preferred off time (used as soft maximum)
+            target_temp: Target room temperature (assumed room temp when heating ON)
+            min_overnight_temp: Hard minimum bedroom temperature overnight
+            min_daytime_temp: Comfort minimum bedroom temperature during the day
+            outside_temp: Forecast overnight outside temperature
+            target_warm_time: When user wants the house warm
+            switch_on_time: Next morning's computed switch-on time
+
+        Returns:
+            Optimal switch-off time, or None for continuous heating
         """
-        # Calculate hours of off-period (from preferred_off to next switch_on)
-        hours_off = self._hours_until(preferred_off_time, switch_on_time)
-
         logger.debug(
             f"Switch-off calc: preferred={preferred_off_time}, "
-            f"switch_on={switch_on_time}, hours_off={hours_off:.1f}"
+            f"target={target_temp}°C, min_day={min_daytime_temp}°C, "
+            f"min_night={min_overnight_temp}°C, "
+            f"outside={outside_temp}°C, switch_on={switch_on_time}"
         )
 
-        # Check minimum off duration constraint
-        if hours_off < DEFAULTS.min_off_duration_hours:
-            logger.info(
-                f"Off period too short ({hours_off:.1f}h < {DEFAULTS.min_off_duration_hours}h), "
-                "skipping switch-off"
+        # Build list of candidate hours from target_warm_time to preferred_off_time
+        start_hour = target_warm_time.hour
+        end_hour = preferred_off_time.hour
+
+        if start_hour <= end_hour:
+            candidate_hours = list(range(start_hour, end_hour + 1))
+        else:
+            # Wrap around midnight (e.g., warm at 22:00, preferred off at 02:00)
+            candidate_hours = list(range(start_hour, 24)) + list(range(0, end_hour + 1))
+
+        # Search for earliest safe switch-off time
+        for candidate_hour in candidate_hours:
+            candidate_time = time(candidate_hour, 0)
+
+            # Hours from candidate off time until heating restarts
+            hours_off = self._hours_until(candidate_time, switch_on_time)
+
+            # Skip if off period would be too short
+            if hours_off < DEFAULTS.min_off_duration_hours:
+                continue
+
+            # Simulate cooling from target_temp until switch_on_time
+            # (after switch-on, the room is being heated so cooling curve doesn't apply)
+            cooling = self.thermal_model.predict_cooling_curve(
+                start_temp=target_temp,
+                outside_temp=outside_temp,
+                hours=int(hours_off),
             )
-            return None  # Don't turn off - continuous heating
 
-        # Predict cooling overnight from preferred_off_time
-        hours_overnight = self._hours_until(preferred_off_time, target_warm_time)
+            # Check if temp stays above the time-aware threshold
+            stays_warm = True
+            for i, t in enumerate(cooling.temperatures):
+                sim_hour = (candidate_hour + i) % 24
+                if self._is_daytime(sim_hour, target_warm_time, preferred_off_time):
+                    threshold = min_daytime_temp
+                else:
+                    threshold = min_overnight_temp
+                if t < threshold:
+                    stays_warm = False
+                    break
 
-        cooling = self.thermal_model.predict_cooling_curve(
-            start_temp=bedroom_temp,
-            outside_temp=outside_temp,
-            hours=int(hours_overnight) + 1,
-        )
+            if stays_warm:
+                logger.info(
+                    f"Earliest safe switch-off: {candidate_time.strftime('%H:%M')} "
+                    f"(cooling {target_temp}°C -> {cooling.temperatures[-1]:.1f}°C "
+                    f"over {hours_off:.0f}h, stays above daytime={min_daytime_temp}°C / "
+                    f"overnight={min_overnight_temp}°C)"
+                )
+                return candidate_time
 
-        # Check if temp drops below minimum
-        for i, temp in enumerate(cooling.temperatures):
-            if temp < min_temp:
-                # Need to stay on longer - calculate delayed switch-off time
-                delay_hours = max(0, hours_overnight - i) * 0.5
-                new_hour = (preferred_off_time.hour + int(delay_hours)) % 24
-                new_minute = preferred_off_time.minute + int((delay_hours % 1) * 60)
-                if new_minute >= 60:
-                    new_hour = (new_hour + 1) % 24
-                    new_minute -= 60
+        # No safe time found before preferred_off_time — search beyond it
+        # (extend up to 2 hours past preferred, then give up)
+        logger.debug("No safe off time before preferred time, searching later...")
+        for extra_hour in range(1, 3):
+            candidate_hour = (end_hour + extra_hour) % 24
+            candidate_time = time(candidate_hour, 0)
 
-                delayed_off = time(new_hour, new_minute)
+            hours_off = self._hours_until(candidate_time, switch_on_time)
+            if hours_off < DEFAULTS.min_off_duration_hours:
+                continue
 
-                # Re-check min off duration with delayed time
-                new_hours_off = self._hours_until(delayed_off, switch_on_time)
-                if new_hours_off < DEFAULTS.min_off_duration_hours:
-                    logger.info(
-                        f"Delayed off ({delayed_off}) would create short off period "
-                        f"({new_hours_off:.1f}h), skipping switch-off"
-                    )
-                    return None
+            cooling = self.thermal_model.predict_cooling_curve(
+                start_temp=target_temp,
+                outside_temp=outside_temp,
+                hours=int(hours_off),
+            )
 
-                return delayed_off
+            stays_warm = True
+            for i, t in enumerate(cooling.temperatures):
+                sim_hour = (candidate_hour + i) % 24
+                if self._is_daytime(sim_hour, target_warm_time, preferred_off_time):
+                    threshold = min_daytime_temp
+                else:
+                    threshold = min_overnight_temp
+                if t < threshold:
+                    stays_warm = False
+                    break
 
-        return preferred_off_time
+            if stays_warm:
+                logger.info(
+                    f"Extended switch-off: {candidate_time.strftime('%H:%M')} "
+                    f"({extra_hour}h past preferred)"
+                )
+                return candidate_time
+
+        # Nothing works — continuous heating
+        logger.info("No safe switch-off time found, using continuous heating")
+        return None
 
     def _build_hourly_plan(
         self,
@@ -573,6 +691,37 @@ class HeatingOptimizer:
                 total_kwh += hourly_kwh
 
         return round(total_kwh, 1)
+
+    def _calculate_burner_hours(
+        self,
+        switch_on_time: time,
+        switch_off_time: time | None,
+    ) -> float:
+        """Calculate expected burner operation hours."""
+        if switch_off_time is None:
+            # Continuous heating - 24 hours
+            return 24.0
+
+        on_mins = switch_on_time.hour * 60 + switch_on_time.minute
+        off_mins = switch_off_time.hour * 60 + switch_off_time.minute
+
+        if off_mins > on_mins:
+            # Same day: simple subtraction
+            duration_mins = off_mins - on_mins
+        else:
+            # Crosses midnight: on_time to midnight + midnight to off_time
+            duration_mins = (24 * 60 - on_mins) + off_mins
+
+        return round(duration_mins / 60, 1)
+
+    def _calculate_avg_modulation(self, hours: list[HourlyHeatingPlan]) -> float:
+        """Calculate average modulation when system is ON."""
+        on_hours = [h for h in hours if h.system_state == "on"]
+        if not on_hours:
+            return 0.0
+
+        total_mod = sum(h.expected_modulation for h in on_hours)
+        return round(total_mod / len(on_hours), 1)
 
     def generate_schedule_summary(self, schedule: DailyHeatingSchedule) -> str:
         """Generate human-readable schedule summary."""

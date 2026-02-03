@@ -1,0 +1,1 @@
+{"date": "2026-02-03", "prediction": {"date": "2026-02-03", "switch_on_time": "07:05", "switch_off_time": "22:00", "setpoint": 21.5, "expected_switch_on_temp": 19.33, "expected_target_time_temp": 20.6, "expected_switch_off_temp": 21.5, "expected_gas_kwh": 13.1, "expected_burner_hours": 14.9, "expected_avg_modulation": 31.3, "target_warm_time": "08:00"}}

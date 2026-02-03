@@ -63,6 +63,10 @@ class ThermalModel:
         self.mean_heating_rate: float = 1.0  # °C/hour (default, measured 0.96-1.18)
         self.solar_gain_coefficient: float = 0.05  # °C per degree elevation
 
+        # Cooling rate constant k (1/τ where τ is time constant in hours)
+        # Based on measured τ = 156 hours (KfW Effizienzhaus 40 level)
+        self.k: float = 0.0064  # Default: 1/156
+
         # Training metadata
         self.last_trained: datetime | None = None
         self.training_samples: int = 0
@@ -358,9 +362,9 @@ class ThermalModel:
             #   - Time constant τ = 156 hours (KfW Effizienzhaus 40 level)
             #   - k = 1/τ = 0.0064 per hour
             # This gives ~0.17°C/hour cooling at 27°C temperature difference
+            # Note: k is now adjustable based on prediction feedback
             temp_diff = current_temp - outside_temp
-            k = 0.0064  # Based on measured τ = 156 hours
-            rate = -k * temp_diff
+            rate = -self.k * temp_diff
 
             # Add solar gain during day
             if sun_elev > 10:
@@ -555,6 +559,7 @@ class ThermalModel:
             "mean_cooling_rate": self.mean_cooling_rate,
             "mean_heating_rate": self.mean_heating_rate,
             "solar_gain_coefficient": self.solar_gain_coefficient,
+            "k": self.k,
             "last_trained": self.last_trained,
             "training_samples": self.training_samples,
         }
@@ -578,6 +583,7 @@ class ThermalModel:
             self.mean_cooling_rate = model_data.get("mean_cooling_rate", 0.3)
             self.mean_heating_rate = model_data.get("mean_heating_rate", 1.0)
             self.solar_gain_coefficient = model_data.get("solar_gain_coefficient", 0.05)
+            self.k = model_data.get("k", 0.0064)
             self.last_trained = model_data.get("last_trained")
             self.training_samples = model_data.get("training_samples", 0)
             return True
@@ -593,7 +599,37 @@ class ThermalModel:
             "mean_cooling_rate": self.mean_cooling_rate,
             "mean_heating_rate": self.mean_heating_rate,
             "solar_gain_coefficient": self.solar_gain_coefficient,
+            "k": self.k,
+            "time_constant_hours": round(1 / self.k, 1) if self.k > 0 else None,
             "has_heating_model": self.heating_rate_model is not None,
             "has_cooling_model": self.cooling_rate_model is not None,
             "has_modulation_model": self.modulation_model is not None,
         }
+
+    def apply_adjustments(self, adjustments: dict[str, float]) -> list[str]:
+        """Apply coefficient adjustments from prediction tracker.
+
+        Args:
+            adjustments: Dictionary of coefficient names to new values
+
+        Returns:
+            List of applied adjustment descriptions
+        """
+        applied = []
+
+        if "k" in adjustments:
+            old_k = self.k
+            self.k = adjustments["k"]
+            applied.append(
+                f"Cooling rate k: {old_k:.6f} -> {self.k:.6f} "
+                f"(τ: {1/old_k:.0f}h -> {1/self.k:.0f}h)"
+            )
+
+        if "mean_heating_rate" in adjustments:
+            old_rate = self.mean_heating_rate
+            self.mean_heating_rate = adjustments["mean_heating_rate"]
+            applied.append(
+                f"Heating rate: {old_rate:.3f} -> {self.mean_heating_rate:.3f} °C/hour"
+            )
+
+        return applied

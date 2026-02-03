@@ -1,0 +1,511 @@
+title: Heating Optimizer
+icon: mdi:robot-outline
+views:
+- title: Overview
+  type: panel
+  cards:
+  - type: custom:stack-in-card
+    mode: vertical
+    card_mod:
+      style: |
+        ha-card {
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+    cards:
+
+    # ── ML Schedule ──────────────────────────────────────
+    - type: custom:bubble-card
+      card_type: separator
+      name: ML Schedule (Today)
+      icon: mdi:robot-outline
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    - type: horizontal-stack
+      cards:
+      # Switch-on time
+      - type: custom:mushroom-template-card
+        primary: Switch ON
+        secondary: "{{ states('input_datetime.heating_switch_on_time') }}"
+        icon: mdi:power-on
+        icon_color: green
+        layout: horizontal
+        entity: input_datetime.heating_switch_on_time
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      # Switch-off time
+      - type: custom:mushroom-template-card
+        primary: Switch OFF
+        secondary: >-
+          {% set on = states('input_datetime.heating_switch_on_time') %}
+          {% set off = states('input_datetime.heating_switch_off_time') %}
+          {% if on == off %}CONTINUOUS{% else %}{{ off }}{% endif %}
+        icon: mdi:power-off
+        icon_color: red
+        layout: horizontal
+        entity: input_datetime.heating_switch_off_time
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      # Optimal setpoint
+      - type: custom:mushroom-template-card
+        primary: Setpoint
+        secondary: "{{ states('input_number.heating_optimal_setpoint') }}°C"
+        icon: mdi:thermometer-auto
+        icon_color: orange
+        layout: horizontal
+        entity: input_number.heating_optimal_setpoint
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+    # ── Live Status ──────────────────────────────────────
+    - type: custom:bubble-card
+      card_type: separator
+      name: Live Status
+      icon: mdi:fire
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    - type: horizontal-stack
+      cards:
+      # Heating mode
+      - type: custom:mushroom-template-card
+        primary: Heating
+        secondary: >-
+          {% set mode = state_attr('climate.e3_vitodens_100_0421_1_heating', 'hvac_action') or states('climate.e3_vitodens_100_0421_1_heating') %}
+          {{ mode | capitalize }}
+        icon: >-
+          {% if states('climate.e3_vitodens_100_0421_1_heating') == 'heat' %}
+          mdi:fire
+          {% else %}
+          mdi:snowflake
+          {% endif %}
+        icon_color: >-
+          {% if states('climate.e3_vitodens_100_0421_1_heating') == 'heat' %}orange{% else %}cyan{% endif %}
+        layout: horizontal
+        entity: climate.e3_vitodens_100_0421_1_heating
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      # Bedroom temp
+      - type: custom:mushroom-template-card
+        primary: Bedroom
+        secondary: "{{ states('sensor.bedroom_thermo_temperature') }}°C"
+        icon: mdi:bed-king
+        icon_color: >-
+          {% set t = states('sensor.bedroom_thermo_temperature') | float %}
+          {% if t < 18 %}deep-purple
+          {% elif t < 19 %}blue
+          {% elif t < 20 %}cyan
+          {% elif t < 22 %}green
+          {% else %}amber{% endif %}
+        layout: horizontal
+        entity: sensor.bedroom_thermo_temperature
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      # Outside temp
+      - type: custom:mushroom-template-card
+        primary: Outside
+        secondary: "{{ states('sensor.e3_vitodens_100_0421_1_outside_temperature') }}°C"
+        icon: mdi:thermometer
+        icon_color: >-
+          {% set t = states('sensor.e3_vitodens_100_0421_1_outside_temperature') | float %}
+          {% if t < 0 %}deep-purple{% elif t < 10 %}blue{% elif t < 18 %}cyan{% else %}teal{% endif %}
+        layout: horizontal
+        entity: sensor.e3_vitodens_100_0421_1_outside_temperature
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+    - type: horizontal-stack
+      cards:
+      # Burner modulation gauge
+      - type: gauge
+        entity: sensor.e3_vitodens_100_0421_1_burner_modulation
+        name: Burner Load
+        min: 0
+        max: 100
+        needle: true
+        segments:
+        - from: 0
+          color: '#2ecc71'
+        - from: 50
+          color: '#f39c12'
+        - from: 80
+          color: '#e74c3c'
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      # Bedroom temp 24h graph
+      - type: custom:mini-graph-card
+        entities:
+        - entity: sensor.bedroom_thermo_temperature
+          name: Bedroom
+          color: "#e74c3c"
+        - entity: sensor.e3_vitodens_100_0421_1_outside_temperature
+          name: Outside
+          color: "#3498db"
+        hours_to_show: 24
+        points_per_hour: 2
+        line_width: 2
+        height: 120
+        show:
+          name: true
+          icon: false
+          state: true
+          legend: true
+          fill: fade
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+    # ── Your Settings ────────────────────────────────────
+    - type: custom:bubble-card
+      card_type: separator
+      name: Your Settings
+      icon: mdi:tune-vertical
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    - type: horizontal-stack
+      cards:
+      # Master switch
+      - type: custom:mushroom-template-card
+        primary: Optimizer
+        secondary: "{{ states('input_boolean.heating_optimization_enabled') | capitalize }}"
+        icon: >-
+          {% if is_state('input_boolean.heating_optimization_enabled', 'on') %}
+          mdi:robot
+          {% else %}
+          mdi:robot-off
+          {% endif %}
+        icon_color: >-
+          {% if is_state('input_boolean.heating_optimization_enabled', 'on') %}green{% else %}red{% endif %}
+        layout: horizontal
+        entity: input_boolean.heating_optimization_enabled
+        tap_action:
+          action: toggle
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      # Target warm time
+      - type: custom:mushroom-template-card
+        primary: Warm By
+        secondary: "{{ states('input_datetime.heating_target_warm_time') }}"
+        icon: mdi:weather-sunset-up
+        icon_color: amber
+        layout: horizontal
+        entity: input_datetime.heating_target_warm_time
+        tap_action:
+          action: more-info
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      # Preferred off time
+      - type: custom:mushroom-template-card
+        primary: Off At
+        secondary: "{{ states('input_datetime.heating_preferred_off_time') }}"
+        icon: mdi:weather-sunset-down
+        icon_color: deep-purple
+        layout: horizontal
+        entity: input_datetime.heating_preferred_off_time
+        tap_action:
+          action: more-info
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+    - type: horizontal-stack
+      cards:
+      # Target temp
+      - type: tile
+        entity: input_number.heating_target_temp
+        name: Target Temp
+        icon: mdi:thermometer
+        color: red
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      # Daytime min
+      - type: tile
+        entity: input_number.heating_min_daytime_temp
+        name: Daytime Min
+        icon: mdi:thermometer-high
+        color: orange
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      # Overnight min
+      - type: tile
+        entity: input_number.heating_min_bedroom_temp
+        name: Overnight Min
+        icon: mdi:thermometer-low
+        color: blue
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+    # ── Today's Usage ────────────────────────────────────
+    - type: custom:bubble-card
+      card_type: separator
+      name: Today's Usage
+      icon: mdi:chart-bar
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-template-card
+        primary: Gas Today
+        secondary: "{{ states('sensor.today_s_gas_usage_energy') }} kWh"
+        icon: mdi:meter-gas
+        icon_color: amber
+        layout: horizontal
+        entity: sensor.today_s_gas_usage_energy
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      - type: custom:mushroom-template-card
+        primary: Yesterday
+        secondary: "{{ states('sensor.yesterday_s_gas_usage_energy') }} kWh"
+        icon: mdi:history
+        icon_color: grey
+        layout: horizontal
+        entity: sensor.yesterday_s_gas_usage_energy
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      - type: custom:mushroom-template-card
+        primary: Power Now
+        secondary: "{{ states('sensor.total_power_consumed') }} W"
+        icon: mdi:flash
+        icon_color: yellow
+        layout: horizontal
+        entity: sensor.total_power_consumed
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+    # ── Safety Automations ───────────────────────────────
+    - type: custom:bubble-card
+      card_type: separator
+      name: Safety Automations
+      icon: mdi:shield-check
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-template-card
+        primary: Morning ON
+        secondary: >-
+          {% set auto = 'automation.heating_optimization_morning_switch_on' %}
+          {% if states(auto) == 'on' %}Active{% else %}Disabled{% endif %}
+        icon: mdi:weather-sunset-up
+        icon_color: >-
+          {% if is_state('automation.heating_optimization_morning_switch_on', 'on') %}green{% else %}red{% endif %}
+        layout: horizontal
+        entity: automation.heating_optimization_morning_switch_on
+        tap_action:
+          action: more-info
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      - type: custom:mushroom-template-card
+        primary: Night OFF
+        secondary: >-
+          {% set auto = 'automation.heating_optimization_night_switch_off' %}
+          {% if states(auto) == 'on' %}Active{% else %}Disabled{% endif %}
+        icon: mdi:weather-night
+        icon_color: >-
+          {% if is_state('automation.heating_optimization_night_switch_off', 'on') %}green{% else %}red{% endif %}
+        layout: horizontal
+        entity: automation.heating_optimization_night_switch_off
+        tap_action:
+          action: more-info
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      - type: custom:mushroom-template-card
+        primary: Bedroom Guard
+        secondary: >-
+          {% set auto = 'automation.heating_optimization_bedroom_temperature_guard' %}
+          {% if states(auto) == 'on' %}Active{% else %}Disabled{% endif %}
+        icon: mdi:shield-home
+        icon_color: >-
+          {% if is_state('automation.heating_optimization_bedroom_temperature_guard', 'on') %}green{% else %}red{% endif %}
+        layout: horizontal
+        entity: automation.heating_optimization_bedroom_temperature_guard
+        tap_action:
+          action: more-info
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+

@@ -69,6 +69,7 @@ class HeatingHelpers:
     preferred_off_time: str = "input_datetime.heating_preferred_off_time"
     target_temp: str = "input_number.heating_target_temp"
     min_bedroom_temp: str = "input_number.heating_min_bedroom_temp"
+    min_daytime_temp: str = "input_number.heating_min_daytime_temp"
     optimization_enabled: str = "input_boolean.heating_optimization_enabled"
 
     # ML-computed values
@@ -85,10 +86,11 @@ class DefaultSettings:
     """Default values for heating optimization."""
 
     # User defaults
-    target_warm_time: str = "07:00"
-    preferred_off_time: str = "22:00"
+    target_warm_time: str = "08:00"
+    preferred_off_time: str = "23:00"
     target_temp: float = 20.0
-    min_bedroom_temp: float = 19.0
+    min_bedroom_temp: float = 18.0
+    min_daytime_temp: float = 20.0
 
     # ML-computed defaults (used until model learns)
     default_switch_on_time: str = "06:00"
@@ -142,3 +144,29 @@ class ModelConfig:
 
 
 MODEL_CONFIG = ModelConfig()
+
+
+@dataclass
+class PredictionConfig:
+    """Configuration for prediction tracking and coefficient adjustment."""
+
+    # Data storage
+    data_dir: str = "data/heating"
+    predictions_file: str = "predictions.jsonl"
+
+    # Adjustment thresholds
+    min_sample_days: int = 7  # Minimum days of data before adjusting coefficients
+    error_threshold: float = 0.3  # Only adjust if avg error > 0.3°C
+
+    # Coefficient bounds (physically realistic ranges)
+    k_min: float = 0.003  # Min cooling rate constant (τ = 333 hours)
+    k_max: float = 0.010  # Max cooling rate constant (τ = 100 hours)
+    heating_rate_min: float = 0.5  # Min heating rate (°C/hour)
+    heating_rate_max: float = 2.0  # Max heating rate (°C/hour)
+
+    # Adjustment factors (incremental changes to avoid oscillation)
+    k_adjustment_factor: float = 0.0005  # Adjustment per degree error
+    heating_rate_adjustment_factor: float = 0.05  # 5% per degree error
+
+
+PREDICTION_CONFIG = PredictionConfig()

@@ -1,11 +1,18 @@
-alias: "Heating Optimization: Bedroom Protection Floor"
-description: "Emergency heating when bedroom drops below minimum temperature"
+alias: "Heating Optimization: Bedroom Temperature Guard"
+description: "Emergency heating when bedroom drops below minimum temperature (daytime or overnight)"
 triggers:
   - trigger: numeric_state
+    id: daytime_trigger
+    entity_id: sensor.bedroom_thermo_temperature
+    below: input_number.heating_min_daytime_temp
+    for:
+      hours: 1
+  - trigger: numeric_state
+    id: overnight_trigger
     entity_id: sensor.bedroom_thermo_temperature
     below: input_number.heating_min_bedroom_temp
     for:
-      minutes: 5
+      hours: 1
 conditions:
   - condition: state
     entity_id: input_boolean.heating_optimization_enabled
@@ -13,6 +20,22 @@ conditions:
   - condition: state
     entity_id: climate.e3_vitodens_100_0421_1_heating
     state: "off"
+  - condition: or
+    conditions:
+      - condition: and
+        conditions:
+          - condition: trigger
+            id: daytime_trigger
+          - condition: time
+            after: input_datetime.heating_target_warm_time
+            before: input_datetime.heating_preferred_off_time
+      - condition: and
+        conditions:
+          - condition: trigger
+            id: overnight_trigger
+          - condition: time
+            after: input_datetime.heating_preferred_off_time
+            before: input_datetime.heating_target_warm_time
 actions:
   - action: climate.set_hvac_mode
     target:
@@ -23,9 +46,19 @@ actions:
     target:
       entity_id: number.e3_vitodens_100_0421_1_normal_temperature
     data:
-      value: "{{ (states('input_number.heating_min_bedroom_temp') | float + 2) | round(1) }}"
+      value: >-
+        {% if trigger.id == 'daytime_trigger' %}
+          {{ (states('input_number.heating_min_daytime_temp') | float + 2) | round(1) }}
+        {% else %}
+          {{ (states('input_number.heating_min_bedroom_temp') | float + 2) | round(1) }}
+        {% endif %}
   - action: notify.mobile_app_sadats_iphone_15_olx
     data:
       title: "Heating Alert"
-      message: "Bedroom below {{ states('input_number.heating_min_bedroom_temp') }}°C ({{ states('sensor.bedroom_thermo_temperature') }}°C) - emergency heat ON"
+      message: >-
+        {% if trigger.id == 'daytime_trigger' %}
+          Bedroom below daytime min {{ states('input_number.heating_min_daytime_temp') }}°C ({{ states('sensor.bedroom_thermo_temperature') }}°C) - emergency heat ON
+        {% else %}
+          Bedroom below overnight min {{ states('input_number.heating_min_bedroom_temp') }}°C ({{ states('sensor.bedroom_thermo_temperature') }}°C) - emergency heat ON
+        {% endif %}
 mode: single

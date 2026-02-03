@@ -192,8 +192,45 @@ def create_delayed_stop_automation() -> None:
         raise RuntimeError(f"Failed to create automation: {response.status_code} - {response.text}")
 
 
+def _find_automations_by_alias(ha_url: str, token: str, alias: str) -> list[dict]:
+    """Find existing automations matching an alias."""
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+    response = requests.get(f"{ha_url}/api/states", headers=headers)
+    if response.status_code != 200:
+        return []
+
+    matches = []
+    for entity in response.json():
+        entity_id = entity.get("entity_id", "")
+        if not entity_id.startswith("automation."):
+            continue
+        attrs = entity.get("attributes", {})
+        if attrs.get("friendly_name") == alias:
+            # Extract the automation config ID from the entity
+            matches.append({
+                "entity_id": entity_id,
+                "friendly_name": attrs.get("friendly_name"),
+                "id": attrs.get("id"),
+            })
+    return matches
+
+
+def _delete_automation(ha_url: str, token: str, automation_id: str) -> bool:
+    """Delete an automation by its config ID."""
+    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+    response = requests.delete(
+        f"{ha_url}/api/config/automation/config/{automation_id}",
+        headers=headers,
+    )
+    return response.status_code == 200
+
+
 def upload_automation_file(file_path: str) -> None:
-    """Upload an automation from a YAML file via REST API."""
+    """Upload an automation from a YAML file via REST API.
+
+    If an automation with the same alias already exists, it is deleted first
+    to prevent duplicates.
+    """
     ha_url, token = load_config()
     path = Path(file_path)
 
@@ -204,6 +241,19 @@ def upload_automation_file(file_path: str) -> None:
     with open(path) as f:
         config = yaml.safe_load(f)
 
+    alias = config.get("alias", path.stem)
+
+    # Delete existing automations with the same alias
+    existing = _find_automations_by_alias(ha_url, token, alias)
+    for auto in existing:
+        auto_id = auto.get("id")
+        if auto_id:
+            print(f"  Deleting existing automation: {auto['entity_id']} (id={auto_id})")
+            if _delete_automation(ha_url, token, auto_id):
+                print(f"  Deleted.")
+            else:
+                print(f"  Warning: failed to delete {auto_id}, continuing...")
+
     # Generate a proper numeric ID (timestamp-based like HA does)
     automation_id = str(int(time.time() * 1000))
 
@@ -211,7 +261,7 @@ def upload_automation_file(file_path: str) -> None:
     # with trigger: "type" format (not platform: "type")
     api_config = {
         "id": automation_id,
-        "alias": config.get("alias", path.stem),
+        "alias": alias,
         "description": config.get("description", ""),
         "mode": config.get("mode", "single"),
         "triggers": config.get("triggers", []),
@@ -219,7 +269,7 @@ def upload_automation_file(file_path: str) -> None:
         "actions": config.get("actions", []),
     }
 
-    print(f"Creating automation: {api_config.get('alias')}...")
+    print(f"Creating automation: {alias}...")
 
     headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
 

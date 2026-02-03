@@ -9,27 +9,31 @@ home_assistant/
 ├── dashboards/           # Lovelace YAML configurations
 │   ├── lights.yaml       # Lights control dashboard
 │   ├── heating-beautiful.yaml  # Heating/climate control dashboard
+│   ├── heating-optimizer.yaml  # ML heating optimizer monitoring dashboard
 │   └── temperature-glass.yaml  # Temperature & humidity dashboard (glass style)
 ├── automations/          # HA automation YAML files
 │   ├── central_heating_delayed_stop.yaml  # Manual delayed stop automation
 │   └── heating/          # ML-driven heating automations
 │       ├── morning_switch_on.yaml    # Auto switch-on at ML time
 │       ├── night_switch_off.yaml     # Auto switch-off at ML time
-│       ├── extreme_cold_override.yaml # Emergency heat at -5°C
-│       └── bedroom_protection.yaml   # Floor temp protection
+│       └── bedroom_protection.yaml   # Bedroom Temperature Guard
 ├── scripts/              # Python scripts for HA interaction
 │   ├── ha_dashboard.py   # Dashboard upload/management tool
 │   ├── ha_automation.py  # Automation and helper creation tool
 │   ├── ha_inventory.py   # HA entity/service inventory generator
 │   └── heating/          # Adaptive heating optimization system
 │       ├── __init__.py
-│       ├── config.py         # Entity IDs, thresholds, settings
-│       ├── ha_client.py      # HA REST/WebSocket API client
-│       ├── data_collector.py # Historical data collection
-│       ├── thermal_model.py  # ML model for thermal learning
-│       ├── optimizer.py      # Schedule optimization logic
-│       ├── scheduler.py      # Main entry point (run daily)
-│       └── setup_helpers.py  # Create HA helper entities
+│       ├── config.py             # Entity IDs, thresholds, settings
+│       ├── ha_client.py          # HA REST/WebSocket API client
+│       ├── data_collector.py     # Historical data collection
+│       ├── thermal_model.py      # ML model for thermal learning
+│       ├── optimizer.py          # Schedule optimization logic
+│       ├── scheduler.py          # Main entry point (run daily)
+│       ├── setup_helpers.py      # Create HA helper entities
+│       └── prediction_tracker.py # Prediction tracking & feedback
+├── data/                 # Data storage
+│   └── heating/          # Heating prediction history
+│       └── predictions.jsonl  # Daily predictions & actuals
 ├── inventory/            # Generated HA entity inventory (auto-generated)
 │   ├── summary.yaml      # HA version, entity counts, components
 │   ├── entities.yaml     # All entities by domain
@@ -376,8 +380,11 @@ python -m scripts.heating.scheduler run
 # Force model retraining
 python -m scripts.heating.scheduler run --train
 
-# Dry run (calculate but don't update HA)
+# Dry run (calculate only, no writes at all)
 python -m scripts.heating.scheduler run --dry-run
+
+# Shadow mode (save predictions locally, don't touch HA or adjust model)
+python -m scripts.heating.scheduler run --shadow
 
 # Show thermal model information
 python -m scripts.heating.scheduler info
@@ -385,10 +392,21 @@ python -m scripts.heating.scheduler info
 # Show current heating state
 python -m scripts.heating.scheduler state
 
+# Review yesterday's predictions vs actuals
+python -m scripts.heating.scheduler review
+
+# Review a specific date
+python -m scripts.heating.scheduler review 2026-02-01
+
+# Show 7-day prediction history
+python -m scripts.heating.scheduler history
+
+# Show 14-day prediction history
+python -m scripts.heating.scheduler history --days 14
+
 # Upload heating automations to HA
 python scripts/ha_automation.py upload automations/heating/morning_switch_on.yaml
 python scripts/ha_automation.py upload automations/heating/night_switch_off.yaml
-python scripts/ha_automation.py upload automations/heating/extreme_cold_override.yaml
 python scripts/ha_automation.py upload automations/heating/bedroom_protection.yaml
 ```
 
@@ -406,16 +424,19 @@ The heating optimization system learns your home's thermal characteristics and a
 1. **Data Collection**: Pulls 14 days of temperature, heating state, and weather data from HA
 2. **Thermal Model**: Learns cooling/heating rates, solar gain coefficients
 3. **Optimizer**: Calculates optimal switch-on/off times and setpoints
-4. **Scheduler**: Updates HA helpers daily at 4am
-5. **Automations**: Simple HA automations execute the ML-computed schedule
+4. **Prediction Tracking**: Saves predictions, collects actuals, calculates errors
+5. **Coefficient Adjustment**: Auto-adjusts model coefficients based on 7+ days of error data
+6. **Scheduler**: Updates HA helpers daily at 4am
+7. **Automations**: Simple HA automations execute the ML-computed schedule
 
 **User-Configured Helpers (set these in HA):**
 | Helper | Purpose | Default |
 |--------|---------|---------|
-| `input_datetime.heating_target_warm_time` | When you want house warm | 07:00 |
-| `input_datetime.heating_preferred_off_time` | Preferred heating off time | 22:00 |
+| `input_datetime.heating_target_warm_time` | When you want house warm | 08:00 |
+| `input_datetime.heating_preferred_off_time` | Preferred heating off time | 23:00 |
 | `input_number.heating_target_temp` | Desired room temperature | 20°C |
-| `input_number.heating_min_bedroom_temp` | Hard floor - never below | 19°C |
+| `input_number.heating_min_bedroom_temp` | Overnight hard floor - never below | 18°C |
+| `input_number.heating_min_daytime_temp` | Daytime comfort floor | 20°C |
 | `input_boolean.heating_optimization_enabled` | Master switch | on |
 
 **ML-Computed Helpers (updated by optimizer):**
@@ -427,7 +448,6 @@ The heating optimization system learns your home's thermal characteristics and a
 
 **Safety Features:**
 - Bedroom protection: Emergency heat if below min temp
-- Extreme cold override: Forces heat ON at -5°C outside
 - Single ON/OFF cycle per day (minimizes boiler wear)
 - Solar gain prediction (delays heating on sunny days)
 
