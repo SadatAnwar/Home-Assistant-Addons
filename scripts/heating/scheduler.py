@@ -76,14 +76,7 @@ class HeatingScheduler:
         }
 
         try:
-            # 1. Check if optimization is enabled
-            if not self._check_optimization_enabled():
-                logger.info("Optimization disabled, skipping")
-                results["skipped"] = "optimization_disabled"
-                results["success"] = True
-                return results
-
-            # 2. Get user settings
+            # 1. Get user settings
             settings = self._get_user_settings()
             results["settings"] = settings
             logger.info(
@@ -253,14 +246,6 @@ class HeatingScheduler:
             results["errors"].append(str(e))
 
         return results
-
-    def _check_optimization_enabled(self) -> bool:
-        """Check if optimization is enabled via HA helper."""
-        state = self.client.get_state(HELPERS.optimization_enabled)
-        if state is None:
-            # Helper doesn't exist, assume enabled
-            return True
-        return state.state == "on"
 
     def _get_user_settings(self) -> dict[str, Any]:
         """Get user-configured settings from HA helpers."""
