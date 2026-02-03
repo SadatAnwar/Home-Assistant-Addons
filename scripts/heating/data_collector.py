@@ -4,7 +4,7 @@ Pulls historical data from Home Assistant and converts to pandas DataFrames
 for analysis and model training.
 """
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 import pandas as pd
@@ -39,11 +39,15 @@ class DataCollector:
             for state in states:
                 if state["state"] not in ("unknown", "unavailable"):
                     try:
-                        records.append({
-                            "timestamp": self._parse_timestamp(state["last_changed"]),
-                            "room": room,
-                            "temperature": float(state["state"]),
-                        })
+                        records.append(
+                            {
+                                "timestamp": self._parse_timestamp(
+                                    state["last_changed"]
+                                ),
+                                "room": room,
+                                "temperature": float(state["state"]),
+                            }
+                        )
                     except (ValueError, KeyError):
                         continue
 
@@ -66,10 +70,12 @@ class DataCollector:
         for state in history.get(entity_id, []):
             if state["state"] not in ("unknown", "unavailable"):
                 try:
-                    records.append({
-                        "timestamp": self._parse_timestamp(state["last_changed"]),
-                        "outside_temp": float(state["state"]),
-                    })
+                    records.append(
+                        {
+                            "timestamp": self._parse_timestamp(state["last_changed"]),
+                            "outside_temp": float(state["state"]),
+                        }
+                    )
                 except (ValueError, KeyError):
                     continue
 
@@ -98,11 +104,13 @@ class DataCollector:
         for state in history.get(CLIMATE_ENTITY, []):
             try:
                 attrs = state.get("attributes", {})
-                climate_records.append({
-                    "timestamp": self._parse_timestamp(state["last_changed"]),
-                    "hvac_mode": state["state"],
-                    "setpoint": attrs.get("temperature"),
-                })
+                climate_records.append(
+                    {
+                        "timestamp": self._parse_timestamp(state["last_changed"]),
+                        "hvac_mode": state["state"],
+                        "setpoint": attrs.get("temperature"),
+                    }
+                )
             except (ValueError, KeyError):
                 continue
 
@@ -113,10 +121,12 @@ class DataCollector:
         for state in history.get(BOILER_SENSORS["burner_modulation"], []):
             if state["state"] not in ("unknown", "unavailable"):
                 try:
-                    modulation_records.append({
-                        "timestamp": self._parse_timestamp(state["last_changed"]),
-                        "burner_modulation": float(state["state"]),
-                    })
+                    modulation_records.append(
+                        {
+                            "timestamp": self._parse_timestamp(state["last_changed"]),
+                            "burner_modulation": float(state["state"]),
+                        }
+                    )
                 except (ValueError, KeyError):
                     continue
 
@@ -126,10 +136,12 @@ class DataCollector:
         burner_records = []
         for state in history.get(BOILER_SENSORS["burner_active"], []):
             try:
-                burner_records.append({
-                    "timestamp": self._parse_timestamp(state["last_changed"]),
-                    "burner_active": state["state"] == "on",
-                })
+                burner_records.append(
+                    {
+                        "timestamp": self._parse_timestamp(state["last_changed"]),
+                        "burner_active": state["state"] == "on",
+                    }
+                )
             except (ValueError, KeyError):
                 continue
 
@@ -140,10 +152,12 @@ class DataCollector:
         for state in history.get(BOILER_SENSORS["supply_temp"], []):
             if state["state"] not in ("unknown", "unavailable"):
                 try:
-                    supply_records.append({
-                        "timestamp": self._parse_timestamp(state["last_changed"]),
-                        "supply_temp": float(state["state"]),
-                    })
+                    supply_records.append(
+                        {
+                            "timestamp": self._parse_timestamp(state["last_changed"]),
+                            "supply_temp": float(state["state"]),
+                        }
+                    )
                 except (ValueError, KeyError):
                     continue
 
@@ -181,12 +195,14 @@ class DataCollector:
         for state in history.get(WEATHER_ENTITIES["sun"], []):
             try:
                 attrs = state.get("attributes", {})
-                records.append({
-                    "timestamp": self._parse_timestamp(state["last_changed"]),
-                    "sun_state": state["state"],
-                    "sun_elevation": attrs.get("elevation"),
-                    "sun_azimuth": attrs.get("azimuth"),
-                })
+                records.append(
+                    {
+                        "timestamp": self._parse_timestamp(state["last_changed"]),
+                        "sun_state": state["state"],
+                        "sun_elevation": attrs.get("elevation"),
+                        "sun_azimuth": attrs.get("azimuth"),
+                    }
+                )
             except (ValueError, KeyError):
                 continue
 
@@ -281,7 +297,9 @@ class DataCollector:
 
         # Add derived features
         if "bedroom" in temps_pivot.columns and "outside_temp" in temps_pivot.columns:
-            temps_pivot["temp_diff"] = temps_pivot["bedroom"] - temps_pivot["outside_temp"]
+            temps_pivot["temp_diff"] = (
+                temps_pivot["bedroom"] - temps_pivot["outside_temp"]
+            )
 
         # Add heating_on flag
         if "hvac_mode" in temps_pivot.columns:
@@ -324,7 +342,10 @@ class DataCollector:
         # Burner modulation
         modulation_state = self.client.get_state(BOILER_SENSORS["burner_modulation"])
         burner_modulation = None
-        if modulation_state and modulation_state.state not in ("unknown", "unavailable"):
+        if modulation_state and modulation_state.state not in (
+            "unknown",
+            "unavailable",
+        ):
             try:
                 burner_modulation = float(modulation_state.state)
             except ValueError:

@@ -180,7 +180,11 @@ def set_default_values() -> dict[str, bool]:
         (HELPERS.min_bedroom_temp, "set_input_number", DEFAULTS.min_bedroom_temp),
         (HELPERS.min_daytime_temp, "set_input_number", DEFAULTS.min_daytime_temp),
         (HELPERS.switch_on_time, "set_input_datetime", DEFAULTS.default_switch_on_time),
-        (HELPERS.switch_off_time, "set_input_datetime", DEFAULTS.default_switch_off_time),
+        (
+            HELPERS.switch_off_time,
+            "set_input_datetime",
+            DEFAULTS.default_switch_off_time,
+        ),
         (HELPERS.optimal_setpoint, "set_input_number", DEFAULTS.default_setpoint),
         (HELPERS.optimization_enabled, "set_input_boolean", True),
     ]
@@ -239,7 +243,9 @@ Examples:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     create_parser = subparsers.add_parser("create", help="Create helper entities")
-    create_parser.add_argument("--force", action="store_true", help="Recreate even if exists")
+    create_parser.add_argument(
+        "--force", action="store_true", help="Recreate even if exists"
+    )
 
     subparsers.add_parser("defaults", help="Set default values for helpers")
 

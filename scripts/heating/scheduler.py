@@ -9,12 +9,9 @@ import argparse
 import logging
 import sys
 from datetime import datetime, time, timedelta
-from pathlib import Path
 from typing import Any
 
 from .config import (
-    BOILER_SETPOINTS,
-    CLIMATE_ENTITY,
     DEFAULTS,
     HELPERS,
     MODEL_CONFIG,
@@ -89,10 +86,14 @@ class HeatingScheduler:
             # 2. Get user settings
             settings = self._get_user_settings()
             results["settings"] = settings
-            logger.info(f"User settings: warm by {settings['target_warm_time']}, "
-                       f"off at {settings['preferred_off_time']}, target {settings['target_temp']}°C")
-            logger.info(f"Min temps: daytime {settings['min_daytime_temp']}°C, "
-                       f"overnight {settings['min_bedroom_temp']}°C")
+            logger.info(
+                f"User settings: warm by {settings['target_warm_time']}, "
+                f"off at {settings['preferred_off_time']}, target {settings['target_temp']}°C"
+            )
+            logger.info(
+                f"Min temps: daytime {settings['min_daytime_temp']}°C, "
+                f"overnight {settings['min_bedroom_temp']}°C"
+            )
 
             # 3. Collect current state
             current_state = self.collector.get_current_state()
@@ -101,15 +102,19 @@ class HeatingScheduler:
                 "outside_temp": current_state.get("outside_temp"),
                 "hvac_mode": current_state.get("hvac_mode"),
             }
-            logger.info(f"Current state: bedroom {current_state['room_temps'].get('bedroom', 'N/A')}°C, "
-                       f"outside {current_state.get('outside_temp', 'N/A')}°C")
+            logger.info(
+                f"Current state: bedroom {current_state['room_temps'].get('bedroom', 'N/A')}°C, "
+                f"outside {current_state.get('outside_temp', 'N/A')}°C"
+            )
 
             # Log forecast availability
             forecast = current_state.get("forecast", [])
             if forecast:
                 logger.info(f"Weather forecast available: {len(forecast)} hours ahead")
             else:
-                logger.warning("No weather forecast available - using current temps as fallback")
+                logger.warning(
+                    "No weather forecast available - using current temps as fallback"
+                )
 
             # 4. Train/update model if needed
             if force_train or self._should_retrain():
@@ -119,7 +124,9 @@ class HeatingScheduler:
                 if "error" in training_result:
                     logger.warning(f"Training warning: {training_result['error']}")
                 else:
-                    logger.info(f"Model trained on {training_result.get('samples', 0)} samples")
+                    logger.info(
+                        f"Model trained on {training_result.get('samples', 0)} samples"
+                    )
 
             if self.optimizer is None:
                 self.optimizer = HeatingOptimizer(self.model)
@@ -141,7 +148,6 @@ class HeatingScheduler:
             schedule, overrides = self.optimizer.apply_safety_overrides(
                 schedule=schedule,
                 current_temps=current_state.get("room_temps", {}),
-                outside_temp=current_state.get("outside_temp", 5),
                 min_overnight_temp=settings["min_bedroom_temp"],
                 min_daytime_temp=settings["min_daytime_temp"],
                 target_warm_time=self._parse_time(settings["target_warm_time"]),
@@ -171,8 +177,10 @@ class HeatingScheduler:
                 if schedule.expected_switch_on_temp is not None
                 else "N/A"
             )
-            logger.info(f"Schedule: ON at {schedule.switch_on_time}, OFF at {off_time_str}, "
-                       f"setpoint {schedule.optimal_setpoint}°C")
+            logger.info(
+                f"Schedule: ON at {schedule.switch_on_time}, OFF at {off_time_str}, "
+                f"setpoint {schedule.optimal_setpoint}°C"
+            )
             logger.info(f"Expected room temp at switch-on: {switch_on_temp_str}")
 
             if overrides:
@@ -201,9 +209,14 @@ class HeatingScheduler:
                         error_summary = self.tracker.get_error_summary(
                             days=PREDICTION_CONFIG.min_sample_days
                         )
-                        if error_summary["sample_count"] >= PREDICTION_CONFIG.min_sample_days:
+                        if (
+                            error_summary["sample_count"]
+                            >= PREDICTION_CONFIG.min_sample_days
+                        ):
                             adjustments = self.tracker.suggest_coefficient_adjustments(
-                                error_summary, self.model.k, self.model.mean_heating_rate
+                                error_summary,
+                                self.model.k,
+                                self.model.mean_heating_rate,
                             )
                             if adjustments:
                                 applied = self.model.apply_adjustments(adjustments)
@@ -322,7 +335,10 @@ class HeatingScheduler:
             return {"error": "No training data available"}
 
         if len(data) < 100:
-            return {"error": f"Insufficient data ({len(data)} samples)", "samples": len(data)}
+            return {
+                "error": f"Insufficient data ({len(data)} samples)",
+                "samples": len(data),
+            }
 
         # Train model
         metrics = self.model.train(data)
@@ -408,15 +424,17 @@ class HeatingScheduler:
 
         print("\nThermal Model Information:")
         print(f"  Trained: {info['trained']}")
-        if info['last_trained']:
+        if info["last_trained"]:
             print(f"  Last trained: {info['last_trained']}")
         print(f"  Training samples: {info['training_samples']}")
-        print(f"\nLearned parameters:")
+        print("\nLearned parameters:")
         print(f"  Mean cooling rate: {info['mean_cooling_rate']:.3f} °C/hour")
         print(f"  Mean heating rate: {info['mean_heating_rate']:.3f} °C/hour")
         print(f"  Solar gain coefficient: {info['solar_gain_coefficient']:.4f}")
-        print(f"  Cooling rate k: {info['k']:.6f} (τ = {info['time_constant_hours']} hours)")
-        print(f"\nModels available:")
+        print(
+            f"  Cooling rate k: {info['k']:.6f} (τ = {info['time_constant_hours']} hours)"
+        )
+        print("\nModels available:")
         print(f"  Heating rate model: {info['has_heating_model']}")
         print(f"  Cooling rate model: {info['has_cooling_model']}")
         print(f"  Modulation model: {info['has_modulation_model']}")
@@ -455,8 +473,10 @@ class HeatingScheduler:
             return
 
         print(f"\nPrediction History (last {days} days):\n")
-        print(f"{'Date':<12} {'On Time':<8} {'Off Time':<10} {'Setpoint':<9} "
-              f"{'Pred On°C':<10} {'Act On°C':<10} {'Error':<8}")
+        print(
+            f"{'Date':<12} {'On Time':<8} {'Off Time':<10} {'Setpoint':<9} "
+            f"{'Pred On°C':<10} {'Act On°C':<10} {'Error':<8}"
+        )
         print("-" * 75)
 
         for record in records:
@@ -464,12 +484,22 @@ class HeatingScheduler:
             a = record.actuals
             e = record.errors
 
-            act_on = f"{a.actual_switch_on_temp:.1f}" if a and a.actual_switch_on_temp else "N/A"
-            error = f"{e.switch_on_temp_error:+.1f}" if e and e.switch_on_temp_error else "N/A"
+            act_on = (
+                f"{a.actual_switch_on_temp:.1f}"
+                if a and a.actual_switch_on_temp
+                else "N/A"
+            )
+            error = (
+                f"{e.switch_on_temp_error:+.1f}"
+                if e and e.switch_on_temp_error
+                else "N/A"
+            )
 
-            print(f"{p.date:<12} {p.switch_on_time:<8} {p.switch_off_time:<10} "
-                  f"{p.setpoint:<9.1f} {p.expected_switch_on_temp:<10.1f} "
-                  f"{act_on:<10} {error:<8}")
+            print(
+                f"{p.date:<12} {p.switch_on_time:<8} {p.switch_off_time:<10} "
+                f"{p.setpoint:<9.1f} {p.expected_switch_on_temp:<10.1f} "
+                f"{act_on:<10} {error:<8}"
+            )
 
         print()
 
@@ -482,17 +512,17 @@ class HeatingScheduler:
         state = self.collector.get_current_state()
 
         print("\nCurrent State:")
-        print(f"\nRoom Temperatures:")
+        print("\nRoom Temperatures:")
         for room, temp in state.get("room_temps", {}).items():
             print(f"  {room}: {temp}°C")
 
         print(f"\nOutside: {state.get('outside_temp', 'N/A')}°C")
-        print(f"\nHeating:")
+        print("\nHeating:")
         print(f"  Mode: {state.get('hvac_mode', 'N/A')}")
         print(f"  Setpoint: {state.get('setpoint', 'N/A')}°C")
         print(f"  Burner modulation: {state.get('burner_modulation', 'N/A')}%")
 
-        print(f"\nSun:")
+        print("\nSun:")
         print(f"  Elevation: {state.get('sun_elevation', 'N/A')}°")
         print(f"  Azimuth: {state.get('sun_azimuth', 'N/A')}°")
 
@@ -546,10 +576,20 @@ Crontab example (run at 4am daily):
 
     # Run command
     run_parser = subparsers.add_parser("run", help="Run the optimization cycle")
-    run_parser.add_argument("--train", action="store_true", help="Force model retraining")
-    run_parser.add_argument("--dry-run", action="store_true", help="Don't write anything (pure calculation)")
-    run_parser.add_argument("--shadow", action="store_true", help="Save predictions locally but don't update HA or adjust model")
-    run_parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
+    run_parser.add_argument(
+        "--train", action="store_true", help="Force model retraining"
+    )
+    run_parser.add_argument(
+        "--dry-run", action="store_true", help="Don't write anything (pure calculation)"
+    )
+    run_parser.add_argument(
+        "--shadow",
+        action="store_true",
+        help="Save predictions locally but don't update HA or adjust model",
+    )
+    run_parser.add_argument(
+        "--verbose", "-v", action="store_true", help="Verbose output"
+    )
 
     # Info command
     subparsers.add_parser("info", help="Show thermal model information")
@@ -566,9 +606,7 @@ Crontab example (run at 4am daily):
     )
 
     # History command
-    history_parser = subparsers.add_parser(
-        "history", help="Show prediction history"
-    )
+    history_parser = subparsers.add_parser("history", help="Show prediction history")
     history_parser.add_argument(
         "--days", "-d", type=int, default=7, help="Number of days to show (default: 7)"
     )
@@ -589,12 +627,14 @@ Crontab example (run at 4am daily):
         if result["success"]:
             logger.info("Scheduler run completed successfully")
             if "schedule" in result:
-                off_display = result['schedule']['switch_off_time']
-                switch_on_temp = result['schedule'].get('expected_switch_on_temp')
+                off_display = result["schedule"]["switch_off_time"]
+                switch_on_temp = result["schedule"].get("expected_switch_on_temp")
                 temp_display = f"{switch_on_temp:.1f}°C" if switch_on_temp else "N/A"
-                print(f"\nSchedule: ON {result['schedule']['switch_on_time']} / "
-                      f"OFF {off_display} / "
-                      f"Setpoint {result['schedule']['optimal_setpoint']}°C")
+                print(
+                    f"\nSchedule: ON {result['schedule']['switch_on_time']} / "
+                    f"OFF {off_display} / "
+                    f"Setpoint {result['schedule']['optimal_setpoint']}°C"
+                )
                 print(f"Expected room temp at switch-on: {temp_display}")
         else:
             logger.error(f"Scheduler run failed: {result.get('errors', [])}")

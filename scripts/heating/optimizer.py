@@ -10,9 +10,8 @@ Calculates optimal daily heating schedules based on:
 import logging
 from dataclasses import dataclass
 from datetime import datetime, time, timedelta
-from typing import Any
 
-from .config import DEFAULTS, SOLAR_GAIN_ROOMS
+from .config import DEFAULTS
 from .thermal_model import ThermalModel
 
 logger = logging.getLogger(__name__)
@@ -44,7 +43,9 @@ class DailyHeatingSchedule:
     expected_max_temp: float
     solar_contribution: float
     reasoning: list[str]
-    expected_switch_on_temp: float | None = None  # Predicted room temp at switch-on time
+    expected_switch_on_temp: float | None = (
+        None  # Predicted room temp at switch-on time
+    )
     expected_target_time_temp: float | None = None  # Predicted temp at target warm time
     expected_switch_off_temp: float | None = None  # Predicted temp at switch-off time
     expected_burner_hours: float | None = None  # Expected hours of burner operation
@@ -57,7 +58,9 @@ class HeatingOptimizer:
     def __init__(self, thermal_model: ThermalModel):
         self.thermal_model = thermal_model
 
-    def _is_daytime(self, hour: int, target_warm_time: time, preferred_off_time: time) -> bool:
+    def _is_daytime(
+        self, hour: int, target_warm_time: time, preferred_off_time: time
+    ) -> bool:
         """Check if a clock hour falls within daytime (warm_time to off_time)."""
         warm_h = target_warm_time.hour
         off_h = preferred_off_time.hour
@@ -117,10 +120,16 @@ class HeatingOptimizer:
         min_daytime_outside = min(daytime_temps)
         avg_daytime_temp = sum(daytime_temps) / len(daytime_temps)
 
-        reasoning.append(f"Current bedroom: {bedroom_temp:.1f}°C, current outside: {outside_temp:.1f}°C")
+        reasoning.append(
+            f"Current bedroom: {bedroom_temp:.1f}°C, current outside: {outside_temp:.1f}°C"
+        )
         reasoning.append(f"Forecast overnight min: {min_overnight:.1f}°C")
-        reasoning.append(f"Forecast morning ({target_warm_time}): {forecast_morning_temp:.1f}°C")
-        reasoning.append(f"Forecast daytime: min={min_daytime_outside:.1f}°C, avg={avg_daytime_temp:.1f}°C")
+        reasoning.append(
+            f"Forecast morning ({target_warm_time}): {forecast_morning_temp:.1f}°C"
+        )
+        reasoning.append(
+            f"Forecast daytime: min={min_daytime_outside:.1f}°C, avg={avg_daytime_temp:.1f}°C"
+        )
 
         # 1. Predict overnight cooling curve (system OFF)
         cooling_prediction = self.thermal_model.predict_cooling_curve(
@@ -131,10 +140,14 @@ class HeatingOptimizer:
 
         # Find expected morning temperature (at target_warm_time)
         hours_until_morning = self._hours_until(current_time.time(), target_warm_time)
-        morning_idx = min(int(hours_until_morning), len(cooling_prediction.temperatures) - 1)
+        morning_idx = min(
+            int(hours_until_morning), len(cooling_prediction.temperatures) - 1
+        )
         morning_start_temp = cooling_prediction.temperatures[morning_idx]
 
-        reasoning.append(f"Expected morning temp (no heating): {morning_start_temp:.1f}°C")
+        reasoning.append(
+            f"Expected morning temp (no heating): {morning_start_temp:.1f}°C"
+        )
 
         # 2. Calculate required pre-heat time using FORECAST morning outside temp
         heating_duration = self.thermal_model.predict_heating_duration(
@@ -146,7 +159,9 @@ class HeatingOptimizer:
 
         # Add safety buffer
         total_preheat = heating_duration + DEFAULTS.safety_buffer_minutes
-        reasoning.append(f"Heating duration: {heating_duration}min + {DEFAULTS.safety_buffer_minutes}min buffer")
+        reasoning.append(
+            f"Heating duration: {heating_duration}min + {DEFAULTS.safety_buffer_minutes}min buffer"
+        )
 
         # 3. Calculate switch-on time
         target_warm_dt = datetime.combine(current_time.date(), target_warm_time)
@@ -171,13 +186,12 @@ class HeatingOptimizer:
         # Use average daytime temp for setpoint, not overnight min
         optimal_setpoint = self._calculate_setpoint(
             outside_temp=avg_daytime_temp,  # Use forecast daytime avg, not current!
-            target_room_temp=target_temp,
         )
 
         # Adjust for solar (reduce setpoint if significant solar gain expected)
         if solar_contribution > 0.5:
             optimal_setpoint -= 0.5
-            reasoning.append(f"Reduced setpoint by 0.5°C for solar gain")
+            reasoning.append("Reduced setpoint by 0.5°C for solar gain")
 
         # Clamp to configured bounds
         optimal_setpoint = round(
@@ -198,7 +212,9 @@ class HeatingOptimizer:
         )
 
         if switch_off_time is None:
-            reasoning.append("Switch-off: CONTINUOUS (can't maintain min temp overnight)")
+            reasoning.append(
+                "Switch-off: CONTINUOUS (can't maintain min temp overnight)"
+            )
         elif switch_off_time.hour < target_night_time.hour:
             # We found an earlier time than the user's preferred
             saved_hours = self._hours_until(switch_off_time, target_night_time)
@@ -219,8 +235,8 @@ class HeatingOptimizer:
         )
 
         # 8. Estimate expected temperatures and gas usage
-        expected_min, expected_max = self._estimate_temp_range(hours, bedroom_temp)
-        expected_gas = self._estimate_gas_usage(hours, outside_temp)
+        expected_min, expected_max = self._estimate_temp_range(hours)
+        expected_gas = self._estimate_gas_usage(hours)
 
         # 9. Calculate additional prediction metrics for tracking
         # Expected temp at target warm time
@@ -271,7 +287,6 @@ class HeatingOptimizer:
         self,
         schedule: DailyHeatingSchedule,
         current_temps: dict[str, float],
-        outside_temp: float,
         min_overnight_temp: float,
         min_daytime_temp: float,
         target_warm_time: time,
@@ -313,7 +328,7 @@ class HeatingOptimizer:
 
         return (target_mins - current_mins) / 60
 
-    def _calculate_setpoint(self, outside_temp: float, target_room_temp: float) -> float:
+    def _calculate_setpoint(self, outside_temp: float) -> float:
         """Calculate setpoint based on outside temperature.
 
         Matches user's manual approach:
@@ -326,7 +341,9 @@ class HeatingOptimizer:
         if outside_temp < DEFAULTS.extreme_cold_threshold:
             # Extreme cold: use max setpoint
             setpoint = DEFAULTS.max_setpoint
-            logger.debug(f"Extreme cold ({outside_temp}°C): using max setpoint {setpoint}°C")
+            logger.debug(
+                f"Extreme cold ({outside_temp}°C): using max setpoint {setpoint}°C"
+            )
         elif outside_temp < 0:
             # Cold: scale from 20 to 22 as temp drops from 0 to -5
             # +0.4°C per degree below 0
@@ -390,7 +407,6 @@ class HeatingOptimizer:
             return default
 
         target_hour = target_time.hour
-        now = datetime.now()
 
         for entry in forecast:
             dt_str = entry.get("datetime", "")
@@ -407,7 +423,9 @@ class HeatingOptimizer:
                 if forecast_hour == target_hour:
                     temp = entry.get("temperature")
                     if temp is not None:
-                        logger.debug(f"Forecast at {target_time}: {temp}°C (from {dt_str})")
+                        logger.debug(
+                            f"Forecast at {target_time}: {temp}°C (from {dt_str})"
+                        )
                         return temp
             except ValueError:
                 continue
@@ -448,7 +466,9 @@ class HeatingOptimizer:
                 continue
 
         if temps:
-            logger.debug(f"Daytime forecast temps ({morning_time}-{evening_time}): min={min(temps)}, max={max(temps)}, avg={sum(temps)/len(temps):.1f}")
+            logger.debug(
+                f"Daytime forecast temps ({morning_time}-{evening_time}): min={min(temps)}, max={max(temps)}, avg={sum(temps) / len(temps):.1f}"
+            )
             return temps
 
         return [default]
@@ -467,7 +487,6 @@ class HeatingOptimizer:
 
         for entry in forecast:
             condition = entry.get("condition", "").lower()
-            temp = entry.get("temperature", 10)
 
             # Check if during daytime
             dt_str = entry.get("datetime", "")
@@ -655,20 +674,21 @@ class HeatingOptimizer:
 
             current_temp = max(15, min(25, current_temp))
 
-            plans.append(HourlyHeatingPlan(
-                hour=hour,
-                system_state="on" if system_on else "off",
-                setpoint=optimal_setpoint if system_on else None,
-                expected_modulation=round(modulation, 1),
-                expected_room_temp=round(current_temp, 1),
-            ))
+            plans.append(
+                HourlyHeatingPlan(
+                    hour=hour,
+                    system_state="on" if system_on else "off",
+                    setpoint=optimal_setpoint if system_on else None,
+                    expected_modulation=round(modulation, 1),
+                    expected_room_temp=round(current_temp, 1),
+                )
+            )
 
         return plans
 
     def _estimate_temp_range(
         self,
         hours: list[HourlyHeatingPlan],
-        starting_temp: float,
     ) -> tuple[float, float]:
         """Estimate min and max temperatures from hourly plan."""
         temps = [h.expected_room_temp for h in hours]
@@ -677,7 +697,6 @@ class HeatingOptimizer:
     def _estimate_gas_usage(
         self,
         hours: list[HourlyHeatingPlan],
-        outside_temp: float,
     ) -> float:
         """Estimate gas usage based on modulation and hours."""
         # Rough estimate: modulation % correlates with gas usage
@@ -732,19 +751,19 @@ class HeatingOptimizer:
         )
         lines = [
             f"Heating Schedule for {schedule.date.strftime('%Y-%m-%d')}",
-            f"",
+            "",
             f"Switch ON:  {schedule.switch_on_time.strftime('%H:%M')}",
             f"Switch OFF: {off_time_str}",
             f"Setpoint:   {schedule.optimal_setpoint}°C",
-            f"",
-            f"Expected temperatures:",
+            "",
+            "Expected temperatures:",
             f"  Min: {schedule.expected_min_temp}°C",
             f"  Max: {schedule.expected_max_temp}°C",
-            f"",
+            "",
             f"Solar contribution: +{schedule.solar_contribution}°C",
             f"Expected gas usage: ~{schedule.expected_gas_usage} kWh",
-            f"",
-            f"Reasoning:",
+            "",
+            "Reasoning:",
         ]
 
         for reason in schedule.reasoning:

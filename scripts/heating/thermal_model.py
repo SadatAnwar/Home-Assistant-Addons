@@ -10,7 +10,7 @@ Learns:
 import logging
 import pickle
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -19,7 +19,7 @@ import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import train_test_split
 
-from .config import DEFAULTS, MODEL_CONFIG, SOLAR_GAIN_ROOMS
+from .config import MODEL_CONFIG
 
 logger = logging.getLogger(__name__)
 
@@ -142,12 +142,17 @@ class ThermalModel:
         # Drop rows with NaN in any feature column
         cooling_data = cooling_data.dropna(subset=feature_cols)
         if len(cooling_data) < 30:
-            return {"samples": len(cooling_data), "error": "insufficient data after NaN removal"}
+            return {
+                "samples": len(cooling_data),
+                "error": "insufficient data after NaN removal",
+            }
 
         X = cooling_data[feature_cols].values
         y = cooling_data["temp_change"].values * 4  # Convert to °C/hour
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2, random_state=42
+        )
 
         self.cooling_rate_model = GradientBoostingRegressor(
             n_estimators=100,
@@ -201,7 +206,9 @@ class ThermalModel:
             heating_data["setpoint"] = heating_data["setpoint"].fillna(21)
             feature_cols.append("setpoint")
         if "burner_modulation" in heating_data.columns:
-            heating_data["burner_modulation"] = heating_data["burner_modulation"].fillna(50)
+            heating_data["burner_modulation"] = heating_data[
+                "burner_modulation"
+            ].fillna(50)
             feature_cols.append("burner_modulation")
 
         if len(feature_cols) < 2:
@@ -210,12 +217,17 @@ class ThermalModel:
         # Drop rows with NaN in any feature column
         heating_data = heating_data.dropna(subset=feature_cols)
         if len(heating_data) < 30:
-            return {"samples": len(heating_data), "error": "insufficient data after NaN removal"}
+            return {
+                "samples": len(heating_data),
+                "error": "insufficient data after NaN removal",
+            }
 
         X = heating_data[feature_cols].values
         y = heating_data["temp_change"].values * 4  # Convert to °C/hour
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2, random_state=42
+        )
 
         self.heating_rate_model = GradientBoostingRegressor(
             n_estimators=100,
@@ -245,7 +257,9 @@ class ThermalModel:
             return {"error": "missing required columns"}
 
         mod_data = data.dropna(subset=required).copy()
-        mod_data = mod_data[mod_data["burner_modulation"] > 0]  # Only when burner active
+        mod_data = mod_data[
+            mod_data["burner_modulation"] > 0
+        ]  # Only when burner active
 
         if len(mod_data) < 50:
             return {"samples": len(mod_data), "error": "insufficient data"}
@@ -257,12 +271,17 @@ class ThermalModel:
         # Drop rows with NaN in any feature column
         mod_data = mod_data.dropna(subset=feature_cols)
         if len(mod_data) < 30:
-            return {"samples": len(mod_data), "error": "insufficient data after NaN removal"}
+            return {
+                "samples": len(mod_data),
+                "error": "insufficient data after NaN removal",
+            }
 
         X = mod_data[feature_cols].values
         y = mod_data["burner_modulation"].values
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2, random_state=42
+        )
 
         self.modulation_model = GradientBoostingRegressor(
             n_estimators=100,
@@ -305,8 +324,8 @@ class ThermalModel:
         # Simple linear estimate of solar gain coefficient
         # When cooling should occur but temp rises, that's solar gain
         sunny_warm = solar_data[
-            (solar_data["sun_elevation"] > 20) &
-            (solar_data["temp_change"] > -0.5)  # Not cooling much
+            (solar_data["sun_elevation"] > 20)
+            & (solar_data["temp_change"] > -0.5)  # Not cooling much
         ]
 
         if len(sunny_warm) > 10:
@@ -376,7 +395,9 @@ class ThermalModel:
             current_temp += rate
             temps.append(round(current_temp, 2))
 
-        logger.debug(f"Cooling prediction result: {temps[0]}°C -> {temps[-1]}°C over {hours}h")
+        logger.debug(
+            f"Cooling prediction result: {temps[0]}°C -> {temps[-1]}°C over {hours}h"
+        )
 
         return CoolingPrediction(
             hours=hour_values,
@@ -403,7 +424,9 @@ class ThermalModel:
             Estimated minutes to reach target
         """
         if start_temp >= target_temp:
-            logger.debug(f"No heating needed: start {start_temp}°C >= target {target_temp}°C")
+            logger.debug(
+                f"No heating needed: start {start_temp}°C >= target {target_temp}°C"
+            )
             return 0
 
         temp_diff = target_temp - start_temp
@@ -415,7 +438,9 @@ class ThermalModel:
 
         if self.heating_rate_model is not None:
             # Use ML model to estimate average heating rate
-            features = np.array([[outside_temp, start_temp, setpoint, 50]])  # 50% modulation
+            features = np.array(
+                [[outside_temp, start_temp, setpoint, 50]]
+            )  # 50% modulation
             ml_rate = self.heating_rate_model.predict(features)[0]
 
             # Apply minimum rate constraints:
@@ -443,8 +468,10 @@ class ThermalModel:
         raw_minutes = hours * 60
         minutes = int(raw_minutes)
 
-        logger.debug(f"Heating duration calc: {temp_diff:.1f}°C / {rate:.3f}°C/h = "
-                    f"{raw_minutes:.0f}min (capped to 15-180)")
+        logger.debug(
+            f"Heating duration calc: {temp_diff:.1f}°C / {rate:.3f}°C/h = "
+            f"{raw_minutes:.0f}min (capped to 15-180)"
+        )
 
         # Cap at reasonable limits
         return max(15, min(180, minutes))
@@ -540,7 +567,9 @@ class ThermalModel:
 
         # If we have a modulation model, verify and adjust
         if self.modulation_model is not None:
-            predicted_mod = self.predict_modulation(outside_temp, setpoint, target_room_temp - 0.5)
+            predicted_mod = self.predict_modulation(
+                outside_temp, setpoint, target_room_temp - 0.5
+            )
             if predicted_mod > max_modulation:
                 # Reduce setpoint to lower modulation
                 setpoint -= 0.5
@@ -594,7 +623,9 @@ class ThermalModel:
         """Get information about the current model state."""
         return {
             "trained": self.last_trained is not None,
-            "last_trained": self.last_trained.isoformat() if self.last_trained else None,
+            "last_trained": self.last_trained.isoformat()
+            if self.last_trained
+            else None,
             "training_samples": self.training_samples,
             "mean_cooling_rate": self.mean_cooling_rate,
             "mean_heating_rate": self.mean_heating_rate,
@@ -622,7 +653,7 @@ class ThermalModel:
             self.k = adjustments["k"]
             applied.append(
                 f"Cooling rate k: {old_k:.6f} -> {self.k:.6f} "
-                f"(τ: {1/old_k:.0f}h -> {1/self.k:.0f}h)"
+                f"(τ: {1 / old_k:.0f}h -> {1 / self.k:.0f}h)"
             )
 
         if "mean_heating_rate" in adjustments:

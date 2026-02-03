@@ -124,19 +124,23 @@ class ModelConfig:
     min_history_days: int = 3
 
     # Model parameters
-    heating_rate_features: list = field(default_factory=lambda: [
-        "outside_temp",
-        "setpoint",
-        "start_temp",
-        "burner_modulation",
-    ])
+    heating_rate_features: list = field(
+        default_factory=lambda: [
+            "outside_temp",
+            "setpoint",
+            "start_temp",
+            "burner_modulation",
+        ]
+    )
 
-    cooling_rate_features: list = field(default_factory=lambda: [
-        "outside_temp",
-        "start_temp",
-        "sun_elevation",
-        "cloud_cover",
-    ])
+    cooling_rate_features: list = field(
+        default_factory=lambda: [
+            "outside_temp",
+            "start_temp",
+            "sun_elevation",
+            "cloud_cover",
+        ]
+    )
 
     # Model persistence
     model_dir: str = "models/heating"

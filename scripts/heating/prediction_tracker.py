@@ -56,7 +56,9 @@ class DailyActuals:
 class PredictionErrors:
     """Calculated errors between predictions and actuals."""
 
-    switch_on_temp_error: float | None  # Predicted - Actual (positive = predicted too warm)
+    switch_on_temp_error: (
+        float | None
+    )  # Predicted - Actual (positive = predicted too warm)
     target_time_temp_error: float | None
     switch_off_temp_error: float | None
     gas_kwh_error: float | None  # Predicted - Actual (negative = underestimated)
@@ -108,7 +110,9 @@ class PredictionTracker:
             switch_off_time=off_time_str,
             setpoint=schedule.optimal_setpoint,
             expected_switch_on_temp=schedule.expected_switch_on_temp or 0.0,
-            expected_target_time_temp=getattr(schedule, "expected_target_time_temp", 0.0),
+            expected_target_time_temp=getattr(
+                schedule, "expected_target_time_temp", 0.0
+            ),
             expected_switch_off_temp=getattr(schedule, "expected_switch_off_temp", 0.0),
             expected_gas_kwh=schedule.expected_gas_usage,
             expected_burner_hours=getattr(schedule, "expected_burner_hours", 0.0),
@@ -243,7 +247,11 @@ class PredictionTracker:
 
         gas_error = safe_diff(prediction.expected_gas_kwh, actuals.actual_gas_kwh)
         gas_error_pct = None
-        if gas_error is not None and actuals.actual_gas_kwh and actuals.actual_gas_kwh > 0:
+        if (
+            gas_error is not None
+            and actuals.actual_gas_kwh
+            and actuals.actual_gas_kwh > 0
+        ):
             gas_error_pct = round((gas_error / actuals.actual_gas_kwh) * 100, 1)
 
         return PredictionErrors(
@@ -354,7 +362,10 @@ class PredictionTracker:
         }
 
     def suggest_coefficient_adjustments(
-        self, error_summary: dict[str, Any], current_k: float, current_heating_rate: float
+        self,
+        error_summary: dict[str, Any],
+        current_k: float,
+        current_heating_rate: float,
     ) -> dict[str, float]:
         """Suggest model coefficient adjustments based on error patterns.
 
@@ -378,7 +389,10 @@ class PredictionTracker:
 
         # Cooling rate adjustment based on switch-on temp error
         switch_on_error = error_summary.get("avg_switch_on_temp_error")
-        if switch_on_error is not None and abs(switch_on_error) > PREDICTION_CONFIG.error_threshold:
+        if (
+            switch_on_error is not None
+            and abs(switch_on_error) > PREDICTION_CONFIG.error_threshold
+        ):
             # Positive error = predicted too warm = house cools faster = increase k
             k_adjustment = switch_on_error * PREDICTION_CONFIG.k_adjustment_factor
             new_k = current_k + k_adjustment
@@ -393,9 +407,14 @@ class PredictionTracker:
 
         # Heating rate adjustment based on target time temp error
         target_error = error_summary.get("avg_target_time_temp_error")
-        if target_error is not None and abs(target_error) > PREDICTION_CONFIG.error_threshold:
+        if (
+            target_error is not None
+            and abs(target_error) > PREDICTION_CONFIG.error_threshold
+        ):
             # Negative error = predicted too cold = heating slower than expected
-            rate_factor = 1 + (target_error * PREDICTION_CONFIG.heating_rate_adjustment_factor)
+            rate_factor = 1 + (
+                target_error * PREDICTION_CONFIG.heating_rate_adjustment_factor
+            )
             new_rate = current_heating_rate * rate_factor
             new_rate = max(
                 PREDICTION_CONFIG.heating_rate_min,
@@ -420,7 +439,8 @@ class PredictionTracker:
 
         parts = time_str.split(":")
         target_dt = datetime.combine(
-            date.date(), datetime.min.time().replace(hour=int(parts[0]), minute=int(parts[1]))
+            date.date(),
+            datetime.min.time().replace(hour=int(parts[0]), minute=int(parts[1])),
         )
 
         closest_temp = None
@@ -510,7 +530,9 @@ class PredictionTracker:
         else:
             # For older dates, we'd need to query history
             # For now, return None for dates older than yesterday
-            logger.debug(f"Gas usage not available for {date_str} (older than yesterday)")
+            logger.debug(
+                f"Gas usage not available for {date_str} (older than yesterday)"
+            )
             return None
 
         state = self.client.get_state(entity)
@@ -599,7 +621,11 @@ def format_review_report(record: DailyRecord) -> str:
 
     # Switch-on temp
     if p.expected_switch_on_temp and a and a.actual_switch_on_temp:
-        error_str = f"{e.switch_on_temp_error:+.1f}°C" if e and e.switch_on_temp_error else "N/A"
+        error_str = (
+            f"{e.switch_on_temp_error:+.1f}°C"
+            if e and e.switch_on_temp_error
+            else "N/A"
+        )
         lines.append(
             f"  At switch-on ({p.switch_on_time}):  "
             f"Predicted: {p.expected_switch_on_temp:.1f}°C  "
@@ -609,7 +635,11 @@ def format_review_report(record: DailyRecord) -> str:
 
     # Target time temp
     if p.expected_target_time_temp and a and a.actual_target_time_temp:
-        error_str = f"{e.target_time_temp_error:+.1f}°C" if e and e.target_time_temp_error else "N/A"
+        error_str = (
+            f"{e.target_time_temp_error:+.1f}°C"
+            if e and e.target_time_temp_error
+            else "N/A"
+        )
         lines.append(
             f"  At {p.target_warm_time}:              "
             f"Predicted: {p.expected_target_time_temp:.1f}°C  "
@@ -620,7 +650,11 @@ def format_review_report(record: DailyRecord) -> str:
     # Switch-off temp
     if p.switch_off_time != "CONTINUOUS" and p.expected_switch_off_temp:
         if a and a.actual_switch_off_temp:
-            error_str = f"{e.switch_off_temp_error:+.1f}°C" if e and e.switch_off_temp_error else "N/A"
+            error_str = (
+                f"{e.switch_off_temp_error:+.1f}°C"
+                if e and e.switch_off_temp_error
+                else "N/A"
+            )
             lines.append(
                 f"  At switch-off ({p.switch_off_time}): "
                 f"Predicted: {p.expected_switch_off_temp:.1f}°C  "
@@ -680,7 +714,11 @@ def format_error_summary(summary: dict[str, Any]) -> str:
     ]
 
     if summary.get("avg_switch_on_temp_error") is not None:
-        bias = "predicts warm" if summary["avg_switch_on_temp_error"] > 0 else "predicts cold"
+        bias = (
+            "predicts warm"
+            if summary["avg_switch_on_temp_error"] > 0
+            else "predicts cold"
+        )
         lines.append(
             f"  Temp at switch-on: {summary['avg_switch_on_temp_error']:+.2f}°C (model {bias})"
         )
@@ -692,7 +730,9 @@ def format_error_summary(summary: dict[str, Any]) -> str:
         )
 
     if summary.get("avg_gas_pct_error") is not None:
-        direction = "underestimates" if summary["avg_gas_pct_error"] < 0 else "overestimates"
+        direction = (
+            "underestimates" if summary["avg_gas_pct_error"] < 0 else "overestimates"
+        )
         lines.append(
             f"  Gas usage: {summary['avg_gas_pct_error']:+.0f}% (model {direction})"
         )

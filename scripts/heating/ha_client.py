@@ -69,8 +69,12 @@ class HAClient:
             entity_id=data["entity_id"],
             state=data["state"],
             attributes=data.get("attributes", {}),
-            last_changed=datetime.fromisoformat(data["last_changed"].replace("Z", "+00:00")),
-            last_updated=datetime.fromisoformat(data["last_updated"].replace("Z", "+00:00")),
+            last_changed=datetime.fromisoformat(
+                data["last_changed"].replace("Z", "+00:00")
+            ),
+            last_updated=datetime.fromisoformat(
+                data["last_updated"].replace("Z", "+00:00")
+            ),
         )
 
     def get_states(self, entity_ids: list[str]) -> dict[str, EntityState]:
@@ -114,7 +118,9 @@ class HAClient:
         )
 
         if response.status_code != 200:
-            raise RuntimeError(f"Failed to get history: {response.status_code} - {response.text}")
+            raise RuntimeError(
+                f"Failed to get history: {response.status_code} - {response.text}"
+            )
 
         data = response.json()
 
@@ -127,7 +133,9 @@ class HAClient:
 
         return result
 
-    def get_weather_forecast(self, entity_id: str = "weather.forecast_home") -> dict[str, Any]:
+    def get_weather_forecast(
+        self, entity_id: str = "weather.forecast_home"
+    ) -> dict[str, Any]:
         """Get weather entity state with hourly forecast.
 
         Uses the weather.get_forecasts service (HA 2023.12+) for proper forecast data.
@@ -314,7 +322,9 @@ class HAWebSocketClient:
             if response.get("id") == self.msg_id:
                 return response
 
-    async def create_input_boolean(self, name: str, icon: str = "mdi:toggle-switch") -> dict:
+    async def create_input_boolean(
+        self, name: str, icon: str = "mdi:toggle-switch"
+    ) -> dict:
         """Create an input_boolean helper."""
         async with websockets.connect(self.ws_url) as ws:
             # Authenticate
@@ -329,7 +339,9 @@ class HAWebSocketClient:
             )
             if not response.get("success"):
                 error = response.get("error", {})
-                raise RuntimeError(f"Failed to create input_boolean: {error.get('message', response)}")
+                raise RuntimeError(
+                    f"Failed to create input_boolean: {error.get('message', response)}"
+                )
             return response.get("result", {})
 
     async def create_input_datetime(
@@ -358,7 +370,9 @@ class HAWebSocketClient:
             )
             if not response.get("success"):
                 error = response.get("error", {})
-                raise RuntimeError(f"Failed to create input_datetime: {error.get('message', response)}")
+                raise RuntimeError(
+                    f"Failed to create input_datetime: {error.get('message', response)}"
+                )
             return response.get("result", {})
 
     async def create_input_number(
@@ -393,7 +407,9 @@ class HAWebSocketClient:
             )
             if not response.get("success"):
                 error = response.get("error", {})
-                raise RuntimeError(f"Failed to create input_number: {error.get('message', response)}")
+                raise RuntimeError(
+                    f"Failed to create input_number: {error.get('message', response)}"
+                )
             return response.get("result", {})
 
 
