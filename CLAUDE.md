@@ -462,6 +462,118 @@ The heating optimization system learns your home's thermal characteristics and a
 - Lower setpoint = lower modulation = less gas
 - Night = system OFF (not reduced temp - Viessmann quirk)
 
+## Production Deployment (Mac Mini)
+
+The heating optimization system runs in production on a remote Ubuntu machine (Mac Mini). This ensures the scheduler runs reliably every 4 hours without depending on a local development machine.
+
+**Remote Machine:**
+| Property | Value |
+|----------|-------|
+| Host | `macmini.fritz.box` |
+| User | `shadman` |
+| Install Path | `~/dev/home_assistant` |
+| Python | 3.12.3 |
+| Cron Schedule | Every 4 hours (`0 */4 * * *`) |
+| Log File | `~/dev/home_assistant/logs/heating.log` |
+
+**What's Deployed:**
+```
+~/dev/home_assistant/
+├── .venv/                    # Python virtual environment
+├── .env                      # HA credentials (same as local)
+├── requirements.txt
+├── scripts/heating/          # All heating automation code
+├── models/heating/           # Trained thermal model
+├── data/heating/             # Prediction history
+└── logs/heating.log          # Cron output logs
+```
+
+### Syncing Code Updates
+
+After making changes locally, sync to the remote machine:
+```bash
+rsync -avz --exclude='.venv' --exclude='.env' --exclude='__pycache__' \
+  --exclude='.git' --exclude='*.pyc' --exclude='inventory/' \
+  /Users/sadat.anwar/dev/home_assistant/ \
+  shadman@macmini.fritz.box:~/dev/home_assistant/
+```
+
+If dependencies changed (requirements.txt), also run:
+```bash
+ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/pip install -r requirements.txt"
+```
+
+### Checking Logs
+
+```bash
+# View recent logs
+ssh shadman@macmini.fritz.box "tail -50 ~/dev/home_assistant/logs/heating.log"
+
+# Follow logs in real-time
+ssh shadman@macmini.fritz.box "tail -f ~/dev/home_assistant/logs/heating.log"
+
+# View full log
+ssh shadman@macmini.fritz.box "cat ~/dev/home_assistant/logs/heating.log"
+```
+
+### Manual Operations
+
+```bash
+# Run scheduler manually
+ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run"
+
+# Dry run (no changes to HA)
+ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run --dry-run"
+
+# Check current state
+ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler state"
+
+# Review predictions
+ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler history"
+```
+
+### Cron Job Management
+
+```bash
+# View current cron jobs
+ssh shadman@macmini.fritz.box "crontab -l"
+
+# Edit cron jobs
+ssh shadman@macmini.fritz.box "crontab -e"
+
+# Current cron entry:
+# 0 */4 * * * cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run >> ~/dev/home_assistant/logs/heating.log 2>&1
+```
+
+### Troubleshooting
+
+**If scheduler fails:**
+1. Check logs: `tail -50 ~/dev/home_assistant/logs/heating.log`
+2. Verify .env exists and has correct credentials
+3. Test HA connectivity: `ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -c 'from scripts.heating.ha_client import HAClient; c = HAClient(); print(c.get_state(\"sensor.bedroom_thermo_temperature\"))'"`
+
+**If cron not running:**
+1. Check cron service: `ssh shadman@macmini.fritz.box "systemctl status cron"`
+2. Check cron logs: `ssh shadman@macmini.fritz.box "grep CRON /var/log/syslog | tail -20"`
+
+**Full redeployment (if needed):**
+```bash
+# 1. Sync code
+rsync -avz --exclude='.venv' --exclude='.env' --exclude='__pycache__' \
+  --exclude='.git' --exclude='*.pyc' --exclude='inventory/' \
+  /Users/sadat.anwar/dev/home_assistant/ \
+  shadman@macmini.fritz.box:~/dev/home_assistant/
+
+# 2. Recreate venv (if Python issues)
+ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && rm -rf .venv && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt"
+
+# 3. Copy .env
+scp /Users/sadat.anwar/dev/home_assistant/.env shadman@macmini.fritz.box:~/dev/home_assistant/.env
+
+# 4. Test
+ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run --dry-run"
+```
+
 ## AI Agent Instructions
 
 - **Keep this file updated**: When adding new project patterns, conventions, dependencies, or significant architectural decisions, update this CLAUDE.md file to reflect those changes

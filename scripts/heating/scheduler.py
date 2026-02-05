@@ -114,8 +114,6 @@ class HeatingScheduler:
             forecast = current_state.get("forecast", [])
             if forecast:
                 logger.info(f"Weather forecast available: {len(forecast)} hours ahead")
-                for f in forecast[:3]:
-                    logger.info(f)
             else:
                 logger.warning(
                     "No weather forecast available - using current temps as fallback"
