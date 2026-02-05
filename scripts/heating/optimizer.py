@@ -132,14 +132,16 @@ class HeatingOptimizer:
         )
 
         # 1. Predict overnight cooling curve (system OFF)
+        hours_until_morning = self._hours_until(current_time.time(), target_warm_time)
+        cooling_hours = max(1, int(hours_until_morning) + 1)
+
         cooling_prediction = self.thermal_model.predict_cooling_curve(
             start_temp=bedroom_temp,
             outside_temp=min_overnight,
-            hours=8,
+            hours=cooling_hours,
         )
 
         # Find expected morning temperature (at target_warm_time)
-        hours_until_morning = self._hours_until(current_time.time(), target_warm_time)
         morning_idx = min(
             int(hours_until_morning), len(cooling_prediction.temperatures) - 1
         )
@@ -190,12 +192,12 @@ class HeatingOptimizer:
 
         # Adjust for solar (reduce setpoint if significant solar gain expected)
         if solar_contribution > 0.5:
-            optimal_setpoint -= 0.5
-            reasoning.append("Reduced setpoint by 0.5°C for solar gain")
+            optimal_setpoint -= 1
+            reasoning.append("Reduced setpoint by 1°C for solar gain")
 
         # Clamp to configured bounds
         optimal_setpoint = round(
-            max(DEFAULTS.min_setpoint, min(DEFAULTS.max_setpoint, optimal_setpoint)), 1
+            max(DEFAULTS.min_setpoint, min(DEFAULTS.max_setpoint, optimal_setpoint))
         )
         reasoning.append(f"Optimal setpoint: {optimal_setpoint}°C")
 
@@ -283,6 +285,165 @@ class HeatingOptimizer:
             expected_avg_modulation=expected_avg_modulation,
         )
 
+    def recalculate_mid_day(
+        self,
+        target_warm_time: time,
+        target_night_time: time,
+        target_temp: float,
+        min_overnight_temp: float,
+        min_daytime_temp: float,
+        current_temps: dict[str, float],
+        outside_temp: float,
+        weather_forecast: list[dict] | None = None,
+        current_time: datetime | None = None,
+        original_switch_on_time: time | None = None,
+        original_setpoint: float | None = None,
+        original_hourly_plans: list[HourlyHeatingPlan] | None = None,
+    ) -> DailyHeatingSchedule:
+        """Recalculate schedule during active heating period.
+
+        Uses actual measured temps instead of cooling predictions.
+        Preserves switch-on time, recalculates switch-off and setpoint.
+        """
+        if current_time is None:
+            current_time = datetime.now()
+
+        reasoning = []
+        bedroom_temp = current_temps.get("bedroom", 20.0)
+        reasoning.append(f"Mid-day recalc: actual bedroom {bedroom_temp:.1f}°C")
+
+        # Preserve original switch-on time
+        switch_on_time = original_switch_on_time or target_warm_time
+
+        # Overnight forecast for switch-off cooling sim
+        overnight_temps = self._extract_overnight_temps(weather_forecast, outside_temp)
+        min_overnight = min(overnight_temps) if overnight_temps else outside_temp
+
+        # Daytime temps for setpoint
+        daytime_temps = self._extract_daytime_temps(
+            weather_forecast, target_warm_time, target_night_time, outside_temp
+        )
+        avg_daytime_temp = sum(daytime_temps) / len(daytime_temps)
+
+        # Switch-on time guard: if original switch-on is less than 2 hours before
+        # target_warm_time, use target_warm_time - 2hrs for switch-off calculation
+        # to prevent unrealistically short off-period estimates
+        effective_switch_on = switch_on_time
+        hours_before_warm = self._hours_until(switch_on_time, target_warm_time)
+        if hours_before_warm < 2.0 and hours_before_warm > 0:
+            guard_hour = (target_warm_time.hour - 2) % 24
+            effective_switch_on = time(guard_hour, target_warm_time.minute)
+            reasoning.append(
+                f"Switch-on guard: using {effective_switch_on.strftime('%H:%M')} "
+                f"for off-time calc (original {switch_on_time.strftime('%H:%M')} "
+                f"too close to warm time)"
+            )
+
+        # Recalculate switch-off time using actual bedroom temp
+        switch_off_time = self._calculate_switch_off_time(
+            preferred_off_time=target_night_time,
+            target_temp=target_temp,
+            min_overnight_temp=min_overnight_temp,
+            min_daytime_temp=min_daytime_temp,
+            outside_temp=min_overnight,
+            target_warm_time=target_warm_time,
+            switch_on_time=effective_switch_on,
+        )
+
+        off_str = switch_off_time.strftime("%H:%M") if switch_off_time else "CONTINUOUS"
+        reasoning.append(f"Recalculated switch-off: {off_str}")
+
+        # Setpoint adjustment based on actual vs predicted temp
+        setpoint = original_setpoint or self._calculate_setpoint(avg_daytime_temp)
+        current_hour = current_time.hour
+
+        if original_hourly_plans:
+            predicted_temp = None
+            for hp in original_hourly_plans:
+                if hp.hour == current_hour:
+                    predicted_temp = hp.expected_room_temp
+                    break
+
+            if predicted_temp is not None:
+                if bedroom_temp > predicted_temp:
+                    setpoint -= 1.0
+                    reasoning.append(
+                        f"Setpoint -1°C: actual {bedroom_temp:.1f}°C > "
+                        f"predicted {predicted_temp:.1f}°C"
+                    )
+                elif bedroom_temp < predicted_temp - 1.0:
+                    setpoint += 1.0
+                    reasoning.append(
+                        f"Setpoint +1°C: actual {bedroom_temp:.1f}°C < "
+                        f"predicted {predicted_temp:.1f}°C - 1.0"
+                    )
+                else:
+                    reasoning.append(
+                        f"Setpoint unchanged: actual {bedroom_temp:.1f}°C "
+                        f"~ predicted {predicted_temp:.1f}°C"
+                    )
+
+        # Clamp setpoint
+        setpoint = round(
+            max(DEFAULTS.min_setpoint, min(DEFAULTS.max_setpoint, setpoint))
+        )
+        reasoning.append(f"Adjusted setpoint: {setpoint}°C")
+
+        # Solar contribution
+        solar_contribution = self._estimate_solar_contribution(
+            weather_forecast, target_warm_time, target_night_time
+        )
+
+        # Build hourly plan from current hour onward
+        hours = self._build_hourly_plan(
+            switch_on_time=switch_on_time,
+            switch_off_time=switch_off_time,
+            optimal_setpoint=setpoint,
+            bedroom_temp=bedroom_temp,
+            outside_temp=outside_temp,
+        )
+
+        expected_min, expected_max = self._estimate_temp_range(hours)
+        expected_gas = self._estimate_gas_usage(hours)
+
+        # Expected temps at key times
+        expected_target_time_temp = None
+        for hp in hours:
+            if hp.hour == target_warm_time.hour:
+                expected_target_time_temp = hp.expected_room_temp
+                break
+
+        expected_switch_off_temp = None
+        if switch_off_time is not None:
+            for hp in hours:
+                if hp.hour == switch_off_time.hour:
+                    expected_switch_off_temp = hp.expected_room_temp
+                    break
+
+        expected_burner_hours = self._calculate_burner_hours(
+            switch_on_time, switch_off_time
+        )
+        expected_avg_modulation = self._calculate_avg_modulation(hours)
+
+        return DailyHeatingSchedule(
+            date=current_time,
+            hours=hours,
+            switch_on_time=switch_on_time,
+            switch_off_time=switch_off_time,
+            optimal_setpoint=setpoint,
+            cycles_per_day=1,
+            expected_gas_usage=expected_gas,
+            expected_min_temp=expected_min,
+            expected_max_temp=expected_max,
+            solar_contribution=solar_contribution,
+            reasoning=reasoning,
+            expected_switch_on_temp=bedroom_temp,
+            expected_target_time_temp=expected_target_time_temp,
+            expected_switch_off_temp=expected_switch_off_temp,
+            expected_burner_hours=expected_burner_hours,
+            expected_avg_modulation=expected_avg_modulation,
+        )
+
     def apply_safety_overrides(
         self,
         schedule: DailyHeatingSchedule,
@@ -337,31 +498,9 @@ class HeatingOptimizer:
         - Extreme cold (<-5°C): Use max setpoint (22°C)
         """
         base_setpoint = DEFAULTS.default_setpoint  # 20°C
+        logger.debug(f"Mild ({outside_temp}°C): using base setpoint {base_setpoint}°C")
 
-        if outside_temp < DEFAULTS.extreme_cold_threshold:
-            # Extreme cold: use max setpoint
-            setpoint = DEFAULTS.max_setpoint
-            logger.debug(
-                f"Extreme cold ({outside_temp}°C): using max setpoint {setpoint}°C"
-            )
-        elif outside_temp < 0:
-            # Cold: scale from 20 to 22 as temp drops from 0 to -5
-            # +0.4°C per degree below 0
-            adjustment = (abs(outside_temp) / 5) * 2
-            setpoint = base_setpoint + adjustment
-            logger.debug(
-                f"Cold ({outside_temp}°C): base {base_setpoint} + {adjustment:.1f} = {setpoint:.1f}°C"
-            )
-        elif outside_temp < 5:
-            # Cool: slight increase (+0.5°C)
-            setpoint = base_setpoint + 0.5
-            logger.debug(f"Cool ({outside_temp}°C): using setpoint {setpoint}°C")
-        else:
-            # Mild: use base setpoint
-            setpoint = base_setpoint
-            logger.debug(f"Mild ({outside_temp}°C): using base setpoint {setpoint}°C")
-
-        return setpoint
+        return base_setpoint
 
     def _extract_overnight_temps(
         self,

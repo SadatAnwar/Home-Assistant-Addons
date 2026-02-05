@@ -105,7 +105,7 @@ async def create_helpers_async(skip_existing: bool = True) -> dict[str, bool]:
             "entity_id": HELPERS.optimal_setpoint,
             "min": 16,
             "max": 26,
-            "step": 0.5,
+            "step": 1,
             "unit": "°C",
             "mode": "slider",
             "icon": "mdi:thermometer-auto",

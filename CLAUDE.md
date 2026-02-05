@@ -10,7 +10,8 @@ home_assistant/
 │   ├── lights.yaml       # Lights control dashboard
 │   ├── heating-beautiful.yaml  # Heating/climate control dashboard
 │   ├── heating-optimizer.yaml  # ML heating optimizer monitoring dashboard
-│   └── temperature-glass.yaml  # Temperature & humidity dashboard (glass style)
+│   ├── temperature-glass.yaml  # Temperature & humidity dashboard (glass style)
+│   └── security.yaml          # Lock controls & smoke alarm status (glass style)
 ├── automations/          # HA automation YAML files
 │   ├── central_heating_delayed_stop.yaml  # Manual delayed stop automation
 │   └── heating/          # ML-driven heating automations

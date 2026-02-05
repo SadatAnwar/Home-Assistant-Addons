@@ -148,7 +148,7 @@ The boiler's outdoor sensor reads approximately **1°C warmer** than the weather
 
 **Methodology for Ongoing Observation**:
 Since HA doesn't store historical forecasts, compare sensor vs forecast at decision points:
-1. At scheduler run time (4am): Compare overnight forecast accuracy
+1. At scheduler run time: Compare overnight forecast accuracy
 2. At target_warm_time: Compare morning forecast accuracy
 3. Log deltas in scheduler output for pattern analysis
 
@@ -186,3 +186,47 @@ Heat_Loss_Coefficient (W/K) = Thermal_Mass (J/K) / τ (seconds)
 ```
 T_eq = T_outside + (Internal_Gains_W / Heat_Loss_Coefficient_W_per_K)
 ```
+
+---
+
+## Device Entity Naming
+
+### SwitchBot Lock
+
+The main door lock uses these entities (not the `lock_ultra_4c` naming):
+
+| Purpose | Entity ID |
+|---------|-----------|
+| Lock control | `lock.door_lock` |
+| Battery | `sensor.door_lock_battery` |
+| Door state | `binary_sensor.door_lock` |
+| Unclosed alarm | `binary_sensor.door_lock_unclosed_alarm` |
+| Unlocked alarm | `binary_sensor.door_lock_unlocked_alarm` |
+
+**Note**: The `lock_ultra_4c` entities are stale/incorrect references.
+
+---
+
+## Dashboard Card Patterns
+
+### Mushroom Cards for Lights
+
+Mushroom cards provide better flexibility than tile cards for light controls:
+
+| Card Type | Use Case |
+|-----------|----------|
+| `mushroom-template-card` | Switches with power monitoring - allows templated secondary text (e.g., "{{ states('sensor.power') }} W") |
+| `mushroom-light-card` | Actual `light.*` entities - has built-in brightness slider |
+| `mushroom-entity-card` | Simple switches without extra info |
+
+**Common settings for consistency:**
+```yaml
+layout: horizontal
+fill_container: true
+tap_action:
+  action: toggle
+icon_tap_action:
+  action: more-info
+```
+
+**Note:** Tile cards can't show values from other entities in `state_content` - only attributes of the main entity. Use mushroom-template-card when you need to display related sensor values.

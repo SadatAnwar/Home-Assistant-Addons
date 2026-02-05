@@ -2,7 +2,8 @@
 """Main scheduler for adaptive heating optimization.
 
 Orchestrates data collection, model training, optimization, and HA updates.
-Designed to run daily at 4am via cron.
+Can run at any time of day — determines the correct action based on current
+time relative to the heating cycle (Cases A-E).
 """
 
 import argparse
@@ -20,13 +21,16 @@ from .config import (
 )
 from .data_collector import DataCollector
 from .ha_client import HAClient
-from .optimizer import HeatingOptimizer
+from .optimizer import DailyHeatingSchedule, HeatingOptimizer, HourlyHeatingPlan
 from .prediction_tracker import (
     PredictionTracker,
     format_error_summary,
     format_review_report,
 )
 from .thermal_model import ThermalModel
+
+# Sentinel for cases where we only update switch-off and setpoint
+_SWITCH_OFF_AND_SETPOINT_ONLY = "switch_off_and_setpoint_only"
 
 # Configure logging
 logging.basicConfig(
@@ -58,18 +62,23 @@ class HeatingScheduler:
         force_train: bool = False,
         dry_run: bool = False,
         shadow: bool = False,
+        recommend_only: bool = False,
     ) -> dict[str, Any]:
-        """Run the daily optimization cycle.
+        """Run the optimization cycle.
+
+        Can be run at any time of day. Determines what to do based on
+        current time relative to the heating cycle.
 
         Args:
             force_train: Force model retraining even if recent model exists
             dry_run: Calculate schedule but don't write anything
             shadow: Save predictions locally but don't update HA or adjust model
+            recommend_only: Save prediction, print recommendation, don't update HA
 
         Returns:
             Dictionary with run results
         """
-        results = {
+        results: dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
             "success": False,
             "errors": [],
@@ -88,7 +97,7 @@ class HeatingScheduler:
                 f"overnight {settings['min_bedroom_temp']}°C"
             )
 
-            # 3. Collect current state
+            # 2. Collect current state
             current_state = self.collector.get_current_state()
             results["current_state"] = {
                 "bedroom_temp": current_state.get("room_temps", {}).get("bedroom"),
@@ -97,19 +106,22 @@ class HeatingScheduler:
             }
             logger.info(
                 f"Current state: bedroom {current_state['room_temps'].get('bedroom', 'N/A')}°C, "
-                f"outside {current_state.get('outside_temp', 'N/A')}°C"
+                f"outside {current_state.get('outside_temp', 'N/A')}°C, "
+                f"hvac {current_state.get('hvac_mode', 'N/A')}"
             )
 
             # Log forecast availability
             forecast = current_state.get("forecast", [])
             if forecast:
                 logger.info(f"Weather forecast available: {len(forecast)} hours ahead")
+                for f in forecast[:3]:
+                    logger.info(f)
             else:
                 logger.warning(
                     "No weather forecast available - using current temps as fallback"
                 )
 
-            # 4. Train/update model if needed
+            # 3. Train/update model if needed
             if force_train or self._should_retrain():
                 logger.info("Training thermal model...")
                 training_result = self._train_model()
@@ -124,18 +136,76 @@ class HeatingScheduler:
             if self.optimizer is None:
                 self.optimizer = HeatingOptimizer(self.model)
 
-            # 5. Calculate optimal schedule
-            logger.info("Calculating optimal schedule...")
-            schedule = self.optimizer.calculate_optimal_schedule(
-                target_warm_time=self._parse_time(settings["target_warm_time"]),
-                target_night_time=self._parse_time(settings["preferred_off_time"]),
-                target_temp=settings["target_temp"],
-                min_overnight_temp=settings["min_bedroom_temp"],
-                min_daytime_temp=settings["min_daytime_temp"],
-                current_temps=current_state.get("room_temps", {}),
-                outside_temp=current_state.get("outside_temp", 5),
-                weather_forecast=current_state.get("forecast"),
+            # 4. Collect yesterday's actuals (once per day)
+            if not dry_run:
+                yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+                yesterday_record = self.tracker._load_record(yesterday)
+                if yesterday_record and yesterday_record.actuals:
+                    logger.info("Actuals already collected for yesterday, skipping")
+                else:
+                    logger.info(f"Collecting actuals for {yesterday}...")
+                    actuals = self.tracker.collect_actuals(yesterday)
+                    if actuals:
+                        results["actuals_collected"] = True
+                        logger.info(f"Collected actuals for {yesterday}")
+                    else:
+                        logger.info(f"No actuals available for {yesterday}")
+
+            # 5. Apply coefficient adjustments (once per day, live mode only)
+            if not dry_run and not shadow:
+                today_str = datetime.now().strftime("%Y-%m-%d")
+                today_record = self.tracker._load_record(today_str)
+                if today_record and today_record.coefficients_adjusted:
+                    logger.info(
+                        "Coefficient adjustments already applied today, skipping"
+                    )
+                else:
+                    error_summary = self.tracker.get_error_summary(
+                        days=PREDICTION_CONFIG.min_sample_days
+                    )
+                    if (
+                        error_summary["sample_count"]
+                        >= PREDICTION_CONFIG.min_sample_days
+                    ):
+                        adjustments = self.tracker.suggest_coefficient_adjustments(
+                            error_summary,
+                            self.model.k,
+                            self.model.mean_heating_rate,
+                        )
+                        if adjustments:
+                            applied = self.model.apply_adjustments(adjustments)
+                            for adj in applied:
+                                logger.info(f"Applied adjustment: {adj}")
+                            results["adjustments_applied"] = applied
+                            self.model.save()
+
+                        # Mark coefficients as adjusted for today
+                        if today_record:
+                            today_record.coefficients_adjusted = True
+                            self.tracker._save_record(today_record)
+            elif shadow:
+                logger.info("SHADOW MODE - skipping coefficient adjustments")
+
+            # 6. Determine current heating state and calculate schedule
+            now = datetime.now()
+            today_str = now.strftime("%Y-%m-%d")
+            existing_record = self.tracker._load_record(today_str)
+            heating_is_on = current_state.get("hvac_mode") in ("heat", "auto")
+
+            target_warm_time = self._parse_time(settings["target_warm_time"])
+            target_night_time = self._parse_time(settings["preferred_off_time"])
+
+            schedule, update_mode, case_label = self._determine_and_calculate(
+                now=now,
+                existing_record=existing_record,
+                heating_is_on=heating_is_on,
+                target_warm_time=target_warm_time,
+                target_night_time=target_night_time,
+                settings=settings,
+                current_state=current_state,
             )
+
+            logger.info(f"Case {case_label}")
 
             # Apply safety overrides
             schedule, overrides = self.optimizer.apply_safety_overrides(
@@ -143,8 +213,8 @@ class HeatingScheduler:
                 current_temps=current_state.get("room_temps", {}),
                 min_overnight_temp=settings["min_bedroom_temp"],
                 min_daytime_temp=settings["min_daytime_temp"],
-                target_warm_time=self._parse_time(settings["target_warm_time"]),
-                preferred_off_time=self._parse_time(settings["preferred_off_time"]),
+                target_warm_time=target_warm_time,
+                preferred_off_time=target_night_time,
             )
 
             off_time_str = (
@@ -163,6 +233,7 @@ class HeatingScheduler:
                 "solar_contribution": schedule.solar_contribution,
                 "reasoning": schedule.reasoning,
                 "overrides": overrides,
+                "case": case_label,
             }
 
             switch_on_temp_str = (
@@ -171,8 +242,8 @@ class HeatingScheduler:
                 else "N/A"
             )
             logger.info(
-                f"Schedule: ON at {schedule.switch_on_time}, OFF at {off_time_str}, "
-                f"setpoint {schedule.optimal_setpoint}°C"
+                f"Schedule: ON at {schedule.switch_on_time.strftime('%H:%M')}, "
+                f"OFF at {off_time_str}, setpoint {schedule.optimal_setpoint}°C"
             )
             logger.info(f"Expected room temp at switch-on: {switch_on_temp_str}")
 
@@ -180,58 +251,46 @@ class HeatingScheduler:
                 for override in overrides:
                     logger.warning(f"Safety override: {override}")
 
-            # 6. Save prediction for tracking (shadow and live only)
+            # 7. Save prediction/adjustment
             if not dry_run:
-                logger.info("Saving prediction for tracking...")
-                self.tracker.save_prediction(schedule, settings["target_warm_time"])
-                results["prediction_saved"] = True
-            else:
-                logger.info("DRY RUN - skipping prediction save")
-
-            # 7. Collect yesterday's actuals and apply coefficient adjustments
-            if not dry_run:
-                yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
-                logger.info(f"Collecting actuals for {yesterday}...")
-                actuals = self.tracker.collect_actuals(yesterday)
-                if actuals:
-                    results["actuals_collected"] = True
-                    logger.info(f"Collected actuals for {yesterday}")
-
-                    # Apply coefficient adjustments (live mode only)
-                    if not shadow:
-                        error_summary = self.tracker.get_error_summary(
-                            days=PREDICTION_CONFIG.min_sample_days
-                        )
-                        if (
-                            error_summary["sample_count"]
-                            >= PREDICTION_CONFIG.min_sample_days
-                        ):
-                            adjustments = self.tracker.suggest_coefficient_adjustments(
-                                error_summary,
-                                self.model.k,
-                                self.model.mean_heating_rate,
-                            )
-                            if adjustments:
-                                applied = self.model.apply_adjustments(adjustments)
-                                for adj in applied:
-                                    logger.info(f"Applied adjustment: {adj}")
-                                results["adjustments_applied"] = applied
-                                # Save model with new coefficients
-                                self.model.save()
-                    else:
-                        logger.info("SHADOW MODE - skipping coefficient adjustments")
+                if existing_record is None or case_label == "A":
+                    # First run of the day — save as primary prediction
+                    logger.info("Saving primary prediction...")
+                    self.tracker.save_prediction(schedule, settings["target_warm_time"])
+                    results["prediction_saved"] = True
                 else:
-                    logger.info(f"No actuals available for {yesterday}")
+                    # Subsequent run — save as adjustment
+                    bedroom_temp = current_state.get("room_temps", {}).get(
+                        "bedroom", 0.0
+                    )
+                    logger.info("Saving adjustment...")
+                    self.tracker.save_adjustment(
+                        date_str=today_str,
+                        switch_off_time=off_time_str,
+                        setpoint=schedule.optimal_setpoint,
+                        actual_bedroom_temp=bedroom_temp,
+                        reasoning=schedule.reasoning,
+                    )
+                    results["adjustment_saved"] = True
+            else:
+                logger.info("DRY RUN - skipping prediction/adjustment save")
 
-            # 8. Update HA helpers (live mode only)
-            if not dry_run and not shadow:
+            # 8. Update HA helpers
+            if not dry_run and not shadow and not recommend_only:
                 logger.info("Updating Home Assistant helpers...")
-                self._update_ha_helpers(schedule)
+                if update_mode == _SWITCH_OFF_AND_SETPOINT_ONLY:
+                    # Case D: only update switch-off and setpoint
+                    self._update_ha_switch_off_and_setpoint(schedule)
+                else:
+                    self._update_ha_helpers(schedule)
                 results["ha_updated"] = True
 
                 # 9. Send notification
                 self._send_schedule_notification(schedule)
                 results["notification_sent"] = True
+            elif recommend_only:
+                logger.info("RECOMMEND ONLY - prediction saved, skipping HA updates")
+                results["recommend_only"] = True
             elif shadow:
                 logger.info("SHADOW MODE - predictions saved, skipping HA updates")
                 results["shadow"] = True
@@ -246,6 +305,160 @@ class HeatingScheduler:
             results["errors"].append(str(e))
 
         return results
+
+    def _determine_and_calculate(
+        self,
+        now: datetime,
+        existing_record,
+        heating_is_on: bool,
+        target_warm_time: time,
+        target_night_time: time,
+        settings: dict[str, Any],
+        current_state: dict[str, Any],
+    ) -> tuple[Any, str, str]:
+        """Determine the current case and calculate the appropriate schedule.
+
+        Returns:
+            (schedule, update_mode, case_label) where update_mode is either
+            "all" or _SWITCH_OFF_AND_SETPOINT_ONLY
+        """
+        room_temps = current_state.get("room_temps", {})
+        outside_temp = current_state.get("outside_temp", 5)
+        forecast = current_state.get("forecast")
+
+        common_kwargs = {
+            "target_warm_time": target_warm_time,
+            "target_night_time": target_night_time,
+            "target_temp": settings["target_temp"],
+            "min_overnight_temp": settings["min_bedroom_temp"],
+            "min_daytime_temp": settings["min_daytime_temp"],
+            "current_temps": room_temps,
+            "outside_temp": outside_temp,
+            "weather_forecast": forecast,
+        }
+
+        # CASE A: No prediction exists for today
+        if existing_record is None:
+            logger.info("Case A: First run of the day — full calculation")
+            schedule = self.optimizer.calculate_optimal_schedule(**common_kwargs)
+            return schedule, "all", "A"
+
+        # We have an existing prediction — determine sub-case
+        pred = existing_record.prediction
+        switch_on_time = self._parse_time(pred.switch_on_time)
+        switch_off_time = (
+            self._parse_time(pred.switch_off_time)
+            if pred.switch_off_time != "CONTINUOUS"
+            else None
+        )
+
+        current_time = now.time()
+
+        if heating_is_on:
+            # CASE D: Heating is ON — mid-day recalculation
+            logger.info("Case D: Heating ON — recalculating switch-off and setpoint")
+            original_hourly_plans = self._load_original_hourly_plans(existing_record)
+            schedule = self.optimizer.recalculate_mid_day(
+                **common_kwargs,
+                current_time=now,
+                original_switch_on_time=switch_on_time,
+                original_setpoint=pred.setpoint,
+                original_hourly_plans=original_hourly_plans,
+            )
+            return schedule, _SWITCH_OFF_AND_SETPOINT_ONLY, "D"
+
+        # Heating is OFF
+        if switch_off_time is not None and self._time_ge(current_time, switch_off_time):
+            # Past switch-off time — could be after today's cycle or before tomorrow's
+            # Check if we're past the preferred off time too
+            if self._time_ge(current_time, target_night_time):
+                # CASE E: Heating done for today — this is effectively tomorrow's calc
+                logger.info(
+                    "Case E: Past switch-off and night time — "
+                    "calculating tomorrow's schedule"
+                )
+                tomorrow = now + timedelta(days=1)
+                schedule = self.optimizer.calculate_optimal_schedule(
+                    **common_kwargs,
+                    current_time=tomorrow,
+                )
+                return schedule, "all", "E"
+
+        # Heating OFF, before switch-on time
+        if not self._time_ge(current_time, switch_on_time):
+            # CASE B: Before heating starts — recalculate with fresh conditions
+            logger.info("Case B: Before switch-on — recalculating with fresh data")
+            schedule = self.optimizer.calculate_optimal_schedule(**common_kwargs)
+            return schedule, "all", "B"
+
+        # Heating OFF but past switch-on time and before switch-off
+        if self._time_ge(current_time, switch_on_time) and (
+            switch_off_time is None or not self._time_ge(current_time, switch_off_time)
+        ):
+            if not self._time_ge(current_time, target_warm_time):
+                # CASE C: Should have started but hasn't — trigger immediately
+                logger.info(
+                    "Case C: Past switch-on but heating OFF — triggering now+2min"
+                )
+                immediate_on = (now + timedelta(minutes=2)).time()
+                original_hourly_plans = self._load_original_hourly_plans(
+                    existing_record
+                )
+                schedule = self.optimizer.recalculate_mid_day(
+                    **common_kwargs,
+                    current_time=now,
+                    original_switch_on_time=immediate_on,
+                    original_setpoint=pred.setpoint,
+                    original_hourly_plans=original_hourly_plans,
+                )
+                # Override switch-on to now+2min
+                schedule = DailyHeatingSchedule(
+                    date=schedule.date,
+                    hours=schedule.hours,
+                    switch_on_time=immediate_on,
+                    switch_off_time=schedule.switch_off_time,
+                    optimal_setpoint=schedule.optimal_setpoint,
+                    cycles_per_day=schedule.cycles_per_day,
+                    expected_gas_usage=schedule.expected_gas_usage,
+                    expected_min_temp=schedule.expected_min_temp,
+                    expected_max_temp=schedule.expected_max_temp,
+                    solar_contribution=schedule.solar_contribution,
+                    reasoning=schedule.reasoning
+                    + [
+                        f"Late start: switch-on set to {immediate_on.strftime('%H:%M')}"
+                    ],
+                    expected_switch_on_temp=schedule.expected_switch_on_temp,
+                    expected_target_time_temp=schedule.expected_target_time_temp,
+                    expected_switch_off_temp=schedule.expected_switch_off_temp,
+                    expected_burner_hours=schedule.expected_burner_hours,
+                    expected_avg_modulation=schedule.expected_avg_modulation,
+                )
+                return schedule, "all", "C"
+
+        # Fallback: heating OFF, past warm time but before switch-off
+        # This could happen if heating was turned off manually
+        # CASE E: treat as done for today
+        logger.info(
+            "Case E: Heating OFF post warm-time — calculating tomorrow's schedule"
+        )
+        tomorrow = now + timedelta(days=1)
+        schedule = self.optimizer.calculate_optimal_schedule(
+            **common_kwargs,
+            current_time=tomorrow,
+        )
+        return schedule, "all", "E"
+
+    def _time_ge(self, a: time, b: time) -> bool:
+        """Check if time a >= time b (simple comparison, no midnight wrapping)."""
+        return (a.hour, a.minute) >= (b.hour, b.minute)
+
+    def _load_original_hourly_plans(self, record) -> list[HourlyHeatingPlan] | None:
+        """Try to reconstruct hourly plans from a saved prediction.
+
+        Since we don't persist hourly plans in JSONL, we return None.
+        The optimizer handles None gracefully (skips setpoint adjustment).
+        """
+        return None
 
     def _get_user_settings(self) -> dict[str, Any]:
         """Get user-configured settings from HA helpers."""
@@ -362,6 +575,28 @@ class HeatingScheduler:
             logger.warning("Failed to update switch-off time helper")
 
         # Update optimal setpoint
+        success = self.client.set_input_number(
+            HELPERS.optimal_setpoint,
+            schedule.optimal_setpoint,
+        )
+        if not success:
+            logger.warning("Failed to update optimal setpoint helper")
+
+    def _update_ha_switch_off_and_setpoint(self, schedule) -> None:
+        """Update only switch-off time and setpoint (for mid-day adjustments)."""
+        if schedule.switch_off_time is not None:
+            off_time_str = schedule.switch_off_time.strftime("%H:%M")
+        else:
+            off_time_str = schedule.switch_on_time.strftime("%H:%M")
+            logger.info("Continuous heating mode - setting off time = on time")
+
+        success = self.client.set_input_datetime(
+            HELPERS.switch_off_time,
+            off_time_str,
+        )
+        if not success:
+            logger.warning("Failed to update switch-off time helper")
+
         success = self.client.set_input_number(
             HELPERS.optimal_setpoint,
             schedule.optimal_setpoint,
@@ -534,6 +769,9 @@ Examples:
   Shadow mode (save predictions locally, don't touch HA):
     python -m scripts.heating.scheduler run --shadow
 
+  Recommend only (save prediction, print result, don't update HA):
+    python -m scripts.heating.scheduler run --recommend-only
+
   Show model information:
     python -m scripts.heating.scheduler info
 
@@ -552,8 +790,8 @@ Examples:
   Show 14-day prediction history:
     python -m scripts.heating.scheduler history --days 14
 
-Crontab example (run at 4am daily):
-  0 4 * * * cd /path/to/home_assistant && .venv/bin/python -m scripts.heating.scheduler run
+Crontab example (can run at any time; multiple runs per day are safe):
+  0 */4 * * * cd /path/to/home_assistant && .venv/bin/python -m scripts.heating.scheduler run
         """,
     )
 
@@ -571,6 +809,11 @@ Crontab example (run at 4am daily):
         "--shadow",
         action="store_true",
         help="Save predictions locally but don't update HA or adjust model",
+    )
+    run_parser.add_argument(
+        "--recommend-only",
+        action="store_true",
+        help="Print recommendation without updating HA helpers",
     )
     run_parser.add_argument(
         "--verbose", "-v", action="store_true", help="Verbose output"
@@ -607,6 +850,7 @@ Crontab example (run at 4am daily):
             force_train=getattr(args, "train", False),
             dry_run=getattr(args, "dry_run", False),
             shadow=getattr(args, "shadow", False),
+            recommend_only=getattr(args, "recommend_only", False),
         )
 
         if result["success"]:

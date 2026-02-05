@@ -90,6 +90,16 @@ class HAWebSocket:
             error = response.get("error", {})
             raise RuntimeError(f"Failed to delete dashboard: {error.get('message', response)}")
 
+    async def update_dashboard(self, dashboard_id: str, **kwargs) -> dict:
+        """Update dashboard metadata (icon, title, etc.)."""
+        params = {"dashboard_id": dashboard_id}
+        params.update(kwargs)
+        response = await self.send_command("lovelace/dashboards/update", **params)
+        if not response.get("success"):
+            error = response.get("error", {})
+            raise RuntimeError(f"Failed to update dashboard: {error.get('message', response)}")
+        return response.get("result", {})
+
     async def get_config(self, url_path: str | None = None) -> dict | None:
         """Get dashboard configuration."""
         kwargs = {}
@@ -297,6 +307,47 @@ async def delete_dashboard_async(url_path: str) -> None:
         print(f"Deleted dashboard '{url_path}'")
 
 
+async def update_dashboard_async(url_path: str, icon: str | None = None, title: str | None = None) -> None:
+    """Update dashboard metadata."""
+    ha_url, token = load_config()
+    ws_url = get_ws_url(ha_url)
+
+    async with websockets.connect(ws_url) as ws:
+        # Authenticate
+        msg = json.loads(await ws.recv())
+        await ws.send(json.dumps({"type": "auth", "access_token": token}))
+        msg = json.loads(await ws.recv())
+        if msg.get("type") != "auth_ok":
+            raise RuntimeError(f"Authentication failed: {msg}")
+
+        client = HAWebSocket(ws)
+
+        # Find the dashboard
+        dashboards = await client.list_dashboards()
+        existing = next((d for d in dashboards if d.get("url_path") == url_path), None)
+
+        if not existing:
+            print(f"Dashboard '{url_path}' not found")
+            sys.exit(1)
+
+        # Build update params
+        dashboard_id = existing.get("id")
+        update_params = {}
+        if icon:
+            update_params["icon"] = icon
+        if title:
+            update_params["title"] = title
+
+        if not update_params:
+            print("No updates specified. Use --icon or --title.")
+            sys.exit(1)
+
+        await client.update_dashboard(dashboard_id, **update_params)
+        print(f"Updated dashboard '{url_path}':")
+        for key, value in update_params.items():
+            print(f"  {key}: {value}")
+
+
 def upload_dashboard(file_path: str, url_path: str | None = None, title: str | None = None) -> None:
     """Sync wrapper for upload."""
     asyncio.run(upload_dashboard_async(file_path, url_path))
@@ -310,6 +361,11 @@ def list_all_dashboards() -> None:
 def delete_dashboard(url_path: str) -> None:
     """Sync wrapper for delete."""
     asyncio.run(delete_dashboard_async(url_path))
+
+
+def update_dashboard_metadata(url_path: str, icon: str | None = None, title: str | None = None) -> None:
+    """Sync wrapper for update."""
+    asyncio.run(update_dashboard_async(url_path, icon, title))
 
 
 def fetch_dashboard(url_path: str, output_file: str | None = None) -> None:
@@ -364,6 +420,12 @@ Examples:
     fetch_parser.add_argument("url_path", help="URL path of the dashboard to fetch")
     fetch_parser.add_argument("-o", "--output", help="Output file path (prints to stdout if not specified)")
 
+    # Update command
+    update_parser = subparsers.add_parser("update", help="Update dashboard metadata (icon, title)")
+    update_parser.add_argument("url_path", help="URL path of the dashboard to update")
+    update_parser.add_argument("--icon", help="New icon (e.g., mdi:lightbulb)")
+    update_parser.add_argument("--title", help="New title")
+
     args = parser.parse_args()
 
     if args.command == "upload":
@@ -374,6 +436,8 @@ Examples:
         delete_dashboard(args.url_path)
     elif args.command == "fetch":
         fetch_dashboard(args.url_path, args.output)
+    elif args.command == "update":
+        update_dashboard_metadata(args.url_path, args.icon, args.title)
 
 
 if __name__ == "__main__":

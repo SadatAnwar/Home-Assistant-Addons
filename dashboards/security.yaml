@@ -1,0 +1,211 @@
+title: Security
+icon: mdi:shield-home
+views:
+- title: Overview
+  type: panel
+  cards:
+  - type: custom:stack-in-card
+    mode: vertical
+    card_mod:
+      style: |
+        ha-card {
+          background: transparent !important;
+          box-shadow: none !important;
+        }
+    cards:
+    # Door Lock Section Header
+    - type: custom:bubble-card
+      card_type: separator
+      name: Door Lock
+      icon: mdi:shield-lock
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    # Lock Control + Status Row
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: lock.door_lock
+        name: Front Door Lock
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      - type: custom:mushroom-template-card
+        primary: Lock Status
+        secondary: >-
+          Battery: {{ states('sensor.door_lock_battery') }}% |
+          Door: {{ states('binary_sensor.door_lock') | replace('off', 'Closed') | replace('on', 'Open') }}
+        icon: mdi:door
+        icon_color: |-
+          {% set batt = states('sensor.door_lock_battery') | int %}
+          {% if batt > 50 %}green
+          {% elif batt > 20 %}orange
+          {% else %}red{% endif %}
+        layout: horizontal
+        tap_action:
+          action: more-info
+        entity: sensor.door_lock_battery
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+    # Lock Alerts Section Header
+    - type: custom:bubble-card
+      card_type: separator
+      name: Lock Alerts
+      icon: mdi:alert-circle
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    # Lock Alerts Row
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-template-card
+        primary: Unclosed Alert
+        secondary: >-
+          {{ 'Triggered' if is_state('binary_sensor.door_lock_unclosed_alarm', 'on') else 'Clear' }}
+        icon: mdi:door-open
+        icon_color: |-
+          {% if is_state('binary_sensor.door_lock_unclosed_alarm', 'on') %}red
+          {% else %}green{% endif %}
+        layout: horizontal
+        tap_action:
+          action: more-info
+        entity: binary_sensor.door_lock_unclosed_alarm
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      - type: custom:mushroom-template-card
+        primary: Unlocked Alert
+        secondary: >-
+          {{ 'Triggered' if is_state('binary_sensor.door_lock_unlocked_alarm', 'on') else 'Clear' }}
+        icon: mdi:lock-open-alert
+        icon_color: |-
+          {% if is_state('binary_sensor.door_lock_unlocked_alarm', 'on') %}red
+          {% else %}green{% endif %}
+        layout: horizontal
+        tap_action:
+          action: more-info
+        entity: binary_sensor.door_lock_unlocked_alarm
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+    # Smoke Alarms Section Header
+    - type: custom:bubble-card
+      card_type: separator
+      name: Smoke Alarms
+      icon: mdi:smoke-detector-variant
+      styles: |
+        .bubble-line {
+          background: rgba(255, 255, 255, 0.3) !important;
+        }
+
+    # Smoke Alarms Row
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-template-card
+        primary: Living Room
+        secondary: >-
+          {{ 'ALARM' if is_state('binary_sensor.living_room_smoke_alarm_alarm_status', 'on') else 'Clear' }} |
+          Battery: {{ states('sensor.living_room_smoke_alarm_battery') }}%
+        icon: mdi:smoke-detector-variant
+        icon_color: |-
+          {% if is_state('binary_sensor.living_room_smoke_alarm_alarm_status', 'on') %}red
+          {% else %}green{% endif %}
+        layout: horizontal
+        tap_action:
+          action: more-info
+        entity: binary_sensor.living_room_smoke_alarm_alarm_status
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      - type: custom:mushroom-template-card
+        primary: Top Floor
+        secondary: >-
+          {{ 'ALARM' if is_state('binary_sensor.smoke_alarm_alarm_status', 'on') else 'Clear' }} |
+          Battery: {{ states('sensor.smoke_alarm_battery') }}%
+        icon: mdi:smoke-detector-variant
+        icon_color: |-
+          {% if is_state('binary_sensor.smoke_alarm_alarm_status', 'on') %}red
+          {% else %}green{% endif %}
+        layout: horizontal
+        tap_action:
+          action: more-info
+        entity: binary_sensor.smoke_alarm_alarm_status
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+
+      - type: custom:mushroom-template-card
+        primary: Stairwell
+        secondary: >-
+          {{ 'ALARM' if is_state('binary_sensor.stairwell_alarm_smoke', 'on') else 'Clear' }} |
+          Battery: {{ states('sensor.stairwell_alarm_battery') }}%
+        icon: mdi:smoke-detector-variant
+        icon_color: |-
+          {% if is_state('binary_sensor.stairwell_alarm_smoke', 'on') %}red
+          {% else %}green{% endif %}
+        layout: horizontal
+        tap_action:
+          action: more-info
+        entity: binary_sensor.stairwell_alarm_smoke
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(255, 255, 255, 0.1) !important;
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 16px;
+              box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }

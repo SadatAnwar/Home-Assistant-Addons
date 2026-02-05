@@ -36,6 +36,18 @@ class DailyPrediction:
     expected_burner_hours: float
     expected_avg_modulation: float
     target_warm_time: str  # HH:MM - user's target warm time
+    timestamp: str = ""  # ISO format — when this prediction was made
+
+
+@dataclass
+class MidDayAdjustment:
+    """Record of a mid-day schedule recalculation."""
+
+    timestamp: str  # ISO format
+    switch_off_time: str  # HH:MM or "CONTINUOUS"
+    setpoint: float
+    actual_bedroom_temp: float
+    reasoning: list[str]
 
 
 @dataclass
@@ -73,8 +85,10 @@ class DailyRecord:
 
     date: str
     prediction: DailyPrediction
+    adjustments: list[MidDayAdjustment] | None = None
     actuals: DailyActuals | None = None
     errors: PredictionErrors | None = None
+    coefficients_adjusted: bool = False
 
 
 class PredictionTracker:
@@ -118,6 +132,7 @@ class PredictionTracker:
             expected_burner_hours=getattr(schedule, "expected_burner_hours", 0.0),
             expected_avg_modulation=getattr(schedule, "expected_avg_modulation", 0.0),
             target_warm_time=target_warm_time,
+            timestamp=datetime.now().isoformat(),
         )
 
         # Load existing record for today or create new one
@@ -130,6 +145,48 @@ class PredictionTracker:
         self._save_record(record)
         logger.info(f"Saved prediction for {date_str}")
         return prediction
+
+    def save_adjustment(
+        self,
+        date_str: str,
+        switch_off_time: str,
+        setpoint: float,
+        actual_bedroom_temp: float,
+        reasoning: list[str],
+    ) -> MidDayAdjustment:
+        """Save a mid-day schedule adjustment for an existing prediction.
+
+        Args:
+            date_str: Date in YYYY-MM-DD format
+            switch_off_time: New switch-off time (HH:MM or "CONTINUOUS")
+            setpoint: Adjusted setpoint
+            actual_bedroom_temp: Current measured bedroom temperature
+            reasoning: List of reasoning strings
+
+        Returns:
+            The saved MidDayAdjustment
+        """
+        record = self._load_record(date_str)
+        if not record:
+            raise ValueError(f"No primary prediction exists for {date_str}")
+
+        adjustment = MidDayAdjustment(
+            timestamp=datetime.now().isoformat(),
+            switch_off_time=switch_off_time,
+            setpoint=setpoint,
+            actual_bedroom_temp=actual_bedroom_temp,
+            reasoning=reasoning,
+        )
+
+        if record.adjustments is None:
+            record.adjustments = []
+        record.adjustments.append(adjustment)
+
+        self._save_record(record)
+        logger.info(
+            f"Saved adjustment for {date_str}: off={switch_off_time}, sp={setpoint}"
+        )
+        return adjustment
 
     def collect_actuals(self, date_str: str) -> DailyActuals | None:
         """Collect actual values from HA history for a specific date.
@@ -590,22 +647,37 @@ class PredictionTracker:
             "date": record.date,
             "prediction": asdict(record.prediction),
         }
+        if record.adjustments:
+            data["adjustments"] = [asdict(a) for a in record.adjustments]
         if record.actuals:
             data["actuals"] = asdict(record.actuals)
         if record.errors:
             data["errors"] = asdict(record.errors)
+        if record.coefficients_adjusted:
+            data["coefficients_adjusted"] = True
         return data
 
     def _dict_to_record(self, data: dict) -> DailyRecord:
         """Convert a dictionary back to a DailyRecord."""
-        prediction = DailyPrediction(**data["prediction"])
+        prediction_data = data["prediction"]
+        # Handle old records missing timestamp field
+        if "timestamp" not in prediction_data:
+            prediction_data["timestamp"] = ""
+        prediction = DailyPrediction(**prediction_data)
+
+        adjustments = None
+        if data.get("adjustments"):
+            adjustments = [MidDayAdjustment(**a) for a in data["adjustments"]]
+
         actuals = DailyActuals(**data["actuals"]) if data.get("actuals") else None
         errors = PredictionErrors(**data["errors"]) if data.get("errors") else None
         return DailyRecord(
             date=data["date"],
             prediction=prediction,
+            adjustments=adjustments,
             actuals=actuals,
             errors=errors,
+            coefficients_adjusted=data.get("coefficients_adjusted", False),
         )
 
 
@@ -661,6 +733,23 @@ def format_review_report(record: DailyRecord) -> str:
                 f"Actual: {a.actual_switch_off_temp:.1f}°C  "
                 f"Error: {error_str}"
             )
+
+    # Mid-day adjustments
+    if record.adjustments:
+        lines.append("")
+        lines.append(f"Mid-day Adjustments ({len(record.adjustments)}):")
+        for adj in record.adjustments:
+            ts = (
+                adj.timestamp.split("T")[1][:5]
+                if "T" in adj.timestamp
+                else adj.timestamp
+            )
+            lines.append(
+                f"  [{ts}] Off: {adj.switch_off_time}, Setpoint: {adj.setpoint}°C, "
+                f"Bedroom: {adj.actual_bedroom_temp:.1f}°C"
+            )
+            for reason in adj.reasoning:
+                lines.append(f"    - {reason}")
 
     lines.append("")
     lines.append("Energy:")

@@ -1,5 +1,5 @@
 # Lights Dashboard
-# Lovelace dashboard for controlling all lights
+# Lovelace dashboard using mushroom cards
 
 title: Lights
 views:
@@ -11,62 +11,152 @@ views:
       - type: vertical-stack
         title: Living Room
         cards:
-          - type: tile
+          - type: custom:mushroom-template-card
             entity: switch.relay_switch_2pm_ce2a_channel_1
-            name: Dining Table Light
+            primary: Dining Table
+            secondary: "{{ states('sensor.relay_switch_2pm_ce2a_channel_1_power') }} W"
             icon: mdi:ceiling-light
-          - type: tile
+            icon_color: "{{ 'amber' if is_state('switch.relay_switch_2pm_ce2a_channel_1', 'on') else 'disabled' }}"
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
+          - type: custom:mushroom-template-card
             entity: switch.relay_switch_2pm_ce2a_channel_2
-            name: Drawing Room Light
+            primary: Drawing Room
+            secondary: "{{ states('sensor.relay_switch_2pm_ce2a_channel_2_power') }} W"
             icon: mdi:floor-lamp
-          - type: tile
+            icon_color: "{{ 'amber' if is_state('switch.relay_switch_2pm_ce2a_channel_2', 'on') else 'disabled' }}"
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
+          - type: custom:mushroom-light-card
             entity: light.govee_lamps
             name: Govee Lamps
+            icon: mdi:lamps
+            use_light_color: true
+            show_brightness_control: true
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
 
       # Kitchen
       - type: vertical-stack
         title: Kitchen
         cards:
-          - type: tile
+          - type: custom:mushroom-light-card
             entity: light.kitchen_lights
             name: Kitchen Lights
-          - type: tile
+            icon: mdi:ceiling-light
+            use_light_color: true
+            show_brightness_control: true
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
+          - type: custom:mushroom-light-card
             entity: light.kitchencounter
             name: Kitchen Counter
-          - type: tile
+            icon: mdi:countertop
+            use_light_color: true
+            show_brightness_control: true
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
+          - type: custom:mushroom-light-card
             entity: light.kitchenspot
             name: Kitchen Spot
+            icon: mdi:spotlight
+            use_light_color: true
+            show_brightness_control: true
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
 
       # Bedroom
       - type: vertical-stack
         title: Bedroom
         cards:
-          - type: tile
+          - type: custom:mushroom-template-card
             entity: switch.bedroom_lamp
-            name: Bedroom Lamp
+            primary: Bedroom Lamp
+            secondary: "{{ states('sensor.bedroom_lamp_power') }} W"
             icon: mdi:lamp
+            icon_color: "{{ 'amber' if is_state('switch.bedroom_lamp', 'on') else 'disabled' }}"
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
 
       # Outdoor
       - type: vertical-stack
         title: Outdoor
         cards:
-          - type: tile
+          - type: custom:mushroom-entity-card
             entity: switch.front_light
             name: Front Light
             icon: mdi:outdoor-lamp
-          - type: tile
+            icon_color: amber
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
+          - type: custom:mushroom-entity-card
             entity: switch.backyard_light
             name: Backyard Light
             icon: mdi:outdoor-lamp
-          - type: tile
+            icon_color: amber
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
+          - type: custom:mushroom-entity-card
             entity: switch.front_door_light
             name: Front Door Light
             icon: mdi:coach-lamp
+            icon_color: amber
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
 
       # Bathroom
       - type: vertical-stack
         title: Bathroom
         cards:
-          - type: tile
+          - type: custom:mushroom-light-card
             entity: light.bathroomlight
             name: Bathroom Light
+            icon: mdi:vanity-light
+            use_light_color: true
+            show_brightness_control: true
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: toggle
+            icon_tap_action:
+              action: more-info
