@@ -113,6 +113,25 @@ Kippen ventilation costs ~20-30% more in heating but prevents:
 
 ## Heating System Insights
 
+### Boiler Heating Curve (Viessmann Vitodens 100-W)
+
+The heating curve maps outside temperature to flow (supply) temperature. Current settings: **Slope 1.3, Level 0.0**.
+
+| Outside Temp | Flow Temp |
+|-------------|-----------|
+| +20°C | 20°C |
+| +10°C | 36°C |
+| 0°C | 49°C |
+| -10°C | 60°C |
+| -20°C | 72°C |
+| -30°C | 75°C |
+
+**How it works**: The boiler adjusts its output water temperature based on how cold it is outside. Colder outside = hotter flow water = more energy needed = higher gas consumption. The slope (1.3) determines how aggressively flow temp rises as outside temp drops.
+
+**Gas usage implications**: Higher flow temperatures require more burner modulation and gas. At 0°C outside (49°C flow), the boiler operates at moderate modulation. At -10°C (60°C flow), it runs significantly harder.
+
+**Note on gas metering**: The SmartNetz gas meter reads total household gas. This home has no DHW (domestic hot water) from gas -- gas is used only for central heating and cooking. Cooking usage is marginal, typically <0.5 m³/day.
+
 ### Weather Forecast Availability
 
 The weather forecast entity `weather.forecast_home` provides **48 hours of hourly forecasts** via the `weather.get_forecasts` service. This should be used for heating schedule optimization:

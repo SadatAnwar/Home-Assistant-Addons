@@ -423,6 +423,7 @@ class PredictionTracker:
         error_summary: dict[str, Any],
         current_k: float,
         current_heating_rate: float,
+        current_gas_base_rate: float | None = None,
     ) -> dict[str, float]:
         """Suggest model coefficient adjustments based on error patterns.
 
@@ -430,6 +431,7 @@ class PredictionTracker:
             error_summary: From get_error_summary()
             current_k: Current cooling rate constant
             current_heating_rate: Current mean heating rate
+            current_gas_base_rate: Current gas base rate (kWh/h at 50% modulation)
 
         Returns:
             Dictionary of suggested new coefficient values (empty if no change needed)
@@ -483,6 +485,32 @@ class PredictionTracker:
                 logger.info(
                     f"Suggesting heating rate adjustment: {current_heating_rate:.3f} -> "
                     f"{new_rate:.3f} (target time temp error: {target_error:+.2f}°C)"
+                )
+
+        # Gas base rate adjustment based on gas % error
+        avg_gas_pct_error = error_summary.get("avg_gas_pct_error")
+        if (
+            current_gas_base_rate is not None
+            and avg_gas_pct_error is not None
+            and abs(avg_gas_pct_error) > PREDICTION_CONFIG.gas_error_threshold * 100
+        ):
+            # avg_gas_pct_error is (predicted - actual) / actual * 100
+            # Negative = underestimating -> increase rate
+            # Positive = overestimating -> decrease rate
+            error_ratio = avg_gas_pct_error / 100  # Convert back to fraction
+            new_rate = current_gas_base_rate * (
+                1 - error_ratio * PREDICTION_CONFIG.gas_adjustment_factor
+            )
+            new_rate = max(
+                PREDICTION_CONFIG.gas_base_rate_min,
+                min(PREDICTION_CONFIG.gas_base_rate_max, new_rate),
+            )
+
+            if abs(new_rate - current_gas_base_rate) > 0.1:
+                adjustments["gas_base_rate_kwh"] = round(new_rate, 1)
+                logger.info(
+                    f"Suggesting gas base rate adjustment: {current_gas_base_rate:.1f} -> "
+                    f"{new_rate:.1f} kWh/h (gas error: {avg_gas_pct_error:+.0f}%)"
                 )
 
         return adjustments

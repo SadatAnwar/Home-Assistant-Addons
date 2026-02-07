@@ -838,14 +838,15 @@ class HeatingOptimizer:
         hours: list[HourlyHeatingPlan],
     ) -> float:
         """Estimate gas usage based on modulation and hours."""
-        # Rough estimate: modulation % correlates with gas usage
-        # Base consumption ~1.5 kWh at 50% modulation
+        # Gas base rate is learned/calibrated (kWh/hour at 50% modulation)
+        # Vitodens 100-W: ~10 kWh/h at 50% modulation (~19 kW nominal input)
+        base_rate = self.thermal_model.gas_base_rate_kwh
 
         total_kwh = 0
         for h in hours:
             if h.system_state == "on":
                 # Scale by modulation (higher modulation = more gas)
-                hourly_kwh = 1.5 * (h.expected_modulation / 50)
+                hourly_kwh = base_rate * (h.expected_modulation / 50)
                 total_kwh += hourly_kwh
 
         return round(total_kwh, 1)

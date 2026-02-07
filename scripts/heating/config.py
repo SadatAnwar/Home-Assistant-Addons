@@ -172,5 +172,12 @@ class PredictionConfig:
     k_adjustment_factor: float = 0.0005  # Adjustment per degree error
     heating_rate_adjustment_factor: float = 0.05  # 5% per degree error
 
+    # Gas estimation
+    gas_base_rate_kwh: float = 10.0  # kWh/hour at 50% modulation (Vitodens 100-W)
+    gas_base_rate_min: float = 5.0  # Lower bound for auto-adjustment
+    gas_base_rate_max: float = 15.0  # Upper bound for auto-adjustment
+    gas_adjustment_factor: float = 0.05  # 5% adjustment per unit ratio error
+    gas_error_threshold: float = 0.15  # Only adjust if avg % error > 15%
+
 
 PREDICTION_CONFIG = PredictionConfig()

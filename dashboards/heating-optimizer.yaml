@@ -376,11 +376,11 @@ views:
       cards:
       - type: custom:mushroom-template-card
         primary: Gas Today
-        secondary: "{{ states('sensor.today_s_gas_usage_energy') }} kWh"
+        secondary: "{{ states('sensor.today_s_gas_usage_volume') }} m³"
         icon: mdi:meter-gas
         icon_color: amber
         layout: horizontal
-        entity: sensor.today_s_gas_usage_energy
+        entity: sensor.today_s_gas_usage_volume
         card_mod:
           style: |
             ha-card {
@@ -394,11 +394,11 @@ views:
 
       - type: custom:mushroom-template-card
         primary: Yesterday
-        secondary: "{{ states('sensor.yesterday_s_gas_usage_energy') }} kWh"
+        secondary: "{{ states('sensor.yesterday_s_gas_usage_volume') }} m³"
         icon: mdi:history
         icon_color: grey
         layout: horizontal
-        entity: sensor.yesterday_s_gas_usage_energy
+        entity: sensor.yesterday_s_gas_usage_volume
         card_mod:
           style: |
             ha-card {

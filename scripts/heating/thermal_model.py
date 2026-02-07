@@ -19,7 +19,7 @@ import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import train_test_split
 
-from .config import MODEL_CONFIG
+from .config import MODEL_CONFIG, PREDICTION_CONFIG
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +66,9 @@ class ThermalModel:
         # Cooling rate constant k (1/τ where τ is time constant in hours)
         # Based on measured τ = 156 hours (KfW Effizienzhaus 40 level)
         self.k: float = 0.0064  # Default: 1/156
+
+        # Gas estimation (kWh/hour at 50% modulation, Vitodens 100-W)
+        self.gas_base_rate_kwh: float = PREDICTION_CONFIG.gas_base_rate_kwh
 
         # Training metadata
         self.last_trained: datetime | None = None
@@ -589,6 +592,7 @@ class ThermalModel:
             "mean_heating_rate": self.mean_heating_rate,
             "solar_gain_coefficient": self.solar_gain_coefficient,
             "k": self.k,
+            "gas_base_rate_kwh": self.gas_base_rate_kwh,
             "last_trained": self.last_trained,
             "training_samples": self.training_samples,
         }
@@ -613,6 +617,9 @@ class ThermalModel:
             self.mean_heating_rate = model_data.get("mean_heating_rate", 1.0)
             self.solar_gain_coefficient = model_data.get("solar_gain_coefficient", 0.05)
             self.k = model_data.get("k", 0.0064)
+            self.gas_base_rate_kwh = model_data.get(
+                "gas_base_rate_kwh", PREDICTION_CONFIG.gas_base_rate_kwh
+            )
             self.last_trained = model_data.get("last_trained")
             self.training_samples = model_data.get("training_samples", 0)
             return True
@@ -631,6 +638,7 @@ class ThermalModel:
             "mean_heating_rate": self.mean_heating_rate,
             "solar_gain_coefficient": self.solar_gain_coefficient,
             "k": self.k,
+            "gas_base_rate_kwh": self.gas_base_rate_kwh,
             "time_constant_hours": round(1 / self.k, 1) if self.k > 0 else None,
             "has_heating_model": self.heating_rate_model is not None,
             "has_cooling_model": self.cooling_rate_model is not None,
@@ -661,6 +669,13 @@ class ThermalModel:
             self.mean_heating_rate = adjustments["mean_heating_rate"]
             applied.append(
                 f"Heating rate: {old_rate:.3f} -> {self.mean_heating_rate:.3f} °C/hour"
+            )
+
+        if "gas_base_rate_kwh" in adjustments:
+            old_rate = self.gas_base_rate_kwh
+            self.gas_base_rate_kwh = adjustments["gas_base_rate_kwh"]
+            applied.append(
+                f"Gas base rate: {old_rate:.1f} -> {self.gas_base_rate_kwh:.1f} kWh/h @50%"
             )
 
         return applied

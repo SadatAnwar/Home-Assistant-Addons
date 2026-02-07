@@ -169,6 +169,7 @@ class HeatingScheduler:
                             error_summary,
                             self.model.k,
                             self.model.mean_heating_rate,
+                            self.model.gas_base_rate_kwh,
                         )
                         if adjustments:
                             applied = self.model.apply_adjustments(adjustments)
@@ -244,6 +245,7 @@ class HeatingScheduler:
                 f"OFF at {off_time_str}, setpoint {schedule.optimal_setpoint}°C"
             )
             logger.info(f"Expected room temp at switch-on: {switch_on_temp_str}")
+            logger.info(f"Expected gas usage: ~{schedule.expected_gas_usage:.1f} kWh")
 
             if overrides:
                 for override in overrides:
@@ -652,6 +654,7 @@ class HeatingScheduler:
         print(
             f"  Cooling rate k: {info['k']:.6f} (τ = {info['time_constant_hours']} hours)"
         )
+        print(f"  Gas base rate: {info['gas_base_rate_kwh']:.1f} kWh/h @50% modulation")
         print("\nModels available:")
         print(f"  Heating rate model: {info['has_heating_model']}")
         print(f"  Cooling rate model: {info['has_cooling_model']}")
