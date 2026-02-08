@@ -57,6 +57,7 @@ home_assistant/
 - **HA_URL**: `http://homeassistant.local:8123` (configure in .env)
 - **HA_TOKEN**: Long-lived access token (configure in .env)
 - Interface via REST API for commands, WebSocket API for subscriptions
+- **Long-Term Statistics**: For historical data older than ~10 days, use the WebSocket `recorder/statistics_during_period` command (see LEARNINGS.md for details). The REST `/api/history/period/` endpoint only returns short-term recorder data.
 
 ## Home Assistant Configuration Reference
 

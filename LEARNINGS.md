@@ -10,6 +10,8 @@ Perpetual knowledge gained from analysis, experiments, and observations. This fi
 
 The time constant τ represents how many hours it takes for the home to lose 63% of its heat advantage over outside temperature.
 
+**Bedroom (parents room) -- original analysis using short-term recorder data:**
+
 | Measurement Period | Conditions | Calculated τ | Notes |
 |-------------------|------------|--------------|-------|
 | Overnight (Feb 1-2, 2026) | Normal living, bathroom kippen | 156 hours | Includes ventilation losses |
@@ -17,6 +19,43 @@ The time constant τ represents how many hours it takes for the home to lose 63%
 | January vacation (Jan 7-23, 2026) | All windows sealed, heating off | 450-600 hours | Extended measurement |
 
 **Conclusion**: True building envelope τ ≈ 400+ hours. Daily living (kippen ventilation) effectively halves this to ~156 hours.
+
+### Room Comparison: Kids Room vs Bedroom (February 2026)
+
+Analysis repeated using kids room sensor (`sensor.aayat_room_temp_temperature`) and compared side-by-side with bedroom (`sensor.bedroom_thermo_temperature`). Vacation periods used **Long-Term Statistics** (hourly mean values) since short-term recorder data only retains ~10 days.
+
+**Sealed house (vacation, no ventilation):**
+
+| Period | Kids Room τ | Bedroom τ | Kids faster by |
+|--------|------------|-----------|----------------|
+| Christmas (Dec 23-28, 5 days) | 504 hours | 620 hours | 19% |
+| January week 1 (Jan 7-14) | 860 hours | 903 hours | 5% |
+| January full (Jan 7-21, 14 days) | 906 hours | 1060 hours | 15% |
+
+**With daily kippen ventilation (Feb 2026 overnights):**
+
+| Period | Kids Room τ | Bedroom τ | Kids faster by |
+|--------|------------|-----------|----------------|
+| Night Feb 5-6 (13.5h, avg -0.7°C) | 135 hours | 131 hours | kids 3% slower |
+| Night Feb 6-7 (12.0h, avg 1.7°C) | 124 hours | 115 hours | kids 8% slower |
+| **Overnight average** | **130 hours** | **123 hours** | kids 6% slower |
+
+**Key findings:**
+- **Sealed house**: Kids room cools 5-19% faster than bedroom, likely due to more exterior wall exposure or window orientation
+- **With ventilation**: Kids room actually retains heat slightly *better* (6%) than bedroom -- the bathroom kippen is physically closer to the bedroom, explaining why ventilation affects it more
+- **Ventilation impact**: τ drops from 500-900h (sealed) to ~130h (with kippen) -- a 4-7x reduction
+- **LTS vs recorder**: τ values from Long-Term Statistics (hourly means) are higher than from short-term recorder (point samples) because averaging smooths fluctuations. The LTS-based bedroom τ of 620h (Christmas) is higher than the original 333h from point samples for the same period
+- **Equilibrium**: Both rooms approached ~13°C after 14 days with heating off and outside averaging -1°C, consistent with internal gains of ~300-500W
+
+**Temperature progression during January vacation (daily snapshots):**
+
+| Date | Kids Room | Bedroom | Outside |
+|------|-----------|---------|---------|
+| Jan 7 | 18.9°C | 19.0°C | -4.2°C |
+| Jan 10 | 16.3°C | 16.4°C | -4.6°C |
+| Jan 14 | 14.9°C | 15.2°C | 3.0°C |
+| Jan 18 | 13.1°C | 13.7°C | 3.0°C |
+| Jan 21 | 12.7°C | 13.6°C | -4.6°C |
 
 ### Comparison to German Building Standards
 
@@ -205,6 +244,50 @@ Heat_Loss_Coefficient (W/K) = Thermal_Mass (J/K) / τ (seconds)
 ```
 T_eq = T_outside + (Internal_Gains_W / Heat_Loss_Coefficient_W_per_K)
 ```
+
+### Retrieving Long-Term Statistics from Home Assistant
+
+The standard `/api/history/period/` REST endpoint only returns short-term recorder data (typically last ~10 days). For older data, use the **Long-Term Statistics** (LTS) via the WebSocket API. LTS stores hourly aggregated values (mean, min, max) indefinitely.
+
+**WebSocket command to fetch LTS data:**
+```python
+{
+    "id": 1,
+    "type": "recorder/statistics_during_period",
+    "start_time": "2025-12-23T00:00:00",  # ISO format
+    "end_time": "2025-12-28T00:00:00",
+    "statistic_ids": [
+        "sensor.aayat_room_temp_temperature",
+        "sensor.bedroom_thermo_temperature",
+        "sensor.e3_vitodens_100_0421_1_outside_temperature"
+    ],
+    "period": "hour",  # Options: "5minute", "hour", "day", "week", "month"
+    "types": ["mean", "min", "max", "state"]
+}
+```
+
+**Response format:** Result is a dict keyed by `statistic_id`, each containing a list of entries:
+```python
+{
+    "start": 1735002000000,  # Epoch milliseconds (divide by 1000 for datetime.fromtimestamp)
+    "end": 1735005600000,
+    "mean": 19.4,
+    "min": 19.2,
+    "max": 19.6,
+    "state": 19.4
+}
+```
+
+**To list available statistics:**
+```python
+{"id": 1, "type": "recorder/list_statistic_ids", "statistic_type": "mean"}
+```
+
+**Important notes:**
+- Timestamps in results are **epoch milliseconds** (not seconds) -- divide by 1000 for Python's `datetime.fromtimestamp()`
+- LTS values are hourly **means**, not point samples -- this produces smoother curves and higher τ estimates compared to raw recorder data
+- Requires WebSocket connection with authentication (same as helper creation)
+- The `period` parameter controls granularity: use `"hour"` for multi-day analysis, `"5minute"` for detailed short periods
 
 ---
 
