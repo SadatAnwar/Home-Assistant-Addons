@@ -225,6 +225,22 @@ def _delete_automation(ha_url: str, token: str, automation_id: str) -> bool:
     return response.status_code == 200
 
 
+def delete_automation_by_alias(alias: str) -> None:
+    """Delete all automations matching an alias."""
+    ha_url, token = load_config()
+    matches = _find_automations_by_alias(ha_url, token, alias)
+    if not matches:
+        print(f"No automation found with alias: {alias}")
+        sys.exit(1)
+    for auto in matches:
+        auto_id = auto.get("id")
+        if auto_id and _delete_automation(ha_url, token, auto_id):
+            print(f"  Deleted: {auto['entity_id']} (id={auto_id})")
+        else:
+            print(f"  Failed to delete: {auto['entity_id']}")
+    print("Done!")
+
+
 def upload_automation_file(file_path: str) -> None:
     """Upload an automation from a YAML file via REST API.
 
@@ -304,6 +320,9 @@ Examples:
 
   Upload automation from YAML file:
     python ha_automation.py upload automations/my_automation.yaml
+
+  Delete automation by alias:
+    python ha_automation.py delete "Sunset night light"
         """,
     )
 
@@ -316,6 +335,9 @@ Examples:
     upload_parser = subparsers.add_parser("upload", help="Upload an automation from YAML file")
     upload_parser.add_argument("file", help="Path to the automation YAML file")
 
+    delete_parser = subparsers.add_parser("delete", help="Delete an automation by alias")
+    delete_parser.add_argument("alias", help="Friendly name (alias) of the automation to delete")
+
     args = parser.parse_args()
 
     if args.command == "create-helpers":
@@ -327,6 +349,8 @@ Examples:
         create_delayed_stop_automation()
     elif args.command == "upload":
         upload_automation_file(args.file)
+    elif args.command == "delete":
+        delete_automation_by_alias(args.alias)
 
 
 if __name__ == "__main__":

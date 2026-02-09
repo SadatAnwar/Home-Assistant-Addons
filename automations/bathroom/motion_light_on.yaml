@@ -1,0 +1,30 @@
+alias: "Bathroom: Motion Light ON"
+description: "Turns on bathroom light when motion detected and it's dark"
+triggers:
+  - trigger: state
+    entity_id: binary_sensor.motion_sensor_1_occupancy
+    to: "on"
+  - type: occupied
+    device_id: 15de72308da2ad7257426085ad357b19
+    entity_id: 0ff54cfac1a5e583024512c0b3d36845
+    domain: binary_sensor
+    trigger: device
+conditions:
+  - condition: or
+    conditions:
+      # Primary: sun is below the horizon (adapts to season)
+      - condition: state
+        entity_id: sun.sun
+        state: "below_horizon"
+      # Safety net: always active 22:00-07:00 even if sun entity has issues
+      - condition: time
+        after: "22:00:00"
+        before: "07:00:00"
+  - condition: state
+    entity_id: light.bathroomlight
+    state: "off"
+actions:
+  - action: light.turn_on
+    target:
+      entity_id: light.bathroomlight
+mode: single

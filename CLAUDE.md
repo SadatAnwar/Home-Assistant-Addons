@@ -14,6 +14,9 @@ home_assistant/
 │   └── security.yaml          # Lock controls & smoke alarm status (glass style)
 ├── automations/          # HA automation YAML files
 │   ├── central_heating_delayed_stop.yaml  # Manual delayed stop automation
+│   ├── bathroom/         # Bathroom motion-activated light automations
+│   │   ├── motion_light_on.yaml   # Light ON when motion + dark (sun below horizon)
+│   │   └── motion_light_off.yaml  # Light OFF after 2 min no motion
 │   └── heating/          # ML-driven heating automations
 │       ├── morning_switch_on.yaml    # Auto switch-on at ML time
 │       ├── night_switch_off.yaml     # Auto switch-off at ML time
@@ -109,6 +112,10 @@ The target HA instance uses these key configurations in `configuration.yaml`:
 **Locks:**
 - `lock.door_lock` - Main door lock
 - `lock.lock_ultra_4c` - Lock Ultra 4C
+
+**Motion Sensors:**
+- `binary_sensor.motion_sensor_1_occupancy` - Bathroom outdoor/gate motion sensor
+- `binary_sensor.motion_sensor_small_1_occupancy` - Bathroom indoor motion sensor
 
 **Power Monitoring:**
 - `sensor.shelly_power_monitor_phase_*` - 3-phase power monitor
