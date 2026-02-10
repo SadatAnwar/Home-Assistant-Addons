@@ -245,7 +245,35 @@ class HeatingScheduler:
                 f"OFF at {off_time_str}, setpoint {schedule.optimal_setpoint}°C"
             )
             logger.info(f"Expected room temp at switch-on: {switch_on_temp_str}")
+            if schedule.expected_target_time_temp is not None:
+                logger.info(
+                    f"Expected temp at target warm time "
+                    f"({settings['target_warm_time']}): "
+                    f"{schedule.expected_target_time_temp:.1f}°C"
+                )
+            if schedule.expected_switch_off_temp is not None:
+                logger.info(
+                    f"Expected temp at switch-off: "
+                    f"{schedule.expected_switch_off_temp:.1f}°C"
+                )
+            if (
+                schedule.expected_min_temp is not None
+                and schedule.expected_max_temp is not None
+            ):
+                logger.info(
+                    f"Expected temp range: "
+                    f"{schedule.expected_min_temp:.1f} - {schedule.expected_max_temp:.1f}°C"
+                )
+            if schedule.solar_contribution > 0.5:
+                logger.info(f"Solar gain: +{schedule.solar_contribution:.1f}°C")
             logger.info(f"Expected gas usage: ~{schedule.expected_gas_usage:.1f} kWh")
+
+            # Log hourly forecast split by heating ON/OFF periods
+            self._log_forecast_segments(
+                forecast=current_state.get("forecast", []),
+                switch_on_time=schedule.switch_on_time,
+                switch_off_time=schedule.switch_off_time,
+            )
 
             if overrides:
                 for override in overrides:
@@ -637,6 +665,65 @@ class HeatingScheduler:
         """Parse time string (HH:MM or HH:MM:SS) to time object."""
         parts = time_str.split(":")
         return time(int(parts[0]), int(parts[1]))
+
+    def _log_forecast_segments(
+        self,
+        forecast: list[dict],
+        switch_on_time: time,
+        switch_off_time: time | None,
+    ) -> None:
+        """Log hourly forecast split by heating ON and OFF periods."""
+        if not forecast:
+            return
+
+        on_entries: list[str] = []
+        off_entries: list[str] = []
+
+        on_minutes = switch_on_time.hour * 60 + switch_on_time.minute
+        # If no switch-off, treat entire day as ON
+        off_minutes = (
+            (switch_off_time.hour * 60 + switch_off_time.minute)
+            if switch_off_time
+            else 24 * 60
+        )
+
+        for entry in forecast[:24]:  # Next 24 hours only
+            dt_str = entry.get("datetime", "")
+            temp = entry.get("temperature")
+            if not dt_str or temp is None:
+                continue
+
+            try:
+                dt = datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
+                hour = dt.hour
+                hour_minutes = hour * 60
+                label = f"{hour:02d}:00={temp:.0f}°C"
+
+                if on_minutes <= off_minutes:
+                    is_on = on_minutes <= hour_minutes < off_minutes
+                else:
+                    is_on = hour_minutes >= on_minutes or hour_minutes < off_minutes
+
+                if is_on:
+                    on_entries.append(label)
+                else:
+                    off_entries.append(label)
+            except ValueError:
+                continue
+
+        on_time_str = switch_on_time.strftime("%H:%M")
+        off_time_str = switch_off_time.strftime("%H:%M") if switch_off_time else "N/A"
+
+        if on_entries:
+            logger.info(
+                f"Forecast (heating ON {on_time_str}-{off_time_str}): "
+                f"{' '.join(on_entries)}"
+            )
+        if off_entries:
+            logger.info(
+                f"Forecast (heating OFF {off_time_str}-{on_time_str}): "
+                f"{' '.join(off_entries)}"
+            )
 
     def show_model_info(self) -> None:
         """Display information about the current thermal model."""
