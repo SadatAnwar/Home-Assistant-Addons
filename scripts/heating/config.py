@@ -107,6 +107,9 @@ class DefaultSettings:
     safety_buffer_minutes: int = 15
     min_off_duration_hours: float = 2.0  # Don't turn off if off period < 2 hours
 
+    # Forecast bias correction (sensor reads warmer than forecast)
+    forecast_temp_bias: float = 0.75  # °C added to forecast temps
+
 
 DEFAULTS = DefaultSettings()
 

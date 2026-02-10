@@ -130,6 +130,10 @@ class HeatingOptimizer:
         reasoning.append(
             f"Forecast daytime: min={min_daytime_outside:.1f}°C, avg={avg_daytime_temp:.1f}°C"
         )
+        if DEFAULTS.forecast_temp_bias != 0:
+            reasoning.append(
+                f"Forecast bias correction: +{DEFAULTS.forecast_temp_bias}°C applied"
+            )
 
         # 1. Predict overnight cooling curve (system OFF)
         hours_until_morning = self._hours_until(current_time.time(), target_warm_time)
@@ -490,12 +494,12 @@ class HeatingOptimizer:
         return (target_mins - current_mins) / 60
 
     def _calculate_setpoint(self, outside_temp: float) -> float:
-        """Calculate setpoint based on outside temperature.
+        """Calculate base setpoint temperature.
 
-        Matches user's manual approach:
-        - Normal days: 20°C setpoint
-        - Cold days (0 to -5°C): Scale up to 22°C
-        - Extreme cold (<-5°C): Use max setpoint (22°C)
+        Returns the base setpoint (20°C). The boiler's weather-compensated
+        heating curve (Slope 1.3, Level 0.0) automatically adjusts supply
+        water temperature based on outside conditions. Caller applies solar
+        gain adjustment separately.
         """
         base_setpoint = DEFAULTS.default_setpoint  # 20°C
         logger.debug(f"Mild ({outside_temp}°C): using base setpoint {base_setpoint}°C")
@@ -522,6 +526,8 @@ class HeatingOptimizer:
             logger.debug(f"No temps in forecast, using default: {default}°C")
             return [default] * 8
 
+        if DEFAULTS.forecast_temp_bias != 0:
+            temps = [t + DEFAULTS.forecast_temp_bias for t in temps]
         logger.debug(f"Extracted overnight temps from forecast: {temps}")
         return temps
 
@@ -562,6 +568,7 @@ class HeatingOptimizer:
                 if forecast_hour == target_hour:
                     temp = entry.get("temperature")
                     if temp is not None:
+                        temp += DEFAULTS.forecast_temp_bias
                         logger.debug(
                             f"Forecast at {target_time}: {temp}°C (from {dt_str})"
                         )
@@ -605,6 +612,8 @@ class HeatingOptimizer:
                 continue
 
         if temps:
+            if DEFAULTS.forecast_temp_bias != 0:
+                temps = [t + DEFAULTS.forecast_temp_bias for t in temps]
             logger.debug(
                 f"Daytime forecast temps ({morning_time}-{evening_time}): min={min(temps)}, max={max(temps)}, avg={sum(temps) / len(temps):.1f}"
             )
@@ -682,20 +691,18 @@ class HeatingOptimizer:
             f"outside={outside_temp}°C, switch_on={switch_on_time}"
         )
 
-        # Build list of candidate hours from target_warm_time to preferred_off_time
-        start_hour = target_warm_time.hour
-        end_hour = preferred_off_time.hour
-
-        if start_hour <= end_hour:
-            candidate_hours = list(range(start_hour, end_hour + 1))
-        else:
-            # Wrap around midnight (e.g., warm at 22:00, preferred off at 02:00)
-            candidate_hours = list(range(start_hour, 24)) + list(range(0, end_hour + 1))
+        # Build candidate times at 30-minute intervals from target_warm_time to preferred_off_time
+        candidates = []
+        cursor = datetime.combine(datetime.today(), target_warm_time)
+        end_dt = datetime.combine(datetime.today(), preferred_off_time)
+        if end_dt <= cursor:
+            end_dt += timedelta(days=1)
+        while cursor <= end_dt:
+            candidates.append(cursor.time())
+            cursor += timedelta(minutes=30)
 
         # Search for earliest safe switch-off time
-        for candidate_hour in candidate_hours:
-            candidate_time = time(candidate_hour, 0)
-
+        for candidate_time in candidates:
             # Hours from candidate off time until heating restarts
             hours_off = self._hours_until(candidate_time, switch_on_time)
 
@@ -714,7 +721,7 @@ class HeatingOptimizer:
             # Check if temp stays above the time-aware threshold
             stays_warm = True
             for i, t in enumerate(cooling.temperatures):
-                sim_hour = (candidate_hour + i) % 24
+                sim_hour = (candidate_time.hour + i) % 24
                 if self._is_daytime(sim_hour, target_warm_time, preferred_off_time):
                     threshold = min_daytime_temp
                 else:
@@ -733,11 +740,13 @@ class HeatingOptimizer:
                 return candidate_time
 
         # No safe time found before preferred_off_time — search beyond it
-        # (extend up to 2 hours past preferred, then give up)
+        # (extend up to 2 hours past preferred in 30-min steps, then give up)
         logger.debug("No safe off time before preferred time, searching later...")
-        for extra_hour in range(1, 3):
-            candidate_hour = (end_hour + extra_hour) % 24
-            candidate_time = time(candidate_hour, 0)
+        for extra_step in range(1, 5):
+            extra_dt = datetime.combine(
+                datetime.today(), preferred_off_time
+            ) + timedelta(minutes=extra_step * 30)
+            candidate_time = extra_dt.time()
 
             hours_off = self._hours_until(candidate_time, switch_on_time)
             if hours_off < DEFAULTS.min_off_duration_hours:
@@ -751,7 +760,7 @@ class HeatingOptimizer:
 
             stays_warm = True
             for i, t in enumerate(cooling.temperatures):
-                sim_hour = (candidate_hour + i) % 24
+                sim_hour = (candidate_time.hour + i) % 24
                 if self._is_daytime(sim_hour, target_warm_time, preferred_off_time):
                     threshold = min_daytime_temp
                 else:
@@ -763,7 +772,7 @@ class HeatingOptimizer:
             if stays_warm:
                 logger.info(
                     f"Extended switch-off: {candidate_time.strftime('%H:%M')} "
-                    f"({extra_hour}h past preferred)"
+                    f"({extra_step * 30}min past preferred)"
                 )
                 return candidate_time
 
