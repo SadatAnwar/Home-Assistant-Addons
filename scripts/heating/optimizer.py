@@ -238,6 +238,7 @@ class HeatingOptimizer:
             optimal_setpoint=optimal_setpoint,
             bedroom_temp=bedroom_temp,
             outside_temp=outside_temp,
+            weather_forecast=weather_forecast,
         )
 
         # 8. Estimate expected temperatures and gas usage
@@ -405,6 +406,7 @@ class HeatingOptimizer:
             optimal_setpoint=setpoint,
             bedroom_temp=bedroom_temp,
             outside_temp=outside_temp,
+            weather_forecast=weather_forecast,
         )
 
         expected_min, expected_max = self._estimate_temp_range(hours)
@@ -787,10 +789,25 @@ class HeatingOptimizer:
         optimal_setpoint: float,
         bedroom_temp: float,
         outside_temp: float,
+        weather_forecast: list[dict] | None = None,
     ) -> list[HourlyHeatingPlan]:
         """Build 24-hour heating plan."""
         plans = []
         current_temp = bedroom_temp
+
+        # Build hourly outside temp lookup from forecast
+        hourly_outside: dict[int, float] = {}
+        if weather_forecast:
+            for entry in weather_forecast:
+                dt_str = entry.get("datetime", "")
+                if dt_str:
+                    try:
+                        dt = datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
+                        temp = entry.get("temperature")
+                        if temp is not None:
+                            hourly_outside[dt.hour] = temp
+                    except ValueError:
+                        pass
 
         for hour in range(24):
             # Determine if heating should be on
@@ -806,19 +823,26 @@ class HeatingOptimizer:
                 # Wrap-around case (e.g., on at 22:00, off at 06:00)
                 system_on = hour_time >= switch_on_time or hour_time < switch_off_time
 
+            # Use per-hour outside temp from forecast, fall back to flat value
+            hour_outside = hourly_outside.get(hour, outside_temp)
+
             if system_on:
                 # Predict modulation
                 modulation = self.thermal_model.predict_modulation(
-                    outside_temp=outside_temp,
+                    outside_temp=hour_outside,
                     setpoint=optimal_setpoint,
                     room_temp=current_temp,
                 )
-                # Estimate temp increase
-                current_temp += self.thermal_model.mean_heating_rate / 4
+                # Heating: use effective rate consistent with predict_heating_duration
+                base_rate = max(self.thermal_model.mean_heating_rate, 1.0)
+                gap = max(0, optimal_setpoint + 0.5 - current_temp)
+                current_temp += base_rate * min(1.0, gap / 2.0)
+                # Room won't exceed setpoint + small overshoot
+                current_temp = min(current_temp, optimal_setpoint + 0.5)
             else:
                 modulation = 0
-                # Estimate cooling
-                current_temp -= self.thermal_model.mean_cooling_rate / 4
+                # Physics-based cooling: Newton's law dT/dt = -k * (T_in - T_out)
+                current_temp -= self.thermal_model.k * (current_temp - hour_outside)
 
             current_temp = max(15, min(25, current_temp))
 
