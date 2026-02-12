@@ -190,9 +190,7 @@ class HeatingOptimizer:
 
         # 5. Calculate optimal setpoint using FORECAST daytime temps
         # Use average daytime temp for setpoint, not overnight min
-        optimal_setpoint = self._calculate_setpoint(
-            outside_temp=avg_daytime_temp,  # Use forecast daytime avg, not current!
-        )
+        optimal_setpoint = self._calculate_setpoint(target_temp=target_temp)
 
         # Adjust for solar (reduce setpoint if significant solar gain expected)
         if solar_contribution > 0.5:
@@ -302,8 +300,6 @@ class HeatingOptimizer:
         weather_forecast: list[dict] | None = None,
         current_time: datetime | None = None,
         original_switch_on_time: time | None = None,
-        original_setpoint: float | None = None,
-        original_hourly_plans: list[HourlyHeatingPlan] | None = None,
     ) -> DailyHeatingSchedule:
         """Recalculate schedule during active heating period.
 
@@ -325,11 +321,6 @@ class HeatingOptimizer:
         min_overnight = min(overnight_temps) if overnight_temps else outside_temp
 
         # Daytime temps for setpoint
-        daytime_temps = self._extract_daytime_temps(
-            weather_forecast, target_warm_time, target_night_time, outside_temp
-        )
-        avg_daytime_temp = sum(daytime_temps) / len(daytime_temps)
-
         # Switch-on time guard: if original switch-on is less than 2 hours before
         # target_warm_time, use target_warm_time - 2hrs for switch-off calculation
         # to prevent unrealistically short off-period estimates
@@ -358,46 +349,24 @@ class HeatingOptimizer:
         off_str = switch_off_time.strftime("%H:%M") if switch_off_time else "CONTINUOUS"
         reasoning.append(f"Recalculated switch-off: {off_str}")
 
-        # Setpoint adjustment based on actual vs predicted temp
-        setpoint = original_setpoint or self._calculate_setpoint(avg_daytime_temp)
-        current_hour = current_time.hour
-
-        if original_hourly_plans:
-            predicted_temp = None
-            for hp in original_hourly_plans:
-                if hp.hour == current_hour:
-                    predicted_temp = hp.expected_room_temp
-                    break
-
-            if predicted_temp is not None:
-                if bedroom_temp > predicted_temp:
-                    setpoint -= 1.0
-                    reasoning.append(
-                        f"Setpoint -1°C: actual {bedroom_temp:.1f}°C > "
-                        f"predicted {predicted_temp:.1f}°C"
-                    )
-                elif bedroom_temp < predicted_temp - 1.0:
-                    setpoint += 1.0
-                    reasoning.append(
-                        f"Setpoint +1°C: actual {bedroom_temp:.1f}°C < "
-                        f"predicted {predicted_temp:.1f}°C - 1.0"
-                    )
-                else:
-                    reasoning.append(
-                        f"Setpoint unchanged: actual {bedroom_temp:.1f}°C "
-                        f"~ predicted {predicted_temp:.1f}°C"
-                    )
-
-        # Clamp setpoint
-        setpoint = round(
-            max(DEFAULTS.min_setpoint, min(DEFAULTS.max_setpoint, setpoint))
-        )
-        reasoning.append(f"Adjusted setpoint: {setpoint}°C")
-
         # Solar contribution
         solar_contribution = self._estimate_solar_contribution(
             weather_forecast, target_warm_time, target_night_time
         )
+
+        # Calculate setpoint fresh from current target_temp
+        setpoint = self._calculate_setpoint(target_temp)
+
+        # Apply solar reduction (consistent with initial calculation)
+        if solar_contribution > 0.5:
+            setpoint -= 1
+            reasoning.append("Reduced setpoint by 1°C for solar gain")
+
+        # Clamp setpoint to safe bounds
+        setpoint = round(
+            max(DEFAULTS.min_setpoint, min(DEFAULTS.max_setpoint, setpoint))
+        )
+        reasoning.append(f"Setpoint: {setpoint}°C")
 
         # Build hourly plan from current hour onward
         hours = self._build_hourly_plan(
@@ -495,18 +464,9 @@ class HeatingOptimizer:
 
         return (target_mins - current_mins) / 60
 
-    def _calculate_setpoint(self, outside_temp: float) -> float:
-        """Calculate base setpoint temperature.
-
-        Returns the base setpoint (20°C). The boiler's weather-compensated
-        heating curve (Slope 1.3, Level 0.0) automatically adjusts supply
-        water temperature based on outside conditions. Caller applies solar
-        gain adjustment separately.
-        """
-        base_setpoint = DEFAULTS.default_setpoint  # 20°C
-        logger.debug(f"Mild ({outside_temp}°C): using base setpoint {base_setpoint}°C")
-
-        return base_setpoint
+    def _calculate_setpoint(self, target_temp: float) -> float:
+        """Calculate boiler setpoint from target room temperature."""
+        return target_temp
 
     def _extract_overnight_temps(
         self,

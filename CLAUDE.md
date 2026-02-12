@@ -35,7 +35,8 @@ home_assistant/
 │       ├── optimizer.py          # Schedule optimization logic
 │       ├── scheduler.py          # Main entry point (run daily)
 │       ├── setup_helpers.py      # Create HA helper entities
-│       └── prediction_tracker.py # Prediction tracking & feedback
+│       ├── prediction_tracker.py # Prediction tracking & feedback
+│       └── simulator_app.py     # Interactive Streamlit simulator UI
 ├── data/                 # Data storage
 │   └── heating/          # Heating prediction history
 │       └── predictions.jsonl  # Daily predictions & actuals
@@ -421,6 +422,9 @@ python -m scripts.heating.scheduler history --days 14
 python scripts/ha_automation.py upload automations/heating/morning_switch_on.yaml
 python scripts/ha_automation.py upload automations/heating/night_switch_off.yaml
 python scripts/ha_automation.py upload automations/heating/bedroom_protection.yaml
+
+# Run interactive heating simulator (web UI)
+streamlit run scripts/heating/simulator_app.py
 ```
 
 **Crontab example (can run at any time; multiple runs per day are safe):**

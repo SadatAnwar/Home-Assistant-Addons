@@ -21,7 +21,7 @@ from .config import (
 )
 from .data_collector import DataCollector
 from .ha_client import HAClient
-from .optimizer import DailyHeatingSchedule, HeatingOptimizer, HourlyHeatingPlan
+from .optimizer import DailyHeatingSchedule, HeatingOptimizer
 from .prediction_tracker import (
     PredictionTracker,
     format_error_summary,
@@ -385,13 +385,10 @@ class HeatingScheduler:
         if heating_is_on:
             # CASE D: Heating is ON — mid-day recalculation
             logger.info("Case D: Heating ON — recalculating switch-off and setpoint")
-            original_hourly_plans = self._load_original_hourly_plans(existing_record)
             schedule = self.optimizer.recalculate_mid_day(
                 **common_kwargs,
                 current_time=now,
                 original_switch_on_time=switch_on_time,
-                original_setpoint=pred.setpoint,
-                original_hourly_plans=original_hourly_plans,
             )
             return schedule, _SWITCH_OFF_AND_SETPOINT_ONLY, "D"
 
@@ -429,15 +426,10 @@ class HeatingScheduler:
                     "Case C: Past switch-on but heating OFF — triggering now+2min"
                 )
                 immediate_on = (now + timedelta(minutes=2)).time()
-                original_hourly_plans = self._load_original_hourly_plans(
-                    existing_record
-                )
                 schedule = self.optimizer.recalculate_mid_day(
                     **common_kwargs,
                     current_time=now,
                     original_switch_on_time=immediate_on,
-                    original_setpoint=pred.setpoint,
-                    original_hourly_plans=original_hourly_plans,
                 )
                 # Override switch-on to now+2min
                 schedule = DailyHeatingSchedule(
@@ -479,14 +471,6 @@ class HeatingScheduler:
     def _time_ge(self, a: time, b: time) -> bool:
         """Check if time a >= time b (simple comparison, no midnight wrapping)."""
         return (a.hour, a.minute) >= (b.hour, b.minute)
-
-    def _load_original_hourly_plans(self, record) -> list[HourlyHeatingPlan] | None:
-        """Try to reconstruct hourly plans from a saved prediction.
-
-        Since we don't persist hourly plans in JSONL, we return None.
-        The optimizer handles None gracefully (skips setpoint adjustment).
-        """
-        return None
 
     def _get_user_settings(self) -> dict[str, Any]:
         """Get user-configured settings from HA helpers."""
