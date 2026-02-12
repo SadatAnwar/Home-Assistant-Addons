@@ -1,6 +1,6 @@
 """Configuration for the adaptive heating optimization system."""
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 # Room temperature sensor mapping
@@ -13,20 +13,6 @@ ROOM_SENSORS = {
     "top_floor": "sensor.top_floor_thermo_temperature",
     "basement": "sensor.basement_temperature",
 }
-
-# Room humidity sensor mapping
-HUMIDITY_SENSORS = {
-    "bedroom": "sensor.bedroom_thermo_humidity",
-    "kids_room": "sensor.aayat_room_temp_humidity",
-    "bathroom": "sensor.bathroom_temp_humidity",
-    "living_room": "sensor.living_room_temp_humidity",
-    "kitchen": "sensor.kitchen_humidity",
-    "top_floor": "sensor.top_floor_thermo_humidity",
-    "basement": "sensor.basement_humidity",
-}
-
-# Rooms that get significant solar gain (south-facing)
-SOLAR_GAIN_ROOMS = ["bedroom", "living_room"]
 
 # Climate entity
 CLIMATE_ENTITY = "climate.e3_vitodens_100_0421_1_heating"
@@ -41,13 +27,6 @@ BOILER_SENSORS = {
     "burner_hours": "sensor.e3_vitodens_100_0421_1_burner_hours",
     "burner_starts": "sensor.e3_vitodens_100_0421_1_burner_starts",
     "gas_consumption_today": "sensor.e3_vitodens_100_0421_1_heating_gas_consumption_today",
-}
-
-# Boiler setpoint entities (number helpers)
-BOILER_SETPOINTS = {
-    "normal_temp": "number.e3_vitodens_100_0421_1_normal_temperature",
-    "comfort_temp": "number.e3_vitodens_100_0421_1_comfort_temperature",
-    "reduced_temp": "number.e3_vitodens_100_0421_1_reduced_temperature",
 }
 
 # Weather entities
@@ -114,10 +93,6 @@ class DefaultSettings:
 DEFAULTS = DefaultSettings()
 
 
-# Primary room for optimization (most important room)
-PRIMARY_ROOM = "bedroom"  # Parent's bedroom
-
-
 @dataclass
 class ModelConfig:
     """Configuration for thermal model training."""
@@ -125,25 +100,6 @@ class ModelConfig:
     # Data collection
     history_days: int = 14
     min_history_days: int = 3
-
-    # Model parameters
-    heating_rate_features: list = field(
-        default_factory=lambda: [
-            "outside_temp",
-            "setpoint",
-            "start_temp",
-            "burner_modulation",
-        ]
-    )
-
-    cooling_rate_features: list = field(
-        default_factory=lambda: [
-            "outside_temp",
-            "start_temp",
-            "sun_elevation",
-            "cloud_cover",
-        ]
-    )
 
     # Model persistence
     model_dir: str = "models/heating"
@@ -162,7 +118,7 @@ class PredictionConfig:
     predictions_file: str = "predictions.jsonl"
 
     # Adjustment thresholds
-    min_sample_days: int = 7  # Minimum days of data before adjusting coefficients
+    min_sample_days: int = 2  # Minimum days of data before adjusting coefficients
     error_threshold: float = 0.3  # Only adjust if avg error > 0.3°C
 
     # Coefficient bounds (physically realistic ranges)

@@ -43,10 +43,12 @@ The schedule (switch-on time, switch-off time, setpoint) is primarily driven by 
 
 | Coefficient | Controls | Auto-adjusted? |
 |---|---|---|
-| `k` (cooling constant, default 0.0064) | Switch-off time via `predict_cooling_curve()` | Yes, by prediction_tracker after 7+ days |
+| `k` (cooling constant, default 0.0064) | Switch-off time via `predict_cooling_curve()` | Yes, by prediction_tracker after 2+ days |
 | `mean_heating_rate` (default 1.0°C/hr) | Switch-on time as fallback when GBM unavailable | Yes, by prediction_tracker |
 | `solar_gain_coefficient` (default 0.05) | Unused in practice (no sun elevation passed) | Yes, by `_train_solar_model()` |
 | `gas_base_rate_kwh` (default 10.0) | Gas estimation only | Yes, by prediction_tracker |
+
+**Update (2026-02-13):** Coefficient adjustment gate was reduced from 7 days to 2 days to adapt faster to weather-driven pattern changes.
 
 ## 1. Use learned solar_gain_coefficient in cooling curve predictions
 
@@ -75,3 +77,45 @@ The schedule (switch-on time, switch-off time, setpoint) is primarily driven by 
 **Current state:** `self.solar_gain_model` is declared as a GBM field but `_train_solar_model()` never actually fits a GBM — it just computes `solar_gain_coefficient` as a simple mean ratio. The field is always None despite being saved/loaded.
 
 **Improvement:** Remove the `solar_gain_model` field entirely. Keep `_train_solar_model()` since it usefully computes `solar_gain_coefficient`, but stop pretending there's a GBM behind it.
+
+## Code Review Findings (2026-02-12)
+
+### 1. Heating-rate auto-adjustment direction is reversed (P1)
+- **Finding:** `avg_target_time_temp_error` is defined as `predicted - actual`, but positive error currently increases `mean_heating_rate`.
+- **Risk:** Model can self-tune in the wrong direction over multiple days, making warm-up timing less accurate.
+- **Evidence:** `scripts/heating/prediction_tracker.py:473`, `scripts/heating/prediction_tracker.py:477`
+
+### 2. Case E stores tomorrow schedule as today's adjustment (P1)
+- **Finding:** When scheduler computes tomorrow's schedule (Case E), save logic still writes an adjustment against today's record.
+- **Risk:** Prediction history and feedback loop become date-misaligned; coefficient tuning learns from the wrong day.
+- **Evidence:** `scripts/heating/scheduler.py:400`, `scripts/heating/scheduler.py:405`, `scripts/heating/scheduler.py:290`, `scripts/heating/scheduler.py:302`
+
+### 3. Hourly plan uses midnight-based hours with current-temp start (P1)
+- **Finding:** `_build_hourly_plan()` simulates hour `0..23` from current bedroom temperature and uses forecast keyed only by hour.
+- **Risk:** Expected target/switch-off temps and gas estimates can be internally inconsistent and use wrong-day forecast slots.
+- **Evidence:** `scripts/heating/optimizer.py:674`, `scripts/heating/optimizer.py:686`, `scripts/heating/optimizer.py:690`
+
+### 4. Forecast hour matching is timezone-naive (P2)
+- **Finding:** Forecast datetimes are parsed but matched using raw `.hour` without robust local-time normalization.
+- **Risk:** Morning/daytime extraction can shift by timezone offset, causing wrong switch-on/off calculations.
+- **Evidence:** `scripts/heating/optimizer.py:455`, `scripts/heating/optimizer.py:495`, `scripts/heating/optimizer.py:535`
+
+### 5. Training label quality: heating_on derived from hvac_mode (P2)
+- **Finding:** Dataset marks `heating_on` when HVAC mode is `heat` or `auto`, independent of actual burner activity.
+- **Risk:** Heating-rate model is trained with mislabeled intervals, reducing predictive quality.
+- **Evidence:** `scripts/heating/data_collector.py:277`
+
+### 6. HA HTTP requests have no timeouts (P2)
+- **Finding:** Core REST calls use `requests.get/post` without timeout values.
+- **Risk:** Scheduler can hang on network/API stalls and miss timing-critical updates.
+- **Evidence:** `scripts/heating/ha_client.py:62`, `scripts/heating/ha_client.py:102`, `scripts/heating/ha_client.py:167`, `scripts/heating/ha_client.py:226`
+
+### 7. Scheduler does not check optimization_enabled helper (P3)
+- **Finding:** Runtime path does not read `input_boolean.heating_optimization_enabled`; it still calculates/saves/updates unless flags (`dry-run`, `shadow`, `recommend-only`) are used.
+- **Risk:** Background optimizer actions may continue even when the user expects optimization to be off.
+- **Evidence:** `scripts/heating/scheduler.py:93`, `scripts/heating/scheduler.py:313`, `scripts/heating/scheduler.py:485`, `scripts/heating/config.py:52`
+
+### 8. No automated tests for scheduler/optimizer feedback flow (P3)
+- **Finding:** Repository has no test suite covering case logic, time handling, or feedback-adjustment math.
+- **Risk:** Regressions in schedule correctness and model tuning are hard to catch before production runs.
+- **Evidence:** repository scan found no test files under current project tree

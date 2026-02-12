@@ -66,18 +66,9 @@ class DataCollector:
         entity_id = BOILER_SENSORS["outside_temp"]
         history = self.client.get_history([entity_id], days=days)
 
-        records = []
-        for state in history.get(entity_id, []):
-            if state["state"] not in ("unknown", "unavailable"):
-                try:
-                    records.append(
-                        {
-                            "timestamp": self._parse_timestamp(state["last_changed"]),
-                            "outside_temp": float(state["state"]),
-                        }
-                    )
-                except (ValueError, KeyError):
-                    continue
+        records = self._parse_numeric_history(
+            history.get(entity_id, []), "outside_temp"
+        )
 
         df = pd.DataFrame(records)
         if not df.empty:
@@ -117,19 +108,10 @@ class DataCollector:
         climate_df = pd.DataFrame(climate_records)
 
         # Process burner modulation
-        modulation_records = []
-        for state in history.get(BOILER_SENSORS["burner_modulation"], []):
-            if state["state"] not in ("unknown", "unavailable"):
-                try:
-                    modulation_records.append(
-                        {
-                            "timestamp": self._parse_timestamp(state["last_changed"]),
-                            "burner_modulation": float(state["state"]),
-                        }
-                    )
-                except (ValueError, KeyError):
-                    continue
-
+        modulation_records = self._parse_numeric_history(
+            history.get(BOILER_SENSORS["burner_modulation"], []),
+            "burner_modulation",
+        )
         modulation_df = pd.DataFrame(modulation_records)
 
         # Process burner active state
@@ -148,19 +130,9 @@ class DataCollector:
         burner_df = pd.DataFrame(burner_records)
 
         # Process supply temperature
-        supply_records = []
-        for state in history.get(BOILER_SENSORS["supply_temp"], []):
-            if state["state"] not in ("unknown", "unavailable"):
-                try:
-                    supply_records.append(
-                        {
-                            "timestamp": self._parse_timestamp(state["last_changed"]),
-                            "supply_temp": float(state["state"]),
-                        }
-                    )
-                except (ValueError, KeyError):
-                    continue
-
+        supply_records = self._parse_numeric_history(
+            history.get(BOILER_SENSORS["supply_temp"], []), "supply_temp"
+        )
         supply_df = pd.DataFrame(supply_records)
 
         # Merge all DataFrames
@@ -369,6 +341,22 @@ class DataCollector:
             "cloud_coverage": weather.get("cloud_coverage"),
             "forecast": weather.get("forecast", []),
         }
+
+    def _parse_numeric_history(self, states: list[dict], field_name: str) -> list[dict]:
+        """Parse HA states into [{timestamp, field_name: float}, ...]."""
+        records = []
+        for state in states:
+            if state["state"] not in ("unknown", "unavailable"):
+                try:
+                    records.append(
+                        {
+                            "timestamp": self._parse_timestamp(state["last_changed"]),
+                            field_name: float(state["state"]),
+                        }
+                    )
+                except (ValueError, KeyError):
+                    continue
+        return records
 
     def _entity_to_room(self, entity_id: str, mapping: dict) -> str | None:
         """Convert entity ID to room name using mapping."""

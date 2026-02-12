@@ -3,6 +3,8 @@
 import asyncio
 import json
 import os
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -76,15 +78,6 @@ class HAClient:
                 data["last_updated"].replace("Z", "+00:00")
             ),
         )
-
-    def get_states(self, entity_ids: list[str]) -> dict[str, EntityState]:
-        """Get current states of multiple entities."""
-        states = {}
-        for entity_id in entity_ids:
-            state = self.get_state(entity_id)
-            if state:
-                states[entity_id] = state
-        return states
 
     def get_history(
         self,
@@ -261,33 +254,6 @@ class HAClient:
         service = "turn_on" if value else "turn_off"
         return self.call_service("input_boolean", service, entity_id=entity_id)
 
-    def set_climate_mode(self, entity_id: str, hvac_mode: str) -> bool:
-        """Set climate entity HVAC mode (off, heat, auto, etc.)."""
-        return self.call_service(
-            "climate",
-            "set_hvac_mode",
-            entity_id=entity_id,
-            data={"hvac_mode": hvac_mode},
-        )
-
-    def set_climate_temperature(self, entity_id: str, temperature: float) -> bool:
-        """Set climate entity target temperature."""
-        return self.call_service(
-            "climate",
-            "set_temperature",
-            entity_id=entity_id,
-            data={"temperature": temperature},
-        )
-
-    def set_number(self, entity_id: str, value: float) -> bool:
-        """Set a number entity value (like Viessmann setpoints)."""
-        return self.call_service(
-            "number",
-            "set_value",
-            entity_id=entity_id,
-            data={"value": value},
-        )
-
     def send_notification(
         self,
         message: str,
@@ -322,27 +288,35 @@ class HAWebSocketClient:
             if response.get("id") == self.msg_id:
                 return response
 
-    async def create_input_boolean(
-        self, name: str, icon: str = "mdi:toggle-switch"
-    ) -> dict:
-        """Create an input_boolean helper."""
+    @asynccontextmanager
+    async def _connect(self) -> AsyncIterator:
+        """Connect and authenticate to HA WebSocket."""
         async with websockets.connect(self.ws_url) as ws:
-            # Authenticate
             await ws.recv()  # auth_required
             await ws.send(json.dumps({"type": "auth", "access_token": self.token}))
             msg = json.loads(await ws.recv())
             if msg.get("type") != "auth_ok":
                 raise RuntimeError(f"Authentication failed: {msg}")
+            yield ws
 
-            response = await self._send_command(
-                ws, "input_boolean/create", name=name, icon=icon
-            )
+    async def _create_helper(self, msg_type: str, label: str, **kwargs) -> dict:
+        """Create a helper entity via WebSocket."""
+        async with self._connect() as ws:
+            response = await self._send_command(ws, msg_type, **kwargs)
             if not response.get("success"):
                 error = response.get("error", {})
                 raise RuntimeError(
-                    f"Failed to create input_boolean: {error.get('message', response)}"
+                    f"Failed to create {label}: {error.get('message', response)}"
                 )
             return response.get("result", {})
+
+    async def create_input_boolean(
+        self, name: str, icon: str = "mdi:toggle-switch"
+    ) -> dict:
+        """Create an input_boolean helper."""
+        return await self._create_helper(
+            "input_boolean/create", "input_boolean", name=name, icon=icon
+        )
 
     async def create_input_datetime(
         self,
@@ -352,28 +326,14 @@ class HAWebSocketClient:
         icon: str = "mdi:clock",
     ) -> dict:
         """Create an input_datetime helper."""
-        async with websockets.connect(self.ws_url) as ws:
-            # Authenticate
-            await ws.recv()
-            await ws.send(json.dumps({"type": "auth", "access_token": self.token}))
-            msg = json.loads(await ws.recv())
-            if msg.get("type") != "auth_ok":
-                raise RuntimeError(f"Authentication failed: {msg}")
-
-            response = await self._send_command(
-                ws,
-                "input_datetime/create",
-                name=name,
-                has_date=has_date,
-                has_time=has_time,
-                icon=icon,
-            )
-            if not response.get("success"):
-                error = response.get("error", {})
-                raise RuntimeError(
-                    f"Failed to create input_datetime: {error.get('message', response)}"
-                )
-            return response.get("result", {})
+        return await self._create_helper(
+            "input_datetime/create",
+            "input_datetime",
+            name=name,
+            has_date=has_date,
+            has_time=has_time,
+            icon=icon,
+        )
 
     async def create_input_number(
         self,
@@ -386,31 +346,17 @@ class HAWebSocketClient:
         icon: str = "mdi:thermometer",
     ) -> dict:
         """Create an input_number helper."""
-        async with websockets.connect(self.ws_url) as ws:
-            # Authenticate
-            await ws.recv()
-            await ws.send(json.dumps({"type": "auth", "access_token": self.token}))
-            msg = json.loads(await ws.recv())
-            if msg.get("type") != "auth_ok":
-                raise RuntimeError(f"Authentication failed: {msg}")
-
-            response = await self._send_command(
-                ws,
-                "input_number/create",
-                name=name,
-                min=min_value,
-                max=max_value,
-                step=step,
-                unit_of_measurement=unit,
-                mode=mode,
-                icon=icon,
-            )
-            if not response.get("success"):
-                error = response.get("error", {})
-                raise RuntimeError(
-                    f"Failed to create input_number: {error.get('message', response)}"
-                )
-            return response.get("result", {})
+        return await self._create_helper(
+            "input_number/create",
+            "input_number",
+            name=name,
+            min=min_value,
+            max=max_value,
+            step=step,
+            unit_of_measurement=unit,
+            mode=mode,
+            icon=icon,
+        )
 
 
 def create_helper(helper_type: str, **kwargs) -> dict:

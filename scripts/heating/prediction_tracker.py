@@ -470,8 +470,10 @@ class PredictionTracker:
             target_error is not None
             and abs(target_error) > PREDICTION_CONFIG.error_threshold
         ):
-            # Negative error = predicted too cold = heating slower than expected
-            rate_factor = 1 + (
+            # target_error = predicted - actual
+            # Positive error (predicted too warm) -> decrease heating rate
+            # Negative error (predicted too cold) -> increase heating rate
+            rate_factor = 1 - (
                 target_error * PREDICTION_CONFIG.heating_rate_adjustment_factor
             )
             new_rate = current_heating_rate * rate_factor

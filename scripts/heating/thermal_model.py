@@ -55,7 +55,6 @@ class ThermalModel:
         self.heating_rate_model: GradientBoostingRegressor | None = None
         self.cooling_rate_model: GradientBoostingRegressor | None = None
         self.modulation_model: GradientBoostingRegressor | None = None
-        self.solar_gain_model: GradientBoostingRegressor | None = None
 
         # Learned parameters (defaults based on real-world measurements)
         # Actual measured cooling: 0.16-0.27°C/hour in extreme cold (-6 to -8°C)
@@ -508,78 +507,6 @@ class ThermalModel:
 
         return max(0, min(100, modulation))
 
-    def predict_solar_gain(
-        self,
-        sun_elevation: float,
-        cloud_cover: float = 0,
-        is_south_facing: bool = True,
-    ) -> float:
-        """Predict solar heat contribution in °C.
-
-        Args:
-            sun_elevation: Current sun elevation in degrees
-            cloud_cover: Cloud cover percentage (0-100)
-            is_south_facing: Whether the room faces south
-
-        Returns:
-            Predicted temperature contribution from solar gain
-        """
-        if sun_elevation <= 0 or not is_south_facing:
-            return 0.0
-
-        # Base solar gain
-        gain = self.solar_gain_coefficient * sun_elevation
-
-        # Reduce by cloud cover
-        clear_sky_factor = 1 - (cloud_cover / 100) * 0.8
-        gain *= clear_sky_factor
-
-        return round(gain, 2)
-
-    def find_optimal_setpoint(
-        self,
-        target_room_temp: float,
-        outside_temp: float,
-        max_modulation: float = 70,
-    ) -> float:
-        """Find minimum setpoint to achieve target room temperature.
-
-        Uses learned relationship between setpoint, outside temp, and room temp.
-
-        Args:
-            target_room_temp: Desired room temperature
-            outside_temp: Current outside temperature
-            max_modulation: Maximum acceptable modulation (for efficiency)
-
-        Returns:
-            Recommended setpoint
-        """
-        # Start with a baseline offset
-        base_offset = 1.0  # Room is typically 1°C below setpoint
-
-        # Adjust for outside temperature
-        # Colder outside = need higher setpoint
-        if outside_temp < 0:
-            temp_adjustment = 0.5 + abs(outside_temp) * 0.1
-        elif outside_temp < 5:
-            temp_adjustment = 0.3
-        else:
-            temp_adjustment = 0
-
-        setpoint = target_room_temp + base_offset + temp_adjustment
-
-        # If we have a modulation model, verify and adjust
-        if self.modulation_model is not None:
-            predicted_mod = self.predict_modulation(
-                outside_temp, setpoint, target_room_temp - 0.5
-            )
-            if predicted_mod > max_modulation:
-                # Reduce setpoint to lower modulation
-                setpoint -= 0.5
-
-        # Clamp to reasonable range
-        return round(max(18, min(24, setpoint)), 1)
-
     def save(self, filename: str = MODEL_CONFIG.model_file) -> None:
         """Save model to disk."""
         filepath = self.model_dir / filename
@@ -587,7 +514,6 @@ class ThermalModel:
             "heating_rate_model": self.heating_rate_model,
             "cooling_rate_model": self.cooling_rate_model,
             "modulation_model": self.modulation_model,
-            "solar_gain_model": self.solar_gain_model,
             "mean_cooling_rate": self.mean_cooling_rate,
             "mean_heating_rate": self.mean_heating_rate,
             "solar_gain_coefficient": self.solar_gain_coefficient,
@@ -612,7 +538,6 @@ class ThermalModel:
             self.heating_rate_model = model_data.get("heating_rate_model")
             self.cooling_rate_model = model_data.get("cooling_rate_model")
             self.modulation_model = model_data.get("modulation_model")
-            self.solar_gain_model = model_data.get("solar_gain_model")
             self.mean_cooling_rate = model_data.get("mean_cooling_rate", 0.3)
             self.mean_heating_rate = model_data.get("mean_heating_rate", 1.0)
             self.solar_gain_coefficient = model_data.get("solar_gain_coefficient", 0.05)
