@@ -5,6 +5,8 @@ from __future__ import annotations
 from datetime import datetime, time, timedelta
 from typing import Any, Callable
 
+from .config import PREDICTION_CONFIG
+
 
 def build_hourly_plan(
     *,
@@ -70,7 +72,9 @@ def build_hourly_plan(
                 room_temp=current_temp,
             )
             # Heating: use effective rate consistent with predict_heating_duration
-            base_rate = max(thermal_model.mean_heating_rate, 1.0)
+            base_rate = max(
+                thermal_model.mean_heating_rate, PREDICTION_CONFIG.heating_rate_min
+            )
             gap = max(0, optimal_setpoint + 0.5 - current_temp)
             current_temp += base_rate * min(1.0, gap / 2.0)
             # Room won't exceed setpoint + small overshoot

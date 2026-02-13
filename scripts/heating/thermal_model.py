@@ -17,7 +17,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 from .config import MODEL_CONFIG, PREDICTION_CONFIG
 
@@ -55,6 +55,9 @@ class ThermalModel:
         self.heating_rate_model: GradientBoostingRegressor | None = None
         self.cooling_rate_model: GradientBoostingRegressor | None = None
         self.modulation_model: GradientBoostingRegressor | None = None
+        self.heating_feature_cols: list[str] = []
+        self.cooling_feature_cols: list[str] = []
+        self.modulation_feature_cols: list[str] = []
 
         # Learned parameters (defaults based on real-world measurements)
         # Actual measured cooling: 0.16-0.27°C/hour in extreme cold (-6 to -8°C)
@@ -140,6 +143,7 @@ class ThermalModel:
 
         if len(feature_cols) < 2:
             return {"error": "insufficient features"}
+        self.cooling_feature_cols = feature_cols.copy()
 
         # Drop rows with NaN in any feature column
         cooling_data = cooling_data.dropna(subset=feature_cols)
@@ -149,34 +153,46 @@ class ThermalModel:
                 "error": "insufficient data after NaN removal",
             }
 
-        X = cooling_data[feature_cols].values
-        y = cooling_data["temp_change"].values * 4  # Convert to °C/hour
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=42
+        cooling_data["temp_change"] = cooling_data["temp_change"] * 4  # °C/hour
+        split = self._time_series_split(
+            data=cooling_data,
+            feature_cols=feature_cols,
+            target_col="temp_change",
         )
+        if split is None:
+            return {"samples": len(cooling_data), "error": "insufficient split data"}
 
-        self.cooling_rate_model = GradientBoostingRegressor(
-            n_estimators=100,
-            max_depth=4,
-            learning_rate=0.1,
-            random_state=42,
-        )
-        self.cooling_rate_model.fit(X_train, y_train)
+        self.cooling_rate_model = self._make_regressor()
+        self.cooling_rate_model.fit(split["X_train"], split["y_train"])
 
-        # Calculate metrics
-        train_score = self.cooling_rate_model.score(X_train, y_train)
-        test_score = self.cooling_rate_model.score(X_test, y_test)
+        # Time-aware validation metrics
+        train_score = self.cooling_rate_model.score(split["X_train"], split["y_train"])
+        test_score = self.cooling_rate_model.score(split["X_test"], split["y_test"])
+        y_test_pred = self.cooling_rate_model.predict(split["X_test"])
+        test_mae = mean_absolute_error(split["y_test"], y_test_pred)
+        test_rmse = np.sqrt(mean_squared_error(split["y_test"], y_test_pred))
 
         # Update mean cooling rate
-        self.mean_cooling_rate = abs(np.mean(y))
+        self.mean_cooling_rate = abs(np.mean(cooling_data["temp_change"].values))
 
-        return {
+        walk_forward = self._walk_forward_metrics(
+            data=cooling_data,
+            feature_cols=feature_cols,
+            target_col="temp_change",
+        )
+
+        metrics = {
             "samples": len(cooling_data),
             "train_r2": round(train_score, 3),
             "test_r2": round(test_score, 3),
+            "test_mae": round(float(test_mae), 3),
+            "test_rmse": round(float(test_rmse), 3),
+            "validation_split": split["mode"],
+            "test_samples": split["test_samples"],
             "mean_rate": round(self.mean_cooling_rate, 3),
         }
+        metrics.update(walk_forward)
+        return metrics
 
     def _train_heating_model(self, data: pd.DataFrame) -> dict[str, float]:
         """Train model for predicting heating rate when heating is on."""
@@ -215,6 +231,7 @@ class ThermalModel:
 
         if len(feature_cols) < 2:
             return {"error": "insufficient features"}
+        self.heating_feature_cols = feature_cols.copy()
 
         # Drop rows with NaN in any feature column
         heating_data = heating_data.dropna(subset=feature_cols)
@@ -224,33 +241,46 @@ class ThermalModel:
                 "error": "insufficient data after NaN removal",
             }
 
-        X = heating_data[feature_cols].values
-        y = heating_data["temp_change"].values * 4  # Convert to °C/hour
-
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=42
+        heating_data["temp_change"] = heating_data["temp_change"] * 4  # °C/hour
+        split = self._time_series_split(
+            data=heating_data,
+            feature_cols=feature_cols,
+            target_col="temp_change",
         )
+        if split is None:
+            return {"samples": len(heating_data), "error": "insufficient split data"}
 
-        self.heating_rate_model = GradientBoostingRegressor(
-            n_estimators=100,
-            max_depth=4,
-            learning_rate=0.1,
-            random_state=42,
-        )
-        self.heating_rate_model.fit(X_train, y_train)
+        self.heating_rate_model = self._make_regressor()
+        self.heating_rate_model.fit(split["X_train"], split["y_train"])
 
-        train_score = self.heating_rate_model.score(X_train, y_train)
-        test_score = self.heating_rate_model.score(X_test, y_test)
+        train_score = self.heating_rate_model.score(split["X_train"], split["y_train"])
+        test_score = self.heating_rate_model.score(split["X_test"], split["y_test"])
+        y_test_pred = self.heating_rate_model.predict(split["X_test"])
+        test_mae = mean_absolute_error(split["y_test"], y_test_pred)
+        test_rmse = np.sqrt(mean_squared_error(split["y_test"], y_test_pred))
 
         # Update mean heating rate
+        y = heating_data["temp_change"].values
         self.mean_heating_rate = np.mean(y[y > 0]) if np.any(y > 0) else 1.0
 
-        return {
+        walk_forward = self._walk_forward_metrics(
+            data=heating_data,
+            feature_cols=feature_cols,
+            target_col="temp_change",
+        )
+
+        metrics = {
             "samples": len(heating_data),
             "train_r2": round(train_score, 3),
             "test_r2": round(test_score, 3),
+            "test_mae": round(float(test_mae), 3),
+            "test_rmse": round(float(test_rmse), 3),
+            "validation_split": split["mode"],
+            "test_samples": split["test_samples"],
             "mean_rate": round(self.mean_heating_rate, 3),
         }
+        metrics.update(walk_forward)
+        return metrics
 
     def _train_modulation_model(self, data: pd.DataFrame) -> dict[str, float]:
         """Train model for predicting burner modulation at given conditions."""
@@ -269,6 +299,7 @@ class ThermalModel:
         feature_cols = ["outside_temp", "setpoint"]
         if "bedroom" in mod_data.columns:
             feature_cols.append("bedroom")
+        self.modulation_feature_cols = feature_cols.copy()
 
         # Drop rows with NaN in any feature column
         mod_data = mod_data.dropna(subset=feature_cols)
@@ -278,29 +309,40 @@ class ThermalModel:
                 "error": "insufficient data after NaN removal",
             }
 
-        X = mod_data[feature_cols].values
-        y = mod_data["burner_modulation"].values
+        split = self._time_series_split(
+            data=mod_data,
+            feature_cols=feature_cols,
+            target_col="burner_modulation",
+        )
+        if split is None:
+            return {"samples": len(mod_data), "error": "insufficient split data"}
 
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=42
+        self.modulation_model = self._make_regressor()
+        self.modulation_model.fit(split["X_train"], split["y_train"])
+
+        train_score = self.modulation_model.score(split["X_train"], split["y_train"])
+        test_score = self.modulation_model.score(split["X_test"], split["y_test"])
+        y_test_pred = self.modulation_model.predict(split["X_test"])
+        test_mae = mean_absolute_error(split["y_test"], y_test_pred)
+        test_rmse = np.sqrt(mean_squared_error(split["y_test"], y_test_pred))
+
+        walk_forward = self._walk_forward_metrics(
+            data=mod_data,
+            feature_cols=feature_cols,
+            target_col="burner_modulation",
         )
 
-        self.modulation_model = GradientBoostingRegressor(
-            n_estimators=100,
-            max_depth=4,
-            learning_rate=0.1,
-            random_state=42,
-        )
-        self.modulation_model.fit(X_train, y_train)
-
-        train_score = self.modulation_model.score(X_train, y_train)
-        test_score = self.modulation_model.score(X_test, y_test)
-
-        return {
+        metrics = {
             "samples": len(mod_data),
             "train_r2": round(train_score, 3),
             "test_r2": round(test_score, 3),
+            "test_mae": round(float(test_mae), 3),
+            "test_rmse": round(float(test_rmse), 3),
+            "validation_split": split["mode"],
+            "test_samples": split["test_samples"],
         }
+        metrics.update(walk_forward)
+        return metrics
 
     def _train_solar_model(self, data: pd.DataFrame) -> dict[str, float]:
         """Train model for predicting solar heat gain in south-facing rooms."""
@@ -385,11 +427,37 @@ class ThermalModel:
             # This gives ~0.17°C/hour cooling at 27°C temperature difference
             # Note: k is now adjustable based on prediction feedback
             temp_diff = current_temp - outside_temp
-            rate = -self.k * temp_diff
+            physics_rate = -self.k * temp_diff
 
             # Add solar gain during day
             if sun_elev > 10:
-                rate += self.solar_gain_coefficient * sun_elev
+                physics_rate += self.solar_gain_coefficient * sun_elev
+
+            # Hybrid cooling prediction:
+            # keep physics as the anchor, blend in ML cooling-rate estimate if available.
+            rate = physics_rate
+            if self.cooling_rate_model is not None:
+                feature_cols = self._resolve_feature_cols(
+                    model=self.cooling_rate_model,
+                    stored_cols=self.cooling_feature_cols,
+                    fallback_cols=["outside_temp", "bedroom", "sun_elevation"],
+                )
+                try:
+                    ml_rate = self._predict_with_model(
+                        model=self.cooling_rate_model,
+                        feature_cols=feature_cols,
+                        values={
+                            "outside_temp": outside_temp,
+                            "bedroom": current_temp,
+                            "sun_elevation": sun_elev,
+                        },
+                        default=0.0,
+                    )
+                    ml_weight = 0.35
+                    rate = physics_rate * (1 - ml_weight) + ml_rate * ml_weight
+                except Exception:
+                    # Keep runtime robust if model metadata/features mismatch.
+                    rate = physics_rate
 
             # Clamp to reasonable range: between -MAX_COOLING_RATE and slight warming
             rate = max(-MAX_COOLING_RATE, min(0.2, rate))
@@ -433,21 +501,31 @@ class ThermalModel:
 
         temp_diff = target_temp - start_temp
 
-        # Absolute minimum heating rate based on real-world experience:
-        # User typically heats for 30-60 min to warm up 1-2°C, implying ~1-2°C/hour
-        # Use 1.0°C/hour as a reasonable floor
-        ABSOLUTE_MIN_RATE = 1.0
+        # Guardrail floor from config (not a hardcoded 1.0°C/hour).
+        ABSOLUTE_MIN_RATE = PREDICTION_CONFIG.heating_rate_min
 
         if self.heating_rate_model is not None:
             # Use ML model to estimate average heating rate
-            features = np.array(
-                [[outside_temp, start_temp, setpoint, 50]]
-            )  # 50% modulation
-            ml_rate = self.heating_rate_model.predict(features)[0]
+            feature_cols = self._resolve_feature_cols(
+                model=self.heating_rate_model,
+                stored_cols=self.heating_feature_cols,
+                fallback_cols=["outside_temp", "bedroom", "setpoint", "burner_modulation"],
+            )
+            ml_rate = self._predict_with_model(
+                model=self.heating_rate_model,
+                feature_cols=feature_cols,
+                values={
+                    "outside_temp": outside_temp,
+                    "bedroom": start_temp,
+                    "setpoint": setpoint,
+                    "burner_modulation": 50.0,
+                },
+                default=0.0,
+            )
 
             # Apply minimum rate constraints:
             # 1. At least 50% of learned mean heating rate
-            # 2. At least the absolute minimum (0.5°C/hour)
+            # 2. At least the configured absolute minimum
             min_rate = max(self.mean_heating_rate * 0.5, ABSOLUTE_MIN_RATE)
             rate = max(min_rate, ml_rate)
 
@@ -495,11 +573,21 @@ class ThermalModel:
             Predicted modulation percentage (0-100)
         """
         if self.modulation_model is not None:
-            if room_temp is not None:
-                features = np.array([[outside_temp, setpoint, room_temp]])
-            else:
-                features = np.array([[outside_temp, setpoint]])
-            modulation = self.modulation_model.predict(features)[0]
+            feature_cols = self._resolve_feature_cols(
+                model=self.modulation_model,
+                stored_cols=self.modulation_feature_cols,
+                fallback_cols=["outside_temp", "setpoint", "bedroom"],
+            )
+            modulation = self._predict_with_model(
+                model=self.modulation_model,
+                feature_cols=feature_cols,
+                values={
+                    "outside_temp": outside_temp,
+                    "setpoint": setpoint,
+                    "bedroom": room_temp if room_temp is not None else setpoint,
+                },
+                default=0.0,
+            )
         else:
             # Simple linear estimate
             temp_diff = setpoint - outside_temp
@@ -514,6 +602,9 @@ class ThermalModel:
             "heating_rate_model": self.heating_rate_model,
             "cooling_rate_model": self.cooling_rate_model,
             "modulation_model": self.modulation_model,
+            "heating_feature_cols": self.heating_feature_cols,
+            "cooling_feature_cols": self.cooling_feature_cols,
+            "modulation_feature_cols": self.modulation_feature_cols,
             "mean_cooling_rate": self.mean_cooling_rate,
             "mean_heating_rate": self.mean_heating_rate,
             "solar_gain_coefficient": self.solar_gain_coefficient,
@@ -538,6 +629,9 @@ class ThermalModel:
             self.heating_rate_model = model_data.get("heating_rate_model")
             self.cooling_rate_model = model_data.get("cooling_rate_model")
             self.modulation_model = model_data.get("modulation_model")
+            self.heating_feature_cols = model_data.get("heating_feature_cols", [])
+            self.cooling_feature_cols = model_data.get("cooling_feature_cols", [])
+            self.modulation_feature_cols = model_data.get("modulation_feature_cols", [])
             self.mean_cooling_rate = model_data.get("mean_cooling_rate", 0.3)
             self.mean_heating_rate = model_data.get("mean_heating_rate", 1.0)
             self.solar_gain_coefficient = model_data.get("solar_gain_coefficient", 0.05)
@@ -604,3 +698,167 @@ class ThermalModel:
             )
 
         return applied
+
+    def _make_regressor(self) -> GradientBoostingRegressor:
+        """Create a fresh regressor instance for training/evaluation."""
+        return GradientBoostingRegressor(
+            n_estimators=100,
+            max_depth=4,
+            learning_rate=0.1,
+            random_state=42,
+        )
+
+    def _time_series_split(
+        self,
+        data: pd.DataFrame,
+        feature_cols: list[str],
+        target_col: str,
+    ) -> dict[str, Any] | None:
+        """Chronological split: recent holdout window, fallback to tail 20%."""
+        required = feature_cols + [target_col]
+        df = data.dropna(subset=required).copy()
+        if len(df) < 2:
+            return None
+
+        split_mode = "chronological_tail_20pct"
+        if "timestamp" in df.columns:
+            df = df.dropna(subset=["timestamp"]).copy()
+            df = df.sort_values("timestamp")
+            if df.empty:
+                return None
+
+            ts = pd.to_datetime(df["timestamp"], errors="coerce")
+            valid = ~ts.isna()
+            df = df.loc[valid].copy()
+            if df.empty:
+                return None
+
+            ts = pd.to_datetime(df["timestamp"], errors="coerce")
+            holdout_start = ts.max() - pd.Timedelta(
+                days=MODEL_CONFIG.validation_holdout_days
+            )
+            test_mask = ts >= holdout_start
+            train_count = int((~test_mask).sum())
+            test_count = int(test_mask.sum())
+
+            if (
+                train_count >= MODEL_CONFIG.min_validation_samples
+                and test_count >= MODEL_CONFIG.min_validation_samples
+            ):
+                train_df = df.loc[~test_mask]
+                test_df = df.loc[test_mask]
+                split_mode = (
+                    f"time_holdout_last_{MODEL_CONFIG.validation_holdout_days}d"
+                )
+            else:
+                split_idx = max(1, min(int(len(df) * 0.8), len(df) - 1))
+                train_df = df.iloc[:split_idx]
+                test_df = df.iloc[split_idx:]
+        else:
+            df = df.sort_index()
+            split_idx = max(1, min(int(len(df) * 0.8), len(df) - 1))
+            train_df = df.iloc[:split_idx]
+            test_df = df.iloc[split_idx:]
+
+        if train_df.empty or test_df.empty:
+            return None
+
+        return {
+            "X_train": train_df[feature_cols].values,
+            "y_train": train_df[target_col].values,
+            "X_test": test_df[feature_cols].values,
+            "y_test": test_df[target_col].values,
+            "mode": split_mode,
+            "test_samples": len(test_df),
+        }
+
+    def _walk_forward_metrics(
+        self,
+        data: pd.DataFrame,
+        feature_cols: list[str],
+        target_col: str,
+    ) -> dict[str, Any]:
+        """Compute walk-forward MAE/RMSE over chronological folds."""
+        required = feature_cols + [target_col]
+        df = data.dropna(subset=required).copy()
+        if len(df) < MODEL_CONFIG.min_validation_samples * 3:
+            return {}
+
+        if "timestamp" in df.columns:
+            df = df.dropna(subset=["timestamp"]).sort_values("timestamp")
+        else:
+            df = df.sort_index()
+
+        n = len(df)
+        if n < MODEL_CONFIG.min_validation_samples * 3:
+            return {}
+
+        folds = max(1, MODEL_CONFIG.walk_forward_folds)
+        test_size = MODEL_CONFIG.min_validation_samples
+        min_train = MODEL_CONFIG.min_validation_samples * 2
+        max_train_end = n - test_size
+        if max_train_end <= min_train:
+            return {}
+
+        if folds == 1:
+            train_ends = [max_train_end]
+        else:
+            train_ends = np.linspace(
+                min_train,
+                max_train_end,
+                num=folds,
+                dtype=int,
+            ).tolist()
+            train_ends = sorted(set(train_ends))
+
+        maes: list[float] = []
+        rmses: list[float] = []
+        for train_end in train_ends:
+            test_end = min(train_end + test_size, n)
+            if test_end <= train_end:
+                continue
+
+            train_df = df.iloc[:train_end]
+            test_df = df.iloc[train_end:test_end]
+            if len(test_df) < MODEL_CONFIG.min_validation_samples:
+                continue
+
+            model = self._make_regressor()
+            model.fit(train_df[feature_cols].values, train_df[target_col].values)
+            preds = model.predict(test_df[feature_cols].values)
+            maes.append(mean_absolute_error(test_df[target_col].values, preds))
+            rmses.append(np.sqrt(mean_squared_error(test_df[target_col].values, preds)))
+
+        if not maes:
+            return {}
+
+        return {
+            "wf_folds": len(maes),
+            "wf_mae": round(float(np.mean(maes)), 3),
+            "wf_rmse": round(float(np.mean(rmses)), 3),
+        }
+
+    def _resolve_feature_cols(
+        self,
+        model: Any,
+        stored_cols: list[str],
+        fallback_cols: list[str],
+    ) -> list[str]:
+        """Resolve model feature names, supporting old pickles without metadata."""
+        if stored_cols:
+            return stored_cols
+        n_features = getattr(model, "n_features_in_", len(fallback_cols))
+        return fallback_cols[:n_features]
+
+    def _predict_with_model(
+        self,
+        model: Any,
+        feature_cols: list[str],
+        values: dict[str, float],
+        default: float = 0.0,
+    ) -> float:
+        """Run a model prediction with named feature mapping."""
+        feature_vector = np.array(
+            [[float(values.get(col, default)) for col in feature_cols]]
+        )
+        return float(model.predict(feature_vector)[0])

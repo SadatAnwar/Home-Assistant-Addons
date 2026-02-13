@@ -100,6 +100,9 @@ class ModelConfig:
     # Data collection
     history_days: int = 14
     min_history_days: int = 3
+    validation_holdout_days: int = 2
+    min_validation_samples: int = 12
+    walk_forward_folds: int = 3
 
     # Model persistence
     model_dir: str = "models/heating"
