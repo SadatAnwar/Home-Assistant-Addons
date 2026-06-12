@@ -1,0 +1,77 @@
+# Garden Dashboard
+# Lovelace dashboard for garden devices including water sprinkler
+
+title: Garden
+views:
+  - title: Garden
+    path: garden
+    icon: mdi:flower
+    cards:
+      - type: vertical-stack
+        title: Water Sprinkler
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: valve.water_sprinkler_valve
+            name: Sprinkler Valve
+            icon: mdi:water-pump
+            icon_color: "{{ 'blue' if is_state('valve.water_sprinkler_valve', 'open') else 'disabled' }}"
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: more-info
+
+          - type: custom:mushroom-number-card
+            entity: input_number.sprinkler_duration
+            name: Duration
+            icon: mdi:timer
+            display_mode: slider
+            layout: horizontal
+            fill_container: true
+
+          - type: custom:mushroom-template-card
+            primary: Start Sprinkler
+            secondary: "{{ states('input_number.sprinkler_duration') | int }} min"
+            icon: mdi:play-circle
+            icon_color: green
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: perform-action
+              perform_action: script.water_sprinkler_start
+
+          - type: custom:mushroom-template-card
+            primary: Stop Sprinkler
+            secondary: "{{ 'Running' if is_state('valve.water_sprinkler_valve', 'open') else 'Idle' }}"
+            icon: mdi:stop-circle
+            icon_color: red
+            layout: horizontal
+            fill_container: true
+            tap_action:
+              action: perform-action
+              perform_action: valve.close_valve
+              target:
+                entity_id: valve.water_sprinkler_valve
+
+      - type: vertical-stack
+        title: Sprinkler Info
+        cards:
+          - type: custom:mushroom-entity-card
+            entity: sensor.water_sprinkler_battery
+            name: Battery
+            icon: mdi:battery
+            layout: horizontal
+            fill_container: true
+
+          - type: custom:mushroom-entity-card
+            entity: sensor.water_sprinkler_total_watering_time
+            name: Total Watering Time
+            icon: mdi:chart-bar
+            layout: horizontal
+            fill_container: true
+
+          - type: custom:mushroom-select-card
+            entity: select.water_sprinkler_weather_delay
+            name: Weather Delay
+            icon: mdi:weather-cloudy-clock
+            layout: horizontal
+            fill_container: true

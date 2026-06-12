@@ -80,6 +80,9 @@ class DefaultSettings:
     min_setpoint: float = 19.0  # Never below this
     max_setpoint: float = 22.0  # Hard cap, even on coldest days
 
+    # Seasonal lockout — skip optimization when outside temp is above this
+    summer_lockout_temp: float = 15.0  # °C
+
     # Safety thresholds
     extreme_cold_threshold: float = -5.0
     max_cycles_per_day: int = 2

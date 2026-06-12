@@ -12,7 +12,7 @@ import sys
 from datetime import datetime, time, timedelta
 from typing import Any
 
-from .config import PREDICTION_CONFIG
+from .config import DEFAULTS, PREDICTION_CONFIG
 from .data_collector import DataCollector
 from .ha_client import HAClient
 from .optimizer import HeatingOptimizer
@@ -105,6 +105,17 @@ class HeatingScheduler:
                 f"outside {current_state.get('outside_temp', 'N/A')}°C, "
                 f"hvac {current_state.get('hvac_mode', 'N/A')}"
             )
+
+            # Summer lockout — skip when it's warm enough that heating isn't needed
+            outside_temp = current_state.get("outside_temp")
+            if outside_temp is not None and outside_temp >= DEFAULTS.summer_lockout_temp:
+                logger.info(
+                    f"Outside temp {outside_temp}°C >= {DEFAULTS.summer_lockout_temp}°C "
+                    f"lockout threshold — skipping optimization (summer mode)"
+                )
+                results["success"] = True
+                results["skipped"] = "summer_lockout"
+                return results
 
             # Log forecast availability
             forecast = current_state.get("forecast", [])

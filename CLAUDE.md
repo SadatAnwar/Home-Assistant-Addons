@@ -8,6 +8,7 @@ A flexible workspace for Home Assistant related code including dashboards, autom
 home_assistant/
 ├── dashboards/           # Lovelace YAML configurations
 │   ├── lights.yaml       # Lights control dashboard
+│   ├── blinds.yaml       # Window blinds & garden shade dashboard
 │   ├── heating-beautiful.yaml  # Heating/climate control dashboard
 │   ├── heating-optimizer.yaml  # ML heating optimizer monitoring dashboard
 │   ├── temperature-glass.yaml  # Temperature & humidity dashboard (glass style)
@@ -96,7 +97,10 @@ The target HA instance uses these key configurations in `configuration.yaml`:
 **Lights (actual controllable):**
 - `light.bathroomlight` - Bathroom main light
 - `light.kitchenspot` / `light.kitchencounter` - Kitchen lights
-- `light.h6072` / `light.h6072_2` - Govee lamps (left/right)
+- `light.h6072` / `light.h6072_2` - Govee H6072 lamps (via official Govee integration)
+- `light.bedroom_light` - Govee H60A6 bedroom light (via govee2mqtt)
+- `switch.bedroom_light_background_light_toggle` - H60A6 backlight toggle
+- `switch.bedroom_light_main_light_toggle` - H60A6 main light toggle
 - `switch.bedroom_lamp` - Bedroom lamp (via switch)
 - `switch.relay_switch_2pm_ce2a_channel_1` - Dining table light
 - `switch.relay_switch_2pm_ce2a_channel_2` - Drawing room light
@@ -348,6 +352,20 @@ python scripts/ha_dashboard.py delete lights-dashboard
 
 > **Note:** The script uses Home Assistant's WebSocket API. Dashboard URL paths must contain a hyphen (HA requirement). Single-word filenames like `lights.yaml` become `lights-dashboard`. Re-uploading the same file updates the existing dashboard.
 
+> **Important:** The upload script does NOT update the sidebar icon — it always defaults to `mdi:view-dashboard`. After creating a new dashboard, always update the sidebar icon separately via the WebSocket API:
+> ```python
+> await ws.send(json.dumps({
+>     'id': 1,
+>     'type': 'lovelace/dashboards/update',
+>     'dashboard_id': 'my_dashboard',   # underscores, not hyphens
+>     'icon': 'mdi:some-icon',
+>     'title': 'My Dashboard',
+>     'show_in_sidebar': True,
+>     'require_admin': False
+> }))
+> ```
+> The `dashboard_id` uses underscores (e.g. `blinds_dashboard`) while the `url_path` uses hyphens (e.g. `blinds-dashboard`).
+
 **Automation & Helper Management:**
 ```bash
 # Create input_boolean and input_datetime helpers for delayed stop feature
@@ -481,8 +499,8 @@ The heating optimization system runs in production on a remote Ubuntu machine (M
 **Remote Machine:**
 | Property | Value |
 |----------|-------|
-| Host | `macmini.fritz.box` |
-| User | `shadman` |
+| Host | `sadat-macmini.fritz.box` |
+| User | `sadat` |
 | Install Path | `~/dev/home_assistant` |
 | Python | 3.12.3 |
 | Cron Schedule | Every 4 hours (`0 */4 * * *`) |
@@ -507,51 +525,51 @@ After making changes locally, sync to the remote machine:
 rsync -avz --exclude='.venv' --exclude='.env' --exclude='__pycache__' \
   --exclude='.git' --exclude='*.pyc' --exclude='inventory/' \
   /Users/sadat.anwar/dev/home_assistant/ \
-  shadman@macmini.fritz.box:~/dev/home_assistant/
+  sadat@sadat-macmini.fritz.box:~/dev/home_assistant/
 ```
 
 If dependencies changed (requirements.txt), also run:
 ```bash
-ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/pip install -r requirements.txt"
+ssh sadat@sadat-macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/pip install -r requirements.txt"
 ```
 
 ### Checking Logs
 
 ```bash
 # View recent logs
-ssh shadman@macmini.fritz.box "tail -50 ~/dev/home_assistant/logs/heating.log"
+ssh sadat@sadat-macmini.fritz.box "tail -50 ~/dev/home_assistant/logs/heating.log"
 
 # Follow logs in real-time
-ssh shadman@macmini.fritz.box "tail -f ~/dev/home_assistant/logs/heating.log"
+ssh sadat@sadat-macmini.fritz.box "tail -f ~/dev/home_assistant/logs/heating.log"
 
 # View full log
-ssh shadman@macmini.fritz.box "cat ~/dev/home_assistant/logs/heating.log"
+ssh sadat@sadat-macmini.fritz.box "cat ~/dev/home_assistant/logs/heating.log"
 ```
 
 ### Manual Operations
 
 ```bash
 # Run scheduler manually
-ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run"
+ssh sadat@sadat-macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run"
 
 # Dry run (no changes to HA)
-ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run --dry-run"
+ssh sadat@sadat-macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run --dry-run"
 
 # Check current state
-ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler state"
+ssh sadat@sadat-macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler state"
 
 # Review predictions
-ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler history"
+ssh sadat@sadat-macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler history"
 ```
 
 ### Cron Job Management
 
 ```bash
 # View current cron jobs
-ssh shadman@macmini.fritz.box "crontab -l"
+ssh sadat@sadat-macmini.fritz.box "crontab -l"
 
 # Edit cron jobs
-ssh shadman@macmini.fritz.box "crontab -e"
+ssh sadat@sadat-macmini.fritz.box "crontab -e"
 
 # Current cron entry:
 # 0 */4 * * * cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run >> ~/dev/home_assistant/logs/heating.log 2>&1
@@ -562,11 +580,11 @@ ssh shadman@macmini.fritz.box "crontab -e"
 **If scheduler fails:**
 1. Check logs: `tail -50 ~/dev/home_assistant/logs/heating.log`
 2. Verify .env exists and has correct credentials
-3. Test HA connectivity: `ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -c 'from scripts.heating.ha_client import HAClient; c = HAClient(); print(c.get_state(\"sensor.bedroom_thermo_temperature\"))'"`
+3. Test HA connectivity: `ssh sadat@sadat-macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -c 'from scripts.heating.ha_client import HAClient; c = HAClient(); print(c.get_state(\"sensor.bedroom_thermo_temperature\"))'"`
 
 **If cron not running:**
-1. Check cron service: `ssh shadman@macmini.fritz.box "systemctl status cron"`
-2. Check cron logs: `ssh shadman@macmini.fritz.box "grep CRON /var/log/syslog | tail -20"`
+1. Check cron service: `ssh sadat@sadat-macmini.fritz.box "systemctl status cron"`
+2. Check cron logs: `ssh sadat@sadat-macmini.fritz.box "grep CRON /var/log/syslog | tail -20"`
 
 **Full redeployment (if needed):**
 ```bash
@@ -574,17 +592,33 @@ ssh shadman@macmini.fritz.box "crontab -e"
 rsync -avz --exclude='.venv' --exclude='.env' --exclude='__pycache__' \
   --exclude='.git' --exclude='*.pyc' --exclude='inventory/' \
   /Users/sadat.anwar/dev/home_assistant/ \
-  shadman@macmini.fritz.box:~/dev/home_assistant/
+  sadat@sadat-macmini.fritz.box:~/dev/home_assistant/
 
 # 2. Recreate venv (if Python issues)
-ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && rm -rf .venv && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt"
+ssh sadat@sadat-macmini.fritz.box "cd ~/dev/home_assistant && rm -rf .venv && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt"
 
 # 3. Copy .env
-scp /Users/sadat.anwar/dev/home_assistant/.env shadman@macmini.fritz.box:~/dev/home_assistant/.env
+scp /Users/sadat.anwar/dev/home_assistant/.env sadat@sadat-macmini.fritz.box:~/dev/home_assistant/.env
 
 # 4. Test
-ssh shadman@macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run --dry-run"
+ssh sadat@sadat-macmini.fritz.box "cd ~/dev/home_assistant && .venv/bin/python -m scripts.heating.scheduler run --dry-run"
 ```
+
+## ⚠️ SECURITY: HA Supervisor API Exposes Addon Credentials in Plaintext
+
+**This is a hard rule. No exceptions.**
+
+The HA Supervisor WebSocket/REST API endpoint `/addons/{slug}/info` (and similar config endpoints) returns the **full addon configuration including all passwords, API keys, and tokens in plaintext**. Calling this endpoint caused a user's credentials to be transmitted to an AI provider in conversation context, requiring a full credential reset.
+
+**NEVER do this:**
+- Call `/addons/{slug}/info` via WebSocket or REST
+- Call `/addons/{slug}/options` or any endpoint that returns addon configuration
+- Query addon details to "diagnose" a problem
+
+**Instead:**
+- Use `/addons/{slug}/logs` only — this returns log output, not config
+- If logs are unavailable via API, ask the user to paste them manually from the HA UI (Settings → Add-ons → [addon] → Log tab)
+- This applies to ALL addons — any addon config may contain credentials
 
 ## AI Agent Instructions
 
